@@ -270,8 +270,8 @@ details.adv[open] > summary::before { content: "–"; }
     <p>Erst ansparen, dann entnehmen, mit fester Aufteilung auf Aktien, Anleihen, Geldmarkt und Gold, auf Wunsch mit Anleihezelt und eigenem Haus. Steuern werden Jahr für Jahr wie im echten Depot gerechnet, über 2.000 mögliche Zukünfte von Börse und Inflation.</p>
     <p class="demo-note">Startet mit Beispielwerten. Deine Eingaben bleiben nur auf diesem Gerät gespeichert.</p>
     <div class="toggle viewsw three" role="group" aria-label="Ansicht">
-      <button type="button" data-view="quick" aria-pressed="false">Schnell</button>
-      <button type="button" data-view="easy" aria-pressed="true">Einfach</button>
+      <button type="button" data-view="quick" aria-pressed="true">Schnell</button>
+      <button type="button" data-view="easy" aria-pressed="false">Einfach</button>
       <button type="button" data-view="full" aria-pressed="false">Ausführlich</button>
     </div>
   </header>
@@ -1830,7 +1830,7 @@ function newWorker(onmsg) { try { const w = new Worker(WURL); w.onmessage = onms
 function useSync() { if (mainW) mainW.terminate(); if (sideW) sideW.terminate(); mainW = sideW = null; mainBusy = sideBusy = false; WSYNC = true; lastKey = ""; schedule(); }
 let WSYNC = !WURL;
 function workerState() { return { worker: !!mainW && !WSYNC, sync: WSYNC }; }
-let hookRender = () => {}, VIEWNOW = "easy";
+let hookRender = () => {}, VIEWNOW = "quick";
 function onMain(id, r) {
   const q = REQ[id]; delete REQ[id];
   if (!q || id < shownId) return;
@@ -2388,8 +2388,8 @@ setScen(SCEN0); appRestore(); syncAll(); run();
 /* ---------- Klickstrecke ---------- */
 if ($("wiz")) {
   const NSTEP = 8, moved = [];
-  let step = 1, view = "easy";
-  try { view = localStorage.getItem("aer-app-view") || "easy"; } catch (e) {}
+  let step = 1, view = "quick";
+  try { view = localStorage.getItem("aer-app-view2") || "quick"; } catch (e) {}
   // Elemente des ausführlichen Rechners werden in die Schritte verschoben und beim Zurückschalten wieder an ihren Platz gestellt
   const pick = k => k === "%kpihead" ? $("m-real").closest(".card-head") : k === "%kpis" ? document.querySelector(".kpis") : k[0] === "#" ? $(k.slice(1)) : k[0] === "@" ? document.querySelector(`[data-${k.slice(1)}]`).closest(".ctl")
     : k[0] === "§" ? (k === "§verdict" ? document.querySelector(".verdict") : k === "§fazit" ? document.querySelector("details.fazit") : k === "§notes" ? document.querySelector("details.panel.notes:not(.fazit)") : $(k.slice(1)).closest(".panel")) : $(k).closest(".ctl");
@@ -2435,7 +2435,7 @@ if ($("wiz")) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
   function setView(v) {
-    view = v; VIEWNOW = v; try { localStorage.setItem("aer-app-view", v); } catch (e) {}
+    view = v; VIEWNOW = v; try { localStorage.setItem("aer-app-view2", v); } catch (e) {}
     document.querySelectorAll("[data-view]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.view === v)));
     unmount(); $("wiz").hidden = v !== "easy"; $("qk").hidden = v !== "quick"; document.querySelector(".grid").hidden = v !== "full";
     if (v === "easy") { mount("#wiz"); syncWiz(); }
