@@ -11,3 +11,5 @@ Wie gerechnet wird: [Bericht](https://docs.google.com/document/d/1u9-VBmi0WClI9l
 Modellrechnung, keine Prognose und keine Anlage-, Steuer- oder Rechtsberatung.
 
 © 2026 Christopher Tremmel
+
+Neue Versionen werden über GitHub Pages automatisch veröffentlicht; die App lädt sie beim nächsten Start.
