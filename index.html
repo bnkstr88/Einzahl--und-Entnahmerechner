@@ -290,7 +290,10 @@ details.adv[open] > summary::before { content: "–"; }
       </div></section>
     <section class="panel wz-step qk-step" data-qstep="3"><h2>Hast du ein Haus mit Kredit?</h2><p class="lead">Wichtig ist, wann der Kredit abbezahlt ist und was das bis dahin kostet.</p>
       <div class="pick" data-yn="home"><button type="button" data-v="1"><strong>Ja</strong><span>Kredit einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>ohne Kredit</span></button></div>
-      <div class="wz-body" data-qif="home" data-els="debt,lz,lzb,lrate,lshare,lsond,#loan-h"></div></section>
+      <div class="wz-body" data-qif="home" data-els="debt,lz,lzb,lrate,lshare,lsond,#loan-h"></div>
+      <h3 style="margin:8px 0 0">Hast du eine vermietete Immobilie?</h3>
+      <div class="pick" data-yn="rOn"><button type="button" data-v="1"><strong>Ja</strong><span>Miete und Kredit einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>ohne</span></button></div>
+      <div class="wz-body" data-qif="rOn" data-els="rv,rdebt,rrate,rrent,#rent-h"></div></section>
     <section class="panel wz-step qk-step" data-qstep="4"><h2>Dein Plan</h2><p class="lead">Ab wann, wie viel und wie du anlegst.</p>
       <div class="wz-body" data-els="retAge"></div><p class="hint" id="qra-h" style="margin-top:-10px"></p>
       <div class="ctl"><span class="lbl" id="qgap-l">Wie viel vom heutigen Lebensstandard brauchst du im Alter?</span><div class="seg" role="group" aria-labelledby="qgap-l"><button type="button" data-qgap="100">100&nbsp;%</button><button type="button" data-qgap="120">120&nbsp;%</button><button type="button" data-qgap="150">150&nbsp;%</button></div><p class="hint" id="qgap-h"></p></div>
@@ -337,7 +340,10 @@ details.adv[open] > summary::before { content: "–"; }
     <section class="panel wz-step" data-step="4"><h2 id="wz-net-t">Wie viel möchtest du im Monat haben?</h2><p class="lead" id="wz-net-l"></p><div class="wz-body" data-els="net,xtra,xAge,@wmode"></div><div class="wz-sub" id="wz-dyn"><p class="hint" style="margin:0"><strong>Mindestrate:</strong> In schlechten Börsenjahren sinkt die Rate, aber nie unter diesen Anteil der Startrate.</p><div class="wz-body" data-els="dfloor"></div></div></section>
     <section class="panel wz-step" data-step="5"><h2>Hast du ein eigenes Haus mit Kredit?</h2><p class="lead">Dann zählt, wann der Kredit abbezahlt ist und wie viel der frei werdenden Rate danach ins Depot geht.</p>
       <div class="pick" data-yn="home"><button type="button" data-v="1"><strong>Ja</strong><span>Haus und Kredit einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>ohne Haus rechnen</span></button></div>
-      <div class="wz-body" data-els="debt,lz,lzb,lz2,lrate,lshare,lsond,#loan-h,hv,hshare" data-if="home"></div></section>
+      <div class="wz-body" data-els="debt,lz,lzb,lz2,lrate,lshare,lsond,#loan-h,hv,hshare" data-if="home"></div>
+      <h3 style="margin:8px 0 0">Hast du eine vermietete Immobilie?</h3>
+      <div class="pick" data-yn="rOn"><button type="button" data-v="1"><strong>Ja</strong><span>Miete, Kredit und Steuer einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>ohne vermietete Immobilie</span></button></div>
+      <div class="wz-body" data-els="rv,rdebt,rlz,rlzb,rrate,rrent,rcost,rbuy,rbuyY,rtax,#rent-h" data-if="rOn"></div></section>
     <section class="panel wz-step" data-step="6"><h2>Wie viel Schwankung hältst du aus?</h2><p class="lead">Mehr Aktien wachsen im Schnitt stärker, fallen in Krisen aber tiefer. Der Rest liegt in Anleihen und 5 % auf Tagesgeld oder Geldmarkt.</p>
       <div class="pick" id="wz-prof"><button type="button" data-p="30"><strong>Vorsichtig</strong><span>30 % Aktien: schwankt weniger, wächst langsamer</span></button><button type="button" data-p="60"><strong>Ausgewogen</strong><span>60 % Aktien: der Mittelweg</span></button><button type="button" data-p="90"><strong>Mutig</strong><span>90 % Aktien: wächst im Schnitt mehr, fällt tiefer</span></button></div>
       <p class="hint" id="wz-prof-h"></p></section>
@@ -508,6 +514,33 @@ details.adv[open] > summary::before { content: "–"; }
                 </div>
         </div>
         <div class="check incl"><input type="checkbox" id="home"><label for="home">Mit einbeziehen</label><p class="hint">Kredit, frei werdende Rate und Hauswert fließen in die Rechnung ein. Die Erfolgsquote zählt weiter nur das Depot.</p></div>
+        </div>
+      </details>
+
+      <details class="grp" id="sec-miete">
+        <summary><span class="t">Vermietete Immobilie</span><span class="sum" id="sum-miete"></span></summary>
+        <div class="gin">
+        <div style="display:grid;gap:14px">
+          <div class="ctl"><div class="ctl-head"><label for="rv">Marktwert heute</label><output id="rv-o" for="rv"></output></div><input type="range" id="rv" min="0" max="2000000" step="5000" value="300000"><p class="hint">Dein Anteil, wenn dir die Wohnung nicht allein gehört; ebenso bei Restschuld, Rate und Miete.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rdebt">Restschuld heute</label><output id="rdebt-o" for="rdebt"></output></div><input type="range" id="rdebt" min="0" max="2000000" step="5000" value="200000"></div>
+          <div class="ctl"><div class="ctl-head"><label for="rlz">Sollzins</label><output id="rlz-o" for="rlz"></output></div><input type="range" id="rlz" min="0" max="8" step="0.01" value="3.5"></div>
+          <div class="ctl"><div class="ctl-head"><label for="rlzb">Zinsbindung noch</label><output id="rlzb-o" for="rlzb"></output></div><input type="range" id="rlzb" min="0" max="30" step="1" value="10"></div>
+          <div class="ctl"><div class="ctl-head"><label for="rlz2">Zins danach</label><output id="rlz2-o" for="rlz2"></output></div><input type="range" id="rlz2" min="0" max="10" step="0.1" value="4.5"><p class="hint">Bei 2 % Inflation; ist sie höher, steigt er entsprechend.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rrate">Rate pro Monat</label><output id="rrate-o" for="rrate"></output></div><input type="range" id="rrate" min="0" max="10000" step="25" value="1000"></div>
+          <div class="ctl"><div class="ctl-head"><label for="rrent">Kaltmiete pro Monat</label><output id="rrent-o" for="rrent"></output></div><input type="range" id="rrent" min="0" max="10000" step="25" value="1100"></div>
+          <div class="ctl"><div class="ctl-head"><label for="rcost">Nicht umlagefähige Kosten</label><output id="rcost-o" for="rcost"></output></div><input type="range" id="rcost" min="0" max="60" step="1" value="25"><p class="hint">In Prozent der Kaltmiete: Instandhaltung, Rücklage, Verwaltung, Versicherung. 20 bis 30 % sind üblich.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rvac">Leerstand und Mietausfall</label><output id="rvac-o" for="rvac"></output></div><input type="range" id="rvac" min="0" max="20" step="1" value="3"></div>
+          <div class="ctl"><div class="ctl-head"><label for="rmg">Mietsteigerung pro Jahr</label><output id="rmg-o" for="rmg"></output></div><input type="range" id="rmg" min="0" max="5" step="0.25" value="2"><p class="hint">Bei 2 % Inflation; ist sie höher, steigt die Miete entsprechend mehr. Die Kosten steigen mit.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rhg">Wertsteigerung über der Inflation</label><output id="rhg-o" for="rhg"></output></div><input type="range" id="rhg" min="-2" max="3" step="0.25" value="0"></div>
+          <div class="ctl"><div class="ctl-head"><label for="rbuy">Kaufpreis mit Nebenkosten</label><output id="rbuy-o" for="rbuy"></output></div><input type="range" id="rbuy" min="0" max="2000000" step="5000" value="280000"><p class="hint">Grundlage für die Abschreibung und für die Steuer bei einem Verkauf innerhalb von 10 Jahren.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rbuyY">Kaufjahr</label><output id="rbuyY-o" for="rbuyY"></output></div><input type="range" id="rbuyY" min="1980" max="2026" step="1" value="2020"></div>
+          <div class="ctl"><div class="ctl-head"><label for="rbldg">Gebäudeanteil am Kaufpreis</label><output id="rbldg-o" for="rbldg"></output></div><input type="range" id="rbldg" min="0" max="100" step="5" value="75"><p class="hint">Nur das Gebäude wird abgeschrieben, nicht das Grundstück.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rafa">Abschreibung pro Jahr</label><output id="rafa-o" for="rafa"></output></div><input type="range" id="rafa" min="0" max="5" step="0.5" value="2"><p class="hint">2 % für Baujahre 1925 bis 2022, 3 % ab 2023, 2,5 % vor 1925.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rtax">Grenzsteuersatz im Berufsleben</label><output id="rtax-o" for="rtax"></output></div><input type="range" id="rtax" min="0" max="50" step="1" value="35"><p class="hint">Mit Soli und Kirchensteuer. Ein Verlust aus der Vermietung senkt deine Lohnsteuer. Ab der Entnahme rechnet der Rechner mit dem Tarif, zusammen mit der gesetzlichen Rente.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rSaleAge">Verkauf mit</label><output id="rSaleAge-o" for="rSaleAge"></output></div><input type="range" id="rSaleAge" min="40" max="100" step="1" value="100"><p class="hint">Ganz rechts: kein Verkauf. Nach 10 Jahren Besitz ist der Gewinn steuerfrei, der Erlös geht ins Depot.</p></div>
+          <p class="hint" id="rent-h"></p>
+        </div>
+        <div class="check incl"><input type="checkbox" id="rOn"><label for="rOn">Mit einbeziehen</label><p class="hint">Netto heute und Sparrate ohne die Immobilie eingeben: Miete, Kosten, Rate und Steuer rechnet der Rechner selbst. Ein Überschuss fließt ins Depot, eine Zuzahlung kommt aus dem Depot; ab der Entnahme zählt der Überschuss wie eine zweite Rente.</p></div>
         </div>
       </details>
 
@@ -775,7 +808,7 @@ const STRESS = {
   c22: { eq: [-27.1, 37.2], inf: [6.9, 5.9], bd: [-17.17, 7.19], gd: [6.6, 10.4], bdMix: true, name: "Zinsanstieg 2022" },
 };
 
-const IDX = new Float64Array(YMAX + 1), CX = new Float64Array(YMAX + 1);
+const IDX = new Float64Array(YMAX + 1), CX = new Float64Array(YMAX + 1), PXT = new Float64Array(YMAX + 1);
 const RE = new Float64Array(YMAX), RB = new Float64Array(YMAX), RC = new Float64Array(YMAX), RG = new Float64Array(YMAX), IN = new Float64Array(YMAX);
 function genPath(p, i, Y) {
   const off = p.off || 0, m = p.inf, st = STRESS[p.stress];
@@ -836,7 +869,7 @@ const LB = [0, 1, 2, 3].map(() => new Float64Array(LMAX));
 // Tilgungsplan: monatliche Rate, Sondertilgung am Jahresende; liefert Zahlungen je Jahr und Restschuld zu Jahresbeginn (nominal)
 function loanPlan(p, Y, saleY) {
   const LP = new Float64Array(Y), DEBT = new Float64Array(Y + 1), XP = new Float64Array(Y);
-  let d = p.home ? p.debt : 0, payoff = d > 0 ? null : 0; DEBT[0] = d;
+  let d = p.home || p.loanOnly ? p.debt : 0, payoff = d > 0 ? null : 0; DEBT[0] = d;
   // Nach der Zinsbindung gilt der Anschlusszins (bei 2 % Inflation; bei mehr Inflation entsprechend höher). Die Rate bleibt gleich,
   // reicht sie nicht für Zins plus 1 % Tilgung, steigt sie darauf
   const zb = p.lzb == null ? Infinity : p.lzb, z2 = p.lz2 == null ? p.lz : Math.max(0, p.lz2 + (p.inf == null ? 0.02 : p.inf) - 0.02);
@@ -872,6 +905,7 @@ function est2026(x) {
 // (Rentenanpassung nach den Löhnen des Vorjahrs); pg, pkvg und tg gelten bei durchschnittlicher Inflation
 function pensionPlan(p, Y, IN, out) {
   const PN = out || new Float64Array(Y);
+  PXT.fill(0);
   if (!p.pOn || !(p.pens > 0)) { if (out) PN.fill(0); return { PN, PY: Infinity }; }
   // pg, pkvg und tg gelten bei 2 % Inflation; höhere oder niedrigere Inflation geht mit einem Jahr Verzögerung durch
   const m = p.inf == null ? 0.02 : p.inf, X = IDX;
@@ -897,10 +931,51 @@ function pensionPlan(p, Y, IN, out) {
       f = Math.pow(1 + p.tg, Math.max(0, (p.year0 || 2026) + y - 2026)) * X[y];
       tx = f * est2026(Math.max(0, base - 138) / f) * (1 + (p.kst || 0));
     } else tx = p.ptax * base;
+    PXT[y] = Math.max(0, base - 138);
     PN[y] = (G - kv - tx) / 12;
     if (first == null) first = { gross: G / 12, kv: kv / 12, tax: tx / 12, net: PN[y], rate: base > 0 ? tx / base : 0, gfb: 12348 * f, prem: prem / 12, zus: zus / 12 };
   }
   return { PN, PY, BA, first, year };
+}
+
+
+// ---------- Vermietete Immobilie ----------
+// Kredit wie beim eigenen Haus (Zinsbindung, Anschlusszins), ohne Sondertilgung
+function rentalLoan(p, Y, rsY) {
+  return loanPlan({ loanOnly: true, home: false, debt: p.rdebt || 0, lz: p.rlz || 0, lzb: p.rlzb, lz2: p.rlz2, lrate: p.rrate || 0, lsond: 0, inf: p.inf }, Y, rsY);
+}
+// Netto-Zufluss pro Jahr (nominal) nach Kosten, Rate und Steuer; im Verkaufsjahr inkl. Erlös.
+// X: Index der Inflation (1 bei 2 %), D: Deflator des Pfads, XT: zu versteuerndes Renteneinkommen, RY: Beginn der Entnahme
+function rentalFlows(p, Y, L, rsY, X, D, XT, RY, out) {
+  const CF = out || new Float64Array(Y), det = { first: null, after: null };
+  CF.fill(0);
+  if (!p.rOn) return det;
+  const y0 = p.year0 || 2026, basis = (p.rbuy || 0) * (p.rbldg == null ? 0.75 : p.rbldg), afaR = p.rafa || 0;
+  const yrs0 = y0 - (p.rbuyY || y0), afaN = afaR > 0 ? 1 / afaR : 0;
+  let afaCum = Math.min(basis, Math.max(0, yrs0) * basis * afaR);
+  for (let y = 0; y < Y; y++) {
+    if (y > rsY) break;
+    const g = Math.pow(1 + (p.rmg == null ? 0.02 : p.rmg), y) * X[y];
+    const rent = y < rsY ? 12 * p.rrent * (1 - (p.rvac || 0)) * g : 0, cost = y < rsY ? 12 * p.rrent * (p.rcost || 0) * g : 0;
+    const pay = L.LP[y], interest = y < rsY ? Math.max(0, pay - (L.DEBT[y] - L.DEBT[y + 1])) : 0;
+    const afa = y < rsY && afaCum < basis && yrs0 + y < afaN ? Math.min(basis * afaR, basis - afaCum) : 0; afaCum += afa;
+    let vv = rent - cost - interest - afa, cash = rent - cost - pay;
+    if (y === rsY) {
+      const price = (p.rv || 0) * Math.pow(1 + (p.rhg || 0), y) * D[y] * (1 - (p.rsc == null ? 0.05 : p.rsc));
+      cash += price - L.DEBT[y];
+      if (y0 + y - (p.rbuyY || y0) < 10) vv += price - ((p.rbuy || 0) - afaCum);   // innerhalb der Spekulationsfrist
+    }
+    let tax;
+    if (y < RY) tax = (p.rtax == null ? 0.35 : p.rtax) * vv;
+    else {
+      const f = Math.pow(1 + (p.tg || 0), Math.max(0, y0 + y - 2026)) * X[y], x = XT[y];
+      tax = f * (est2026(Math.max(0, x + vv) / f) - est2026(x / f)) * (1 + (p.kst || 0));
+    }
+    CF[y] = cash - tax;
+    if (y === 0) det.first = { rent: rent / 12, cost: cost / 12, interest: interest / 12, afa: afa / 12, pay: pay / 12, tax: tax / 12, cf: CF[0] / 12 };
+    if (det.after == null && y < rsY && L.DEBT[y] <= 0 && pay === 0) det.after = { y, rent: rent / 12, cost: cost / 12, tax: tax / 12, cf: CF[y] / 12 / D[y] };
+  }
+  return det;
 }
 
 function simulate(p, lite) {
@@ -923,10 +998,15 @@ function simulate(p, lite) {
   const payAll = p.home && p.debt > 0 ? (p.lrate * 12 + p.lsond) * sh : 0;
   const FREED = new Float64Array(Y); for (let y = 0; y < Y; y++) FREED[y] = y < saleY ? Math.max(0, payAll - LP[y]) * (p.fp == null ? 1 : p.fp) : 0;
   const HR = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) HR[y] = p.home && y <= saleY ? p.hv * ho * Math.pow(1 + p.hg, y) : 0;
-  const withHome = p.home && (p.hv > 0 || p.debt > 0);
+  // Vermietete Immobilie: Kredit, Wert (heutige Kaufkraft) und Verkauf
+  const rsY = p.rOn && p.rSaleAge > 0 && p.rSaleAge - p.age0 < Y ? Math.max(0, p.rSaleAge - p.age0) : Infinity;
+  const RL = rentalLoan(p, Y, rsY), RCF = new Float64Array(Y), RDF = new Float64Array(Y + 1);
+  const RVr = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) RVr[y] = p.rOn && y < rsY ? (p.rv || 0) * Math.pow(1 + (p.rhg || 0), y) : 0;
+  const RDEBT = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) RDEBT[y] = p.rOn && y < rsY ? RL.DEBT[y] : 0;
+  const withHome = (p.home && (p.hv > 0 || p.debt > 0)) || (p.rOn && (p.rv > 0 || p.rdebt > 0));
   const netR = lite || !withHome ? null : new Float64Array((Y + 1) * N), netN = lite || !withHome ? null : new Float64Array((Y + 1) * N);
   const infM = p.inf == null ? 0.02 : p.inf, bzE = Math.max(0, p.bz + infM - 0.02);
-  const PL = pensionPlan(p, Y), PNP = new Float64Array(Y), pathPN = PL.PY < Y;
+  const PL = pensionPlan(p, Y), PNP = new Float64Array(Y), pathPN = PL.PY < Y, PI = new Float64Array(Y);
   let PN = PL.PN;
   const tax1 = new Float64Array(N), loan1 = LP[Math.min(RY, Y - 1)] / 12;
   const P = new Float64Array(NC), TU = new Float64Array(NC), HEAD = new Int32Array(NC);
@@ -972,6 +1052,8 @@ function simulate(p, lite) {
     genPath(p, i, Y);
     if (pathPN) PN = pensionPlan(p, Y, IN, PNP).PN;
     CX[0] = 1; for (let y = 1; y < Y; y++) CX[y] = CX[y - 1] * (1 + (y >= 2 ? IN[y - 2] : infM)) / 1.02; // Sparrate folgt den Löhnen
+    if (p.rOn) { RDF[0] = 1; for (let y = 0; y < Y; y++) RDF[y + 1] = RDF[y] * (1 + IN[y]); rentalFlows(p, Y, RL, rsY, CX, RDF, PXT, RY, RCF); }
+    for (let y = 0; y < Y; y++) PI[y] = PN[y] + (p.rOn && y >= RY ? RCF[y] / 12 : 0);   // Einkommen neben dem Depot: Rente plus Mietüberschuss
     for (let c = 0; c < NC; c++) { LU[c].fill(0); LB[c].fill(0); P[c] = 1; TU[c] = 0; HEAD[c] = 0; }
     last = 0; carry = 0;
     if (p.cap > 0) {
@@ -980,16 +1062,16 @@ function simulate(p, lite) {
     }
     let vpPend = 0, defl = 1, dead = false, tA = 0, tR = 0, tR10 = 0, tAN = 0, tRN = 0, tR10N = 0;
     const st = { base: 0, iwr: 0 };
-    if (!lite) { totR[i] = p.cap; totN[i] = p.cap; if (netR) { netR[i] = p.cap + HR[0] - DEBT[0]; netN[i] = netR[i]; } }
+    if (!lite) { totR[i] = p.cap; totN[i] = p.cap; if (netR) { netR[i] = p.cap + HR[0] + RVr[0] - DEBT[0] - RDEBT[0]; netN[i] = netR[i]; } }
     for (let y = 0; y < Y; y++) {
       const age = p.age0 + y, w = W[y], retired = y >= RY;
-      if (retired && y === RY) { st.base = p.net * defl; const t = total(); st.iwr = t > 0 ? Math.max(0, st.base - PN[y]) * 12 / t : 0; }
-      let cashIn = (retired ? 0 : p.contrib * 12 * Math.pow(1 + p.cg, y) * CX[y] + FREED[y] - LN.XP[y] * sh) + FIN[y] * defl;
+      if (retired && y === RY) { st.base = p.net * defl; const t = total(); st.iwr = t > 0 ? Math.max(0, st.base - PI[y]) * 12 / t : 0; }
+      let cashIn = (retired ? 0 : p.contrib * 12 * Math.pow(1 + p.cg, y) * CX[y] + FREED[y] - LN.XP[y] * sh + (p.rOn ? RCF[y] : 0)) + FIN[y] * defl;
       let cashNeed = (retired ? LP[y] : 0) + FOUT[y] * defl;
       // Liegt die Netto-Rente über dem Wunsch, ist die ganze Rente Einkommen; das Depot zahlt dann nichts
       // Extra für die aktiven Jahre (heutige Kaufkraft, bis zum gewählten Alter) kommt zur Rate dazu
       const EXn = retired && p.extra > 0 && age < (p.xAge || 0) ? p.extra * (p.indexed ? defl : 1) : 0;
-      if (retired) cashNeed += Math.max(0, st.base + EXn - PN[y]) * 12;
+      if (retired) cashNeed += Math.max(0, st.base + EXn - PI[y]) * 12;
       else if (PN[y] > 0) cashIn += PN[y] * 12;
       if (y === saleY) { const pr = HR[y] * defl * (1 - (p.sc || 0)) - DEBT[y]; if (pr >= 0) cashIn += pr; else cashNeed -= pr; }
       let g = 0, tax = taxOf(vpPend), G = 0;
@@ -999,12 +1081,12 @@ function simulate(p, lite) {
         const tv = total();
         if (G > tv + 1e-6) {
           dead = true; fails++; failAges.push(age);
-          if (!lite) { const part = Math.max(PN[y], Math.min(st.base + EXn, PN[y] + Math.max(0, tv + cashIn - tax) / 12)); rateN[y * N + i] = part; rateR[y * N + i] = part / defl; penR[y * N + i] = PN[y] / defl; }
+          if (!lite) { const part = Math.max(PI[y], Math.min(st.base + EXn, PI[y] + Math.max(0, tv + cashIn - tax) / 12)); rateN[y * N + i] = part; rateR[y * N + i] = part / defl; penR[y * N + i] = PN[y] / defl; }
           let dd = defl;
           for (let yy = y; yy < Y && !lite; yy++) {
-            if (yy > y) { rateN[yy * N + i] = PN[yy]; rateR[yy * N + i] = PN[yy] / dd; penR[yy * N + i] = PN[yy] / dd; }
+            if (yy > y) { rateN[yy * N + i] = PI[yy]; rateR[yy * N + i] = PI[yy] / dd; penR[yy * N + i] = PN[yy] / dd; }
             totR[(yy + 1) * N + i] = 0; totN[(yy + 1) * N + i] = 0; dd *= 1 + IN[yy];
-            if (netR) { netR[(yy + 1) * N + i] = HR[yy + 1] - DEBT[yy + 1] / dd; netN[(yy + 1) * N + i] = HR[yy + 1] * dd - DEBT[yy + 1]; }
+            if (netR) { netR[(yy + 1) * N + i] = HR[yy + 1] + RVr[yy + 1] - (DEBT[yy + 1] + RDEBT[yy + 1]) / dd; netN[(yy + 1) * N + i] = (HR[yy + 1] + RVr[yy + 1]) * dd - DEBT[yy + 1] - RDEBT[yy + 1]; }
           }
           break;
         }
@@ -1030,7 +1112,7 @@ function simulate(p, lite) {
       { const e = pool - carry; carry = e < 0 ? -e : 0; }
       const taxReal = tax / defl;
       if (retired) { tR += taxReal; tRN += tax; if (y < RY + 10) { tR10 += taxReal; tR10N += tax; } } else { tA += taxReal; tAN += tax; }
-      if (!lite) { taxY[y * N + i] = taxReal; if (retired) { const inc = Math.max(st.base + EXn, PN[y]); rateN[y * N + i] = inc; rateR[y * N + i] = inc / defl; penR[y * N + i] = PN[y] / defl; } }
+      if (!lite) { taxY[y * N + i] = taxReal; if (retired) { const inc = Math.max(st.base + EXn, PI[y]); rateN[y * N + i] = inc; rateR[y * N + i] = inc / defl; penR[y * N + i] = PN[y] / defl; } }
       // Wertentwicklung und Vorabpauschale
       let vpNext = 0;
       for (let c = 0; c < NC; c++) {
@@ -1042,7 +1124,7 @@ function simulate(p, lite) {
       vpPend = vpNext;
       defl *= 1 + IN[y];
       const tv = total();
-      if (!lite) { totN[(y + 1) * N + i] = tv; totR[(y + 1) * N + i] = tv / defl; if (netR) { netN[(y + 1) * N + i] = tv + HR[y + 1] * defl - DEBT[y + 1]; netR[(y + 1) * N + i] = netN[(y + 1) * N + i] / defl; } }
+      if (!lite) { totN[(y + 1) * N + i] = tv; totR[(y + 1) * N + i] = tv / defl; if (netR) { netN[(y + 1) * N + i] = tv + (HR[y + 1] + RVr[y + 1]) * defl - DEBT[y + 1] - RDEBT[y + 1]; netR[(y + 1) * N + i] = netN[(y + 1) * N + i] / defl; } }
       if (y + 1 === RY) atRet[i] = tv / defl;
       // nächste Rate
       if (retired && y < Y - 1) {
@@ -1051,10 +1133,10 @@ function simulate(p, lite) {
         const bridge = p.wmode === "dyn" && isFinite(PL.PY) && PL.PY > RY && y + 1 <= PL.PY;
         if (bridge) {
           const gI = p.indexed ? 1 + IN[y] : 1; st.base *= gI;
-          if (y + 1 === PL.PY) st.iwr = tv > 0 ? Math.max(0, st.base - PN[y + 1]) * 12 / tv : 0;
+          if (y + 1 === PL.PY) st.iwr = tv > 0 ? Math.max(0, st.base - PI[y + 1]) * 12 / tv : 0;
         } else if (p.wmode === "dyn") {
           const prev = st.base, gI = p.indexed ? 1 + IN[y] : 1, D = p.indexed ? defl : 1;
-          let nb = Math.min(Math.max(st.iwr * tv / 12 + PN[y + 1], prev * gI * (1 - p.dcut)), prev * gI * (1 + p.dup));
+          let nb = Math.min(Math.max(st.iwr * tv / 12 + PI[y + 1], prev * gI * (1 - p.dcut)), prev * gI * (1 + p.dup));
           st.base = Math.min(Math.max(nb, p.net * p.dfloor * D), isFinite(p.dcap) ? p.net * p.dcap * D : Infinity);
         } else if (p.indexed) st.base *= 1 + IN[y];
       }
@@ -1164,7 +1246,7 @@ const STRESS = {
   c22: { eq: [-27.1, 37.2], inf: [6.9, 5.9], bd: [-17.17, 7.19], gd: [6.6, 10.4], bdMix: true, name: "Zinsanstieg 2022" },
 };
 
-const IDX = new Float64Array(YMAX + 1), CX = new Float64Array(YMAX + 1);
+const IDX = new Float64Array(YMAX + 1), CX = new Float64Array(YMAX + 1), PXT = new Float64Array(YMAX + 1);
 const RE = new Float64Array(YMAX), RB = new Float64Array(YMAX), RC = new Float64Array(YMAX), RG = new Float64Array(YMAX), IN = new Float64Array(YMAX);
 function genPath(p, i, Y) {
   const off = p.off || 0, m = p.inf, st = STRESS[p.stress];
@@ -1225,7 +1307,7 @@ const LB = [0, 1, 2, 3].map(() => new Float64Array(LMAX));
 // Tilgungsplan: monatliche Rate, Sondertilgung am Jahresende; liefert Zahlungen je Jahr und Restschuld zu Jahresbeginn (nominal)
 function loanPlan(p, Y, saleY) {
   const LP = new Float64Array(Y), DEBT = new Float64Array(Y + 1), XP = new Float64Array(Y);
-  let d = p.home ? p.debt : 0, payoff = d > 0 ? null : 0; DEBT[0] = d;
+  let d = p.home || p.loanOnly ? p.debt : 0, payoff = d > 0 ? null : 0; DEBT[0] = d;
   // Nach der Zinsbindung gilt der Anschlusszins (bei 2 % Inflation; bei mehr Inflation entsprechend höher). Die Rate bleibt gleich,
   // reicht sie nicht für Zins plus 1 % Tilgung, steigt sie darauf
   const zb = p.lzb == null ? Infinity : p.lzb, z2 = p.lz2 == null ? p.lz : Math.max(0, p.lz2 + (p.inf == null ? 0.02 : p.inf) - 0.02);
@@ -1261,6 +1343,7 @@ function est2026(x) {
 // (Rentenanpassung nach den Löhnen des Vorjahrs); pg, pkvg und tg gelten bei durchschnittlicher Inflation
 function pensionPlan(p, Y, IN, out) {
   const PN = out || new Float64Array(Y);
+  PXT.fill(0);
   if (!p.pOn || !(p.pens > 0)) { if (out) PN.fill(0); return { PN, PY: Infinity }; }
   // pg, pkvg und tg gelten bei 2 % Inflation; höhere oder niedrigere Inflation geht mit einem Jahr Verzögerung durch
   const m = p.inf == null ? 0.02 : p.inf, X = IDX;
@@ -1286,10 +1369,51 @@ function pensionPlan(p, Y, IN, out) {
       f = Math.pow(1 + p.tg, Math.max(0, (p.year0 || 2026) + y - 2026)) * X[y];
       tx = f * est2026(Math.max(0, base - 138) / f) * (1 + (p.kst || 0));
     } else tx = p.ptax * base;
+    PXT[y] = Math.max(0, base - 138);
     PN[y] = (G - kv - tx) / 12;
     if (first == null) first = { gross: G / 12, kv: kv / 12, tax: tx / 12, net: PN[y], rate: base > 0 ? tx / base : 0, gfb: 12348 * f, prem: prem / 12, zus: zus / 12 };
   }
   return { PN, PY, BA, first, year };
+}
+
+
+// ---------- Vermietete Immobilie ----------
+// Kredit wie beim eigenen Haus (Zinsbindung, Anschlusszins), ohne Sondertilgung
+function rentalLoan(p, Y, rsY) {
+  return loanPlan({ loanOnly: true, home: false, debt: p.rdebt || 0, lz: p.rlz || 0, lzb: p.rlzb, lz2: p.rlz2, lrate: p.rrate || 0, lsond: 0, inf: p.inf }, Y, rsY);
+}
+// Netto-Zufluss pro Jahr (nominal) nach Kosten, Rate und Steuer; im Verkaufsjahr inkl. Erlös.
+// X: Index der Inflation (1 bei 2 %), D: Deflator des Pfads, XT: zu versteuerndes Renteneinkommen, RY: Beginn der Entnahme
+function rentalFlows(p, Y, L, rsY, X, D, XT, RY, out) {
+  const CF = out || new Float64Array(Y), det = { first: null, after: null };
+  CF.fill(0);
+  if (!p.rOn) return det;
+  const y0 = p.year0 || 2026, basis = (p.rbuy || 0) * (p.rbldg == null ? 0.75 : p.rbldg), afaR = p.rafa || 0;
+  const yrs0 = y0 - (p.rbuyY || y0), afaN = afaR > 0 ? 1 / afaR : 0;
+  let afaCum = Math.min(basis, Math.max(0, yrs0) * basis * afaR);
+  for (let y = 0; y < Y; y++) {
+    if (y > rsY) break;
+    const g = Math.pow(1 + (p.rmg == null ? 0.02 : p.rmg), y) * X[y];
+    const rent = y < rsY ? 12 * p.rrent * (1 - (p.rvac || 0)) * g : 0, cost = y < rsY ? 12 * p.rrent * (p.rcost || 0) * g : 0;
+    const pay = L.LP[y], interest = y < rsY ? Math.max(0, pay - (L.DEBT[y] - L.DEBT[y + 1])) : 0;
+    const afa = y < rsY && afaCum < basis && yrs0 + y < afaN ? Math.min(basis * afaR, basis - afaCum) : 0; afaCum += afa;
+    let vv = rent - cost - interest - afa, cash = rent - cost - pay;
+    if (y === rsY) {
+      const price = (p.rv || 0) * Math.pow(1 + (p.rhg || 0), y) * D[y] * (1 - (p.rsc == null ? 0.05 : p.rsc));
+      cash += price - L.DEBT[y];
+      if (y0 + y - (p.rbuyY || y0) < 10) vv += price - ((p.rbuy || 0) - afaCum);   // innerhalb der Spekulationsfrist
+    }
+    let tax;
+    if (y < RY) tax = (p.rtax == null ? 0.35 : p.rtax) * vv;
+    else {
+      const f = Math.pow(1 + (p.tg || 0), Math.max(0, y0 + y - 2026)) * X[y], x = XT[y];
+      tax = f * (est2026(Math.max(0, x + vv) / f) - est2026(x / f)) * (1 + (p.kst || 0));
+    }
+    CF[y] = cash - tax;
+    if (y === 0) det.first = { rent: rent / 12, cost: cost / 12, interest: interest / 12, afa: afa / 12, pay: pay / 12, tax: tax / 12, cf: CF[0] / 12 };
+    if (det.after == null && y < rsY && L.DEBT[y] <= 0 && pay === 0) det.after = { y, rent: rent / 12, cost: cost / 12, tax: tax / 12, cf: CF[y] / 12 / D[y] };
+  }
+  return det;
 }
 
 function simulate(p, lite) {
@@ -1312,10 +1436,15 @@ function simulate(p, lite) {
   const payAll = p.home && p.debt > 0 ? (p.lrate * 12 + p.lsond) * sh : 0;
   const FREED = new Float64Array(Y); for (let y = 0; y < Y; y++) FREED[y] = y < saleY ? Math.max(0, payAll - LP[y]) * (p.fp == null ? 1 : p.fp) : 0;
   const HR = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) HR[y] = p.home && y <= saleY ? p.hv * ho * Math.pow(1 + p.hg, y) : 0;
-  const withHome = p.home && (p.hv > 0 || p.debt > 0);
+  // Vermietete Immobilie: Kredit, Wert (heutige Kaufkraft) und Verkauf
+  const rsY = p.rOn && p.rSaleAge > 0 && p.rSaleAge - p.age0 < Y ? Math.max(0, p.rSaleAge - p.age0) : Infinity;
+  const RL = rentalLoan(p, Y, rsY), RCF = new Float64Array(Y), RDF = new Float64Array(Y + 1);
+  const RVr = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) RVr[y] = p.rOn && y < rsY ? (p.rv || 0) * Math.pow(1 + (p.rhg || 0), y) : 0;
+  const RDEBT = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) RDEBT[y] = p.rOn && y < rsY ? RL.DEBT[y] : 0;
+  const withHome = (p.home && (p.hv > 0 || p.debt > 0)) || (p.rOn && (p.rv > 0 || p.rdebt > 0));
   const netR = lite || !withHome ? null : new Float64Array((Y + 1) * N), netN = lite || !withHome ? null : new Float64Array((Y + 1) * N);
   const infM = p.inf == null ? 0.02 : p.inf, bzE = Math.max(0, p.bz + infM - 0.02);
-  const PL = pensionPlan(p, Y), PNP = new Float64Array(Y), pathPN = PL.PY < Y;
+  const PL = pensionPlan(p, Y), PNP = new Float64Array(Y), pathPN = PL.PY < Y, PI = new Float64Array(Y);
   let PN = PL.PN;
   const tax1 = new Float64Array(N), loan1 = LP[Math.min(RY, Y - 1)] / 12;
   const P = new Float64Array(NC), TU = new Float64Array(NC), HEAD = new Int32Array(NC);
@@ -1361,6 +1490,8 @@ function simulate(p, lite) {
     genPath(p, i, Y);
     if (pathPN) PN = pensionPlan(p, Y, IN, PNP).PN;
     CX[0] = 1; for (let y = 1; y < Y; y++) CX[y] = CX[y - 1] * (1 + (y >= 2 ? IN[y - 2] : infM)) / 1.02; // Sparrate folgt den Löhnen
+    if (p.rOn) { RDF[0] = 1; for (let y = 0; y < Y; y++) RDF[y + 1] = RDF[y] * (1 + IN[y]); rentalFlows(p, Y, RL, rsY, CX, RDF, PXT, RY, RCF); }
+    for (let y = 0; y < Y; y++) PI[y] = PN[y] + (p.rOn && y >= RY ? RCF[y] / 12 : 0);   // Einkommen neben dem Depot: Rente plus Mietüberschuss
     for (let c = 0; c < NC; c++) { LU[c].fill(0); LB[c].fill(0); P[c] = 1; TU[c] = 0; HEAD[c] = 0; }
     last = 0; carry = 0;
     if (p.cap > 0) {
@@ -1369,16 +1500,16 @@ function simulate(p, lite) {
     }
     let vpPend = 0, defl = 1, dead = false, tA = 0, tR = 0, tR10 = 0, tAN = 0, tRN = 0, tR10N = 0;
     const st = { base: 0, iwr: 0 };
-    if (!lite) { totR[i] = p.cap; totN[i] = p.cap; if (netR) { netR[i] = p.cap + HR[0] - DEBT[0]; netN[i] = netR[i]; } }
+    if (!lite) { totR[i] = p.cap; totN[i] = p.cap; if (netR) { netR[i] = p.cap + HR[0] + RVr[0] - DEBT[0] - RDEBT[0]; netN[i] = netR[i]; } }
     for (let y = 0; y < Y; y++) {
       const age = p.age0 + y, w = W[y], retired = y >= RY;
-      if (retired && y === RY) { st.base = p.net * defl; const t = total(); st.iwr = t > 0 ? Math.max(0, st.base - PN[y]) * 12 / t : 0; }
-      let cashIn = (retired ? 0 : p.contrib * 12 * Math.pow(1 + p.cg, y) * CX[y] + FREED[y] - LN.XP[y] * sh) + FIN[y] * defl;
+      if (retired && y === RY) { st.base = p.net * defl; const t = total(); st.iwr = t > 0 ? Math.max(0, st.base - PI[y]) * 12 / t : 0; }
+      let cashIn = (retired ? 0 : p.contrib * 12 * Math.pow(1 + p.cg, y) * CX[y] + FREED[y] - LN.XP[y] * sh + (p.rOn ? RCF[y] : 0)) + FIN[y] * defl;
       let cashNeed = (retired ? LP[y] : 0) + FOUT[y] * defl;
       // Liegt die Netto-Rente über dem Wunsch, ist die ganze Rente Einkommen; das Depot zahlt dann nichts
       // Extra für die aktiven Jahre (heutige Kaufkraft, bis zum gewählten Alter) kommt zur Rate dazu
       const EXn = retired && p.extra > 0 && age < (p.xAge || 0) ? p.extra * (p.indexed ? defl : 1) : 0;
-      if (retired) cashNeed += Math.max(0, st.base + EXn - PN[y]) * 12;
+      if (retired) cashNeed += Math.max(0, st.base + EXn - PI[y]) * 12;
       else if (PN[y] > 0) cashIn += PN[y] * 12;
       if (y === saleY) { const pr = HR[y] * defl * (1 - (p.sc || 0)) - DEBT[y]; if (pr >= 0) cashIn += pr; else cashNeed -= pr; }
       let g = 0, tax = taxOf(vpPend), G = 0;
@@ -1388,12 +1519,12 @@ function simulate(p, lite) {
         const tv = total();
         if (G > tv + 1e-6) {
           dead = true; fails++; failAges.push(age);
-          if (!lite) { const part = Math.max(PN[y], Math.min(st.base + EXn, PN[y] + Math.max(0, tv + cashIn - tax) / 12)); rateN[y * N + i] = part; rateR[y * N + i] = part / defl; penR[y * N + i] = PN[y] / defl; }
+          if (!lite) { const part = Math.max(PI[y], Math.min(st.base + EXn, PI[y] + Math.max(0, tv + cashIn - tax) / 12)); rateN[y * N + i] = part; rateR[y * N + i] = part / defl; penR[y * N + i] = PN[y] / defl; }
           let dd = defl;
           for (let yy = y; yy < Y && !lite; yy++) {
-            if (yy > y) { rateN[yy * N + i] = PN[yy]; rateR[yy * N + i] = PN[yy] / dd; penR[yy * N + i] = PN[yy] / dd; }
+            if (yy > y) { rateN[yy * N + i] = PI[yy]; rateR[yy * N + i] = PI[yy] / dd; penR[yy * N + i] = PN[yy] / dd; }
             totR[(yy + 1) * N + i] = 0; totN[(yy + 1) * N + i] = 0; dd *= 1 + IN[yy];
-            if (netR) { netR[(yy + 1) * N + i] = HR[yy + 1] - DEBT[yy + 1] / dd; netN[(yy + 1) * N + i] = HR[yy + 1] * dd - DEBT[yy + 1]; }
+            if (netR) { netR[(yy + 1) * N + i] = HR[yy + 1] + RVr[yy + 1] - (DEBT[yy + 1] + RDEBT[yy + 1]) / dd; netN[(yy + 1) * N + i] = (HR[yy + 1] + RVr[yy + 1]) * dd - DEBT[yy + 1] - RDEBT[yy + 1]; }
           }
           break;
         }
@@ -1419,7 +1550,7 @@ function simulate(p, lite) {
       { const e = pool - carry; carry = e < 0 ? -e : 0; }
       const taxReal = tax / defl;
       if (retired) { tR += taxReal; tRN += tax; if (y < RY + 10) { tR10 += taxReal; tR10N += tax; } } else { tA += taxReal; tAN += tax; }
-      if (!lite) { taxY[y * N + i] = taxReal; if (retired) { const inc = Math.max(st.base + EXn, PN[y]); rateN[y * N + i] = inc; rateR[y * N + i] = inc / defl; penR[y * N + i] = PN[y] / defl; } }
+      if (!lite) { taxY[y * N + i] = taxReal; if (retired) { const inc = Math.max(st.base + EXn, PI[y]); rateN[y * N + i] = inc; rateR[y * N + i] = inc / defl; penR[y * N + i] = PN[y] / defl; } }
       // Wertentwicklung und Vorabpauschale
       let vpNext = 0;
       for (let c = 0; c < NC; c++) {
@@ -1431,7 +1562,7 @@ function simulate(p, lite) {
       vpPend = vpNext;
       defl *= 1 + IN[y];
       const tv = total();
-      if (!lite) { totN[(y + 1) * N + i] = tv; totR[(y + 1) * N + i] = tv / defl; if (netR) { netN[(y + 1) * N + i] = tv + HR[y + 1] * defl - DEBT[y + 1]; netR[(y + 1) * N + i] = netN[(y + 1) * N + i] / defl; } }
+      if (!lite) { totN[(y + 1) * N + i] = tv; totR[(y + 1) * N + i] = tv / defl; if (netR) { netN[(y + 1) * N + i] = tv + (HR[y + 1] + RVr[y + 1]) * defl - DEBT[y + 1] - RDEBT[y + 1]; netR[(y + 1) * N + i] = netN[(y + 1) * N + i] / defl; } }
       if (y + 1 === RY) atRet[i] = tv / defl;
       // nächste Rate
       if (retired && y < Y - 1) {
@@ -1440,10 +1571,10 @@ function simulate(p, lite) {
         const bridge = p.wmode === "dyn" && isFinite(PL.PY) && PL.PY > RY && y + 1 <= PL.PY;
         if (bridge) {
           const gI = p.indexed ? 1 + IN[y] : 1; st.base *= gI;
-          if (y + 1 === PL.PY) st.iwr = tv > 0 ? Math.max(0, st.base - PN[y + 1]) * 12 / tv : 0;
+          if (y + 1 === PL.PY) st.iwr = tv > 0 ? Math.max(0, st.base - PI[y + 1]) * 12 / tv : 0;
         } else if (p.wmode === "dyn") {
           const prev = st.base, gI = p.indexed ? 1 + IN[y] : 1, D = p.indexed ? defl : 1;
-          let nb = Math.min(Math.max(st.iwr * tv / 12 + PN[y + 1], prev * gI * (1 - p.dcut)), prev * gI * (1 + p.dup));
+          let nb = Math.min(Math.max(st.iwr * tv / 12 + PI[y + 1], prev * gI * (1 - p.dcut)), prev * gI * (1 + p.dup));
           st.base = Math.min(Math.max(nb, p.net * p.dfloor * D), isFinite(p.dcap) ? p.net * p.dcap * D : Infinity);
         } else if (p.indexed) st.base *= 1 + IN[y];
       }
@@ -1551,10 +1682,13 @@ const STRESS_H = {
   infl: "Zehn Jahre mit Inflation bis 13 %. Die Rate steigt kräftig mit, während Aktien und Anleihen real kaum zulegen. Gold stieg damals stark, 1979 allein um 127 % in US-Dollar.",
   gfall: "Gold verliert in fünf Jahren über ein Drittel, wie 1981–1985 in Euro. Aktien und Anleihen laufen zufällig weiter. Ohne Gold im Depot ändert dieser Test nichts.",
 };
-const DEFAULTS = { inc0: 2600, gapOn: false, gapPct: 100, xtra: 0, xAge: 75, pOn: false, pens: 1650, pAge: 67, pg: 2, pniv: 48, ppkv0: 700, ktg: 0, bel: 0, pkvg: 3.5, ptax: 20, tg: 2, pkv: 12.35, home: false, sc: 5, fp: 50, flowsOn: false, debt: 285000, lshare: 50, hshare: 50, lz: 3.4, lrate: 1350, lsond: 2000, hv: 420000, hg: 0, age0: 41, cap: 65000, gain0: 25, contrib: 350, cg: 0, retAge: 67, age1: 95, net: 900, dfloor: 75, wE: 60, wC: 5, wG: 0, rg: 3.5, vg: 15, tent: false, tUp: 10, tPeak: 40, tDown: 10, tLate: 60, bz: 3.2, re: 7, rb: 3.75, rc: 2, ve: 16, vb: 4, inf: 2, idx: true, ter: 0.3, lzb: 10, lz2: 4.5 };
+const DEFAULTS = { rOn: false, rv: 300000, rdebt: 200000, rlz: 3.5, rlzb: 10, rlz2: 4.5, rrate: 1000, rrent: 1100, rcost: 25, rvac: 3, rmg: 2, rhg: 0, rbuy: 280000, rbuyY: 2020, rbldg: 75, rafa: 2, rtax: 35, rSaleAge: 100, inc0: 2600, gapOn: false, gapPct: 100, xtra: 0, xAge: 75, pOn: false, pens: 1650, pAge: 67, pg: 2, pniv: 48, ppkv0: 700, ktg: 0, bel: 0, pkvg: 3.5, ptax: 20, tg: 2, pkv: 12.35, home: false, sc: 5, fp: 50, flowsOn: false, debt: 285000, lshare: 50, hshare: 50, lz: 3.4, lrate: 1350, lsond: 2000, hv: 420000, hg: 0, age0: 41, cap: 65000, gain0: 25, contrib: 350, cg: 0, retAge: 67, age1: 95, net: 900, dfloor: 75, wE: 60, wC: 5, wG: 0, rg: 3.5, vg: 15, tent: false, tUp: 10, tPeak: 40, tDown: 10, tLate: 60, bz: 3.2, re: 7, rb: 3.75, rc: 2, ve: 16, vb: 4, inf: 2, idx: true, ter: 0.3, lzb: 10, lz2: 4.5 };
 const S = { kvm: "gkv", ptm: "fix", wmode: "fix", swing: 10, band: 5, fb: 1000, ks: 0, sell: "fifo", scen: "o", model: "r", stress: "none", when: "ret", mode: "real" };
 
 const fmts = {
+  rv: v => eur(v), rdebt: v => eur(v), rlz: v => nf2.format(v) + " %", rlzb: v => v + " Jahre", rlz2: v => nf2.format(v) + " %", rrate: v => eur(v), rrent: v => eur(v),
+  rcost: v => v + " %", rvac: v => v + " %", rmg: v => nf2.format(v) + " %", rhg: v => (v > 0 ? "+" : "") + nf2.format(v) + " %", rbuy: v => eur(v), rbuyY: v => String(v),
+  rbldg: v => v + " %", rafa: v => nf1.format(v) + " %", rtax: v => v + " %", rSaleAge: v => v >= 100 ? "nie" : v + " Jahre",
   lshare: v => v + " %", hshare: v => v + " %", inc0: v => eur(v), gapPct: v => v + " %", xtra: v => eur(v), xAge: v => v + " Jahre",
   age0: v => v + " Jahre", cap: v => eur(v), gain0: v => v + " %", contrib: v => eur(v), cg: v => nf1.format(v) + " %",
   retAge: v => "mit " + v + " Jahren", age1: v => v + " Jahre", net: v => eur(v),
@@ -1568,6 +1702,8 @@ const fmts = {
 const ranges = Object.keys(fmts);
 // Zahlenfelder neben allen Reglern: der getippte Wert gilt exakt, der Regler zeigt ihn gerundet an
 const NUMCFG = {
+  rv: { u: "€", d: 0, soft: 1e7 }, rdebt: { u: "€", d: 0, soft: 1e7 }, rlz: { u: "%", d: 2 }, rlzb: { u: "Jahre", d: 0 }, rlz2: { u: "%", d: 2 }, rrate: { u: "€", d: 0, soft: 5e4 }, rrent: { u: "€", d: 0, soft: 5e4 },
+  rcost: { u: "%", d: 0 }, rvac: { u: "%", d: 0 }, rmg: { u: "%", d: 2 }, rhg: { u: "%", d: 2 }, rbuy: { u: "€", d: 0, soft: 1e7 }, rbldg: { u: "%", d: 0 }, rafa: { u: "%", d: 1 }, rtax: { u: "%", d: 0 }, rbuyY: { u: "", d: 0, ng: 1 }, rSaleAge: { u: "Jahre", d: 0 },
   age0: { u: "Jahre", d: 0 }, cap: { u: "€", d: 0, soft: 2e7 }, gain0: { u: "%", d: 0 }, contrib: { u: "€", d: 0, soft: 1e5 }, cg: { u: "%", d: 1 },
   retAge: { pre: "mit", u: "Jahren", d: 0 }, age1: { u: "Jahre", d: 0 }, net: { u: "€", d: 0, soft: 5e4 }, dfloor: { u: "%", d: 0 },
   wE: { u: "%", d: 0 }, wC: { u: "%", d: 0 }, wG: { u: "%", d: 0 }, rg: { u: "%", d: 2 }, vg: { u: "%", d: 0 }, tUp: { u: "Jahre vorher", d: 0 }, tPeak: { u: "%", d: 0 }, tDown: { u: "Jahre", d: 0 }, tLate: { u: "%", d: 0 },
@@ -1580,7 +1716,7 @@ const NUMV = {}, ORIGMAX = {};
 const isHome = () => $("home").checked;
 const gv = id => NUMV[id] != null ? NUMV[id] : parseFloat($(id).value);
 function setV(id, x) { const rg = $(id); rg.value = x; if (Math.abs(+rg.value - x) > 1e-9) NUMV[id] = x; else delete NUMV[id]; }
-const nfd = {}; const fmtN = (id, x) => (nfd[id] || (nfd[id] = new Intl.NumberFormat("de-DE", { maximumFractionDigits: NUMCFG[id].d }))).format(x);
+const nfd = {}; const fmtN = (id, x) => (nfd[id] || (nfd[id] = new Intl.NumberFormat("de-DE", { maximumFractionDigits: NUMCFG[id].d, useGrouping: !NUMCFG[id].ng }))).format(x);
 function parseNum(s) {
   s = String(s).replace(/[^0-9,.\-]/g, "");
   if (/,/.test(s)) s = s.replace(/\./g, "").replace(",", ".");
@@ -1611,6 +1747,8 @@ function readParams(over) {
     re: v("re") / 100, rb: v("rb") / 100, rc: v("rc") / 100, rgo: v("rg") / 100, vg: v("vg") / 100, ve: v("ve") / 100, vb: v("vb") / 100, inf: v("inf") / 100, ter: v("ter") / 100,
     extra: v("xtra"), xAge: v("xAge"), gapOn: $("gapOn").checked, gapLink: $("gapOn").checked && GAP ? { base: GAP.base, pct: GAP.pct } : null,
     pOn: $("pOn").checked, pens: v("pens"), pAge: Math.min(Math.max(v("pAge"), retAge), age1 - 1), pg: v("pg") / 100, pniv: v("pniv") / 100, kvPriv: S.kvm === "pkv", pkv0: v("ppkv0"), ktg: v("ktg"), bel: v("bel"), pkvg: v("pkvg") / 100, ptax: v("ptax") / 100, ptaxAuto: S.ptm === "auto", tg: v("tg") / 100, kst: S.ks / 100, pkv: v("pkv") / 100, year0: new Date().getFullYear(),
+    rOn: $("rOn").checked, rv: v("rv"), rdebt: v("rdebt"), rlz: v("rlz") / 100, rlzb: v("rlzb"), rlz2: v("rlz2") / 100, rrate: v("rrate"), rrent: v("rrent"), rcost: v("rcost") / 100, rvac: v("rvac") / 100,
+    rmg: v("rmg") / 100, rhg: v("rhg") / 100, rbuy: v("rbuy"), rbuyY: v("rbuyY"), rbldg: v("rbldg") / 100, rafa: v("rafa") / 100, rtax: v("rtax") / 100, rSaleAge: v("rSaleAge") >= 100 ? 0 : v("rSaleAge"),
     home: isHome(), debt: v("debt"), lz: v("lz") / 100, lzb: v("lzb"), lz2: v("lz2") / 100, lrate: v("lrate"), lshare: v("lshare") / 100, hshare: v("hshare") / 100, lsond: v("lsond"), fp: v("fp") / 100, sc: v("sc") / 100, hv: v("hv"), hg: v("hg") / 100,
     flows: isHome() && $("flowsOn").checked ? readFlows(age0, age1) : [],
     model: S.model, stress: S.stress, off, rate: KS_RATE[S.ks], fb: S.fb, bz: v("bz") / 100, trick: S.sell === "trick",
@@ -1667,6 +1805,7 @@ function updSums() {
   set("ansparen", `${g("age0")} Jahre · ${eurR(g("cap"))} angelegt · ${eur(g("contrib"))} im Monat`);
   set("entnehmen", `ab ${g("retAge")} bis ${g("age1")} · ${eur(g("net"))} im Monat${gv("xtra") > 0 ? ` + ${eur(gv("xtra"))} bis ${gv("xAge")}` : ""}${$("pOn").checked ? " mit Rente" : ""} · ${S.wmode === "dyn" ? "flexibel" : "fest"}`);
   set("rente", $("pOn").checked ? `${eur(g("pens"))} brutto ab ${g("pAge")} · +${nf2.format(g("pg"))} % pro Jahr${gv("pniv") !== 48 ? ` · Niveau ${nf1.format(gv("pniv"))} %` : ""} · ${S.ptm === "auto" ? "Steuer nach Tarif" : "Steuer " + nf1.format(gv("ptax")) + " %"}${S.kvm === "pkv" ? " · privat versichert" : ""}` : "nicht einbezogen");
+  set("miete", $("rOn").checked ? `Wert ${eurR(g("rv"))} · Restschuld ${eurR(g("rdebt"))} · Miete ${eur(g("rrent"))} · Rate ${eur(g("rrate"))}` : "nicht einbezogen");
   set("haus", isHome() ? `Restschuld ${eurR(g("debt"))} · ${eur(g("lrate"))} Rate · Anteil Rate ${g("lshare")} % · Hauswert ${eurR(g("hv"))}, dir gehören ${g("hshare")} %` + ($("flowsOn").checked ? " · mit Einmalzahlungen" : "") : "nicht einbezogen");
   set("aufteilung", `Aktien ${nf1.format(e)} % · Anleihen ${nf1.format(b)} % · Geldmarkt ${nf1.format(c)} %` + (gd > 0 ? ` · Gold ${nf1.format(gd)} %` : "") + ($("tent").checked ? " · Anleihezelt" : ""));
   set("markt", `${SCEN_NAME[S.scen]} · Aktien ${nf2.format(g("re"))} % · Kosten ${nf2.format(g("ter"))} % · Inflation ${nf2.format(g("inf"))} %` + (S.model === "s" ? " · einfaches Modell" : ""));
@@ -1856,8 +1995,9 @@ function startSide(p) {
   if (p.tent) cmp.tent = readParams({ tent: false });
   if (p.trick) cmp.trick = readParams({ trick: false });
   if (p.wG > 0) { const k = 1 / (1 - p.wG); cmp.gold = readParams({ wG: 0, wE: p.wE * k, wC: p.wC * k, tPeak: p.tPeak * k, tLate: p.tLate * k }); }
+  if (p.rOn) cmp.noRent = readParams({ rOn: false });
   if (VIEWNOW === "quick") { const a = SCEN[S.scen === "v" ? "o" : "v"]; cmp.alt = readParams({ re: a.re / 100, rb: a.rb / 100, rc: a.rc / 100, rgo: a.rg / 100 }); }
-  if (Object.keys(cmp).some(k => k !== "alt")) $("cmpbox").innerHTML = `<p class="busy">Vergleich wird berechnet …</p>`; else renderCmp();
+  if (Object.keys(cmp).some(k => k !== "alt" && k !== "noRent")) $("cmpbox").innerHTML = `<p class="busy">Vergleich wird berechnet …</p>`; else renderCmp();
   sideTimer = setTimeout(() => {
     if (sid !== sideId) return;
     const onSide = m => { if (m.id !== sideId) return; if (m.type === "cmp") { if (last && last.p === sideP) { last.cmp = m.cmp; renderCmp(); hookRender(); } } else { sideBusy = false; renderLev(m.d, sideP); } };
@@ -1918,7 +2058,24 @@ function renderLev(d, p) {
     : found ? `Jede grüne Zeile bringt das Ergebnis allein auf mindestens 80 %, ab da zeigt die Ampel Grün. Kombiniert reicht von jedem weniger. Gerechnet in denselben 2.000 Zukünften, heute ${pf(base)}. Tippe eine Zeile an, um sie zu übernehmen.`
     : `Kombiniere mehrere Stellschrauben, zum Beispiel mehr sparen und flexibel entnehmen. Heute: ${pf(base)}.`;
 }
+// Vermietete Immobilie: Rechnung des ersten Jahres, Kreditende, Vergleich ohne die Immobilie (bei 2 % Inflation, ohne Zufall)
+function renderRent() {
+  const h = $("rent-h"); if (!h || !last) return;
+  const p = readParams(), on = p.rOn; p.rOn = true;
+  const Y = Math.max(1, p.age1 - p.age0), RY = Math.max(0, p.retAge - p.age0);
+  const rsY = p.rSaleAge > 0 && p.rSaleAge - p.age0 < Y ? Math.max(0, p.rSaleAge - p.age0) : Infinity;
+  const L = rentalLoan(p, Y, rsY), X = new Float64Array(Y + 1).fill(1), D = Float64Array.from({ length: Y + 1 }, (_, y) => Math.pow(1.02, y));
+  pensionPlan(p, Y); const det = rentalFlows(p, Y, L, rsY, X, D, PXT, RY);
+  if (!det.first) { h.textContent = ""; return; }
+  const f = det.first, sg = x => (x >= 0 ? "+" : "−") + eur(Math.abs(Math.round(x)));
+  let t = `Heute im Monat: Miete ${eur(Math.round(f.rent))} − Kosten ${eur(Math.round(f.cost))} − Rate ${eur(Math.round(f.pay))} ${f.tax <= 0 ? "+ Steuererstattung " + eur(Math.round(-f.tax)) : "− Steuer " + eur(Math.round(f.tax))} = ${sg(f.cf)} (${f.cf >= 0 ? "geht ins Depot" : "kommt aus dem Depot"}).`;
+  t += ` Netto-Mietrendite vor Kredit ${nf1.format(p.rv > 0 ? (f.rent - f.cost) * 12 / p.rv * 100 : 0)} %.`;
+  if (p.rdebt > 0 && L.payoff != null) t += ` Kredit abbezahlt mit ${Math.round(p.age0 + L.payoff)}` + (det.after ? `, danach etwa ${sg(det.after.cf)} im Monat nach Steuer, in heutiger Kaufkraft.` : ".");
+  if (on && last.cmp && last.cmp.noRent) t += ` Ohne die Immobilie: ${nf1.format(Math.round(last.cmp.noRent.success * 1000) / 10)} % statt ${nf1.format(Math.round(last.r.success * 1000) / 10)} %.`;
+  h.textContent = t;
+}
 function renderCmp() {
+  renderRent();
   const { p, r, cmp } = last, box = $("cmpbox"), pts = x => Math.round(x * 1000) / 10;
   if (!p.tent && !p.trick && !(p.wG > 0)) { box.innerHTML = `<p class="hint">Schalte das Anleihezelt oder den Zweitdepot-Trick ein oder nimm Gold dazu, dann siehst du hier, was das in genau denselben 2.000 Zukünften ändert.</p>`; return; }
   if (!cmp) return;
@@ -1941,6 +2098,7 @@ function renderCmp() {
   box.innerHTML = h;
 }
 function render() {
+  renderRent();
   const { p, r } = last, Y = r.Y, RY = Math.min(r.RY, Y), real = S.mode === "real";
   const Wv = stats(real ? r.totR : r.totN, 0, Y + 1), T = stats(r.taxY, 0, Y);
   const NW = r.netR ? stats(real ? r.netR : r.netN, 0, Y + 1) : null;
@@ -2150,6 +2308,7 @@ function pdfInputs() {
     ["Rate", p.wmode === "dyn" ? `flexibel, ±${S.swing} % pro Jahr, nie unter ${Math.round(p.dfloor * 100)} % (${eur10(p.net * p.dfloor)})` : "fest" + (p.indexed ? ", behält ihre Kaufkraft" : ", bleibt nominal gleich")]]);
   if (p.pOn) { const f = r.pension && r.pension.first; sec("Gesetzliche Rente", [["Rente laut Renteninformation", eur(p.pens) + " brutto, heutige Werte"], ["Rente ab", p.pAge + " Jahren"], ["Steigerung pro Jahr", pc(p.pg)], ["Rentenniveau bei Rentenbeginn", pc(p.pniv) + (Math.abs(p.pniv - 0.48) > 1e-9 ? " (Renteninformation: 48 %)" : "")], ["Steuer auf die Rente", p.ptaxAuto ? `nach Tarif, Tarif steigt ${pc(p.tg)} pro Jahr; im ersten Jahr ${f ? nf1.format(f.rate * 100) + " % auf den steuerpflichtigen Teil" : ""}` : pc(p.ptax) + (ptaxLinked ? " fest, voreingestellt nach Tarif" : " fest, selbst eingetragen")], GAP && GAP.on && ["Rentenlücke schließen", tx("gap-h")], ["Kranken- und Pflegeversicherung", p.kvPriv ? `privat: heute ${eur(p.pkv0)} gesamt${p.ktg ? `, davon ${eur(p.ktg)} fällt mit der Rente weg` : ""}${p.bel ? `, Entlastung ${eur(p.bel)}` : ""}, steigt ${pc(p.pkvg)} pro Jahr. ${tx("pkv-h")}` : `${pc(p.pkv)}, heute ${eur(p.pens * p.pkv)} im Monat${pkvEur != null ? " (selbst eingetragen)" : ""}`], f && ["Netto im ersten Jahr", `${eur10(f.net)} im Monat, heutige Kaufkraft etwa ${eur10(f.net / Math.pow(1 + p.inf, r.pension.PY))}`]]); }
   else sec("Gesetzliche Rente", [["", "nicht einbezogen"]]);
+  if (p.rOn) sec("Vermietete Immobilie", [["Marktwert heute", eur(p.rv)], ["Restschuld heute", eur(p.rdebt)], ["Sollzins", pc(p.rlz) + `, noch ${p.rlzb} Jahre, danach ${pc(p.rlz2)}`], ["Rate pro Monat", eur(p.rrate)], ["Kaltmiete pro Monat", eur(p.rrent)], ["Nicht umlagefähige Kosten", pc(p.rcost) + " der Kaltmiete"], ["Leerstand", pc(p.rvac)], ["Mietsteigerung", pc(p.rmg)], ["Wertsteigerung über Inflation", pc(p.rhg)], ["Kaufpreis, Kaufjahr", eur(p.rbuy) + ", " + p.rbuyY], ["Abschreibung", pc(p.rafa) + " auf " + pc(p.rbldg) + " Gebäudeanteil"], ["Grenzsteuersatz im Berufsleben", pc(p.rtax)], ["Verkauf", p.rSaleAge > 0 ? "mit " + p.rSaleAge : "nein"]]);
   if (p.home) sec("Eigenes Haus", [["Restschuld heute", eur(p.debt)], ["Sollzins", pc(p.lz) + `, noch ${p.lzb} Jahre, danach ${pc(p.lz2)}`], ["Rate pro Monat", eur(p.lrate)], ["Dein Anteil an Rate und Sondertilgung", Math.round(p.lshare * 100) + " %"], ["Dein Anteil am Haus", Math.round(p.hshare * 100) + " %"], ["Sondertilgung pro Jahr", eur(p.lsond)], ["Nach Kreditende ins Depot", pc(p.fp)], ["Hauswert heute", eur(p.hv) + (p.hg ? `, ${pc(p.hg)} pro Jahr über der Inflation` : "")], tx("loan-h") && ["Kredit", tx("loan-h")],
     ...p.flows.map(f => ["Einmalzahlung mit " + f.age, f.type === "sale" ? `Hausverkauf${f.label !== "Hausverkauf" ? " (" + f.label + ")" : ""}, ${pc(p.sc)} Verkaufskosten` : `${f.type === "out" ? "Ausgabe" : "Einnahme"} ${eur(f.amt)} (${f.label})`])]);
   else sec("Eigenes Haus", [["", "nicht einbezogen"]]);
@@ -2322,6 +2481,7 @@ $("pens").addEventListener("input", syncPkv); $("pens-n").addEventListener("chan
   el.addEventListener("change", commit); el.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); commit(); el.blur(); } }); el.addEventListener("focus", () => el.select()); }
 ["idx", "tent", "flowsOn", "pOn", "gapOn"].forEach(id => $(id).addEventListener("change", schedule));
 $("home").addEventListener("change", schedule);
+$("rOn").addEventListener("change", schedule);
 $("bz").addEventListener("input", syncAll); $("bz-n").addEventListener("change", syncAll);
 [1, 2, 3].forEach(n => {
   $(`f${n}-t`).addEventListener("change", schedule);
@@ -2493,7 +2653,7 @@ if ($("wiz")) {
     let h = `<h2>Beide Märkte im Vergleich</h2><div class="qk-two">` + (own ? tile("Normal", "Börse wie früher", normal) + tile("Vorsichtig", "Börse eher schwach", vors) : tile("Deine Annahmen", "aus der ausführlichen Ansicht", cur) + tile("Vorsichtig", "Börse eher schwach", oth)) + `</div>`;
     h += `<p>So oft reicht das Geld bis ${p.age1}. Ergebnis, Stellschrauben und Diagramme rechnen mit „${own ? (S.scen === "v" ? "Vorsichtig" : "Normal") : "deinen Annahmen"}“.</p>`;
     $("qk-res").innerHTML = h;
-    $("qk-ass").textContent = `Fest im Hintergrund, änderbar unter „Ausführlich“: Rente steigt ${pf0(p.pg)} pro Jahr${p.kvPriv ? `, PKV ${pf0(p.pkvg)}` : ""}, beides bei ${pf0(0.02)} Inflation; Inflation ${pf0(p.inf)}, Kosten ${pf0(p.ter)}, Planung bis ${p.age1}${p.home && p.debt > 0 ? `, Zins nach der Zinsbindung ${pf0(p.lz2)}` : ""}, Steuer ${p.ptaxAuto ? "nach Tarif" : "mit " + pf0(p.ptax) + " auf die Rente"}${p.home ? ", die Hälfte der frei werdenden Kreditrate wird gespart".replace("die Hälfte", p.fp === 0.5 ? "die Hälfte" : pf0(p.fp)) : ""}. Gerechnet mit 2.000 möglichen Zukünften und deutschen Steuern wie im echten Depot. Modellrechnung, keine Prognose und keine Anlage-, Steuer- oder Rechtsberatung.`;
+    $("qk-ass").textContent = `Fest im Hintergrund, änderbar unter „Ausführlich“: Rente steigt ${pf0(p.pg)} pro Jahr${p.kvPriv ? `, PKV ${pf0(p.pkvg)}` : ""}, beides bei ${pf0(0.02)} Inflation; Inflation ${pf0(p.inf)}, Kosten ${pf0(p.ter)}, Planung bis ${p.age1}${p.home && p.debt > 0 ? `, Zins nach der Zinsbindung ${pf0(p.lz2)}` : ""}, Steuer ${p.ptaxAuto ? "nach Tarif" : "mit " + pf0(p.ptax) + " auf die Rente"}${p.home ? ", die Hälfte der frei werdenden Kreditrate wird gespart".replace("die Hälfte", p.fp === 0.5 ? "die Hälfte" : pf0(p.fp)) : ""}${p.rOn ? `; vermietete Immobilie mit ${pf0(p.rlz)} Zins für ${p.rlzb} Jahre, danach ${pf0(p.rlz2)}, Kosten ${pf0(p.rcost)} der Miete, Leerstand ${pf0(p.rvac)}, Grenzsteuersatz ${pf0(p.rtax)}, Abschreibung ${pf0(p.rafa)} auf ${pf0(p.rbldg)} von ${eur(p.rbuy)} Kaufpreis (Kauf ${p.rbuyY})` : ""}. Gerechnet mit 2.000 möglichen Zukünften und deutschen Steuern wie im echten Depot. Modellrechnung, keine Prognose und keine Anlage-, Steuer- oder Rechtsberatung.`;
   }
   hookRender = () => { if (view === "quick") syncQk(); };
   function qgo(n) { qs = Math.max(1, Math.min(QN, n)); syncQk(); schedule(); window.scrollTo({ top: 0, behavior: "smooth" }); }
