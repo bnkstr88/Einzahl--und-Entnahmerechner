@@ -251,10 +251,10 @@ body.has-rbar { padding-bottom: 76px; }
 .btn.pri { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); margin-left: auto; }
 .btn:focus-visible, .pick button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-.pick button { font: inherit; text-align: left; display: grid; gap: 2px; padding: 14px 16px; min-height: 56px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.pick button { font: inherit; text-align: left; display: grid; align-content: start; gap: 2px; padding: 14px 16px; min-height: 56px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
 .pick button strong { font-size: 1rem; }
-#wz-prof { grid-template-columns: minmax(0, 1fr); }
-@media (min-width: 600px) { #wz-prof { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+#wz-prof, #qk-prof { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 600px) { #wz-prof, #qk-prof { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .pick button span { font-size: 0.84rem; color: var(--muted); }
 .pick button[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, var(--surface)); box-shadow: inset 0 0 0 1px var(--accent); }
 .wz-res { display: grid; gap: 16px; }
@@ -285,6 +285,8 @@ body.has-rbar { padding-bottom: 76px; }
 #lev-t { margin: 0 0 10px; }
 .wz-res h3 { margin: 0 0 10px; }
 
+h1, h2, h3, summary .t, label, .fact .l { text-wrap: balance; }
+p, .hint, li, .fact .s { text-wrap: pretty; }
 </style>
 </head>
 <body>
@@ -307,7 +309,7 @@ body.has-rbar { padding-bottom: 76px; }
       <div class="pick" data-yn="pOn"><button type="button" data-v="1"><strong>Ja</strong><span>Rente einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>nur das Depot rechnen</span></button></div>
       <div class="wz-body" data-qif="pOn">
         <div class="wz-body" data-els="pens"></div>
-        <div class="ctl"><span class="lbl" id="qniv-l">Rentenniveau bei deinem Rentenbeginn</span><div class="seg" role="group" aria-labelledby="qniv-l"><button type="button" data-qniv="48">48&nbsp;%<small> wie heute</small></button><button type="button" data-qniv="44">44&nbsp;%<small> Mitte</small></button><button type="button" data-qniv="40">40&nbsp;%<small> vorsichtig</small></button></div><p class="hint" id="qniv-h"></p></div>
+        <div class="ctl"><span class="lbl" id="qniv-l">Rentenniveau bei deinem Rentenbeginn</span><div class="seg" role="group" aria-labelledby="qniv-l"><button type="button" data-qniv="48">48&nbsp;%<br><small>wie heute</small></button><button type="button" data-qniv="44">44&nbsp;%<br><small>Mitte</small></button><button type="button" data-qniv="40">40&nbsp;%<br><small>vorsichtig</small></button></div><p class="hint" id="qniv-h"></p></div>
         <div class="wz-body" data-els="#kvm-c"></div>
         <div class="wz-body" data-qkv="1" data-els="ppkv0,ktg"></div>
         <div class="wz-body" data-els="#pens-h"></div>
@@ -323,7 +325,7 @@ body.has-rbar { padding-bottom: 76px; }
       <div class="ctl"><span class="lbl" id="qgap-l">Wie viel vom heutigen Lebensstandard brauchst du im Alter?</span><div class="seg" role="group" aria-labelledby="qgap-l"><button type="button" data-qgap="100">100&nbsp;%</button><button type="button" data-qgap="120">120&nbsp;%</button><button type="button" data-qgap="150">150&nbsp;%</button></div><p class="hint" id="qgap-h"></p></div>
       <div class="ctl"><span class="lbl" id="qwm-l">Kannst du in schlechten Börsenjahren etwas weniger ausgeben?</span><div class="seg two" role="group" aria-labelledby="qwm-l"><button type="button" data-qwm="dyn">Ja, flexibel</button><button type="button" data-qwm="fix">Nein, fest</button></div><p class="hint" id="qwm-h"></p></div>
       <div class="wz-body" data-els="@scen"></div>
-      <div class="ctl"><span class="lbl">Wie legst du an?</span><div class="pick" id="qk-prof"><button type="button" data-qp="30"><strong>Vorsichtig</strong><span>30 % Aktien</span></button><button type="button" data-qp="60"><strong>Ausgewogen</strong><span>60 % Aktien</span></button><button type="button" data-qp="90"><strong>Mutig</strong><span>90 % Aktien</span></button></div><p class="hint" id="qp-h"></p></div>
+      <div class="ctl"><span class="lbl">Wie legst du an?</span><div class="pick" id="qk-prof"><button type="button" data-qp="30"><strong>Vorsichtig</strong><span>30 % Aktien</span></button><button type="button" data-qp="60"><strong>Ausgewogen</strong><span>60 % Aktien</span></button><button type="button" data-qp="90"><strong>Mutig</strong><span>90 % Aktien</span></button></div><p class="hint" id="qp-h"></p></div>
     </section>
     <section class="wz-step qk-step" data-qstep="5">
       <div class="wz-res" data-els="§verdict,%kpihead,%kpis"></div>
@@ -341,10 +343,10 @@ body.has-rbar { padding-bottom: 76px; }
     <section class="panel wz-step" data-step="2"><h2>Wann soll die Entnahme beginnen?</h2><p class="lead">Ab diesem Alter lebst du vom Depot, bis zum zweiten Alter soll es reichen. Lieber großzügig planen: Viele werden älter als gedacht.</p><div class="wz-body" data-els="retAge,age1"></div></section>
     <div id="wz-pre" class="wz-pre">
       <div class="ctl"><span class="lbl" id="wpg-l">Rentensteigerung pro Jahr</span>
-        <div class="seg" role="group" aria-labelledby="wpg-l"><button type="button" data-wpg="0">0 %<br><small>keine Erhöhung</small></button><button type="button" data-wpg="2">2 %<br><small>wie die Inflation</small></button><button type="button" data-wpg="3">3 %<br><small>etwa wie die Löhne</small></button></div>
+        <div class="seg" role="group" aria-labelledby="wpg-l"><button type="button" data-wpg="0">0 %<br><small>keine Erhöhung</small></button><button type="button" data-wpg="2">2 %<br><small>wie die Inflation</small></button><button type="button" data-wpg="3">3 %<br><small>etwa wie die Löhne</small></button></div>
         <p class="hint" id="wpg-h"></p></div>
       <div class="ctl"><span class="lbl" id="wniv-l">Rentenniveau bei Rentenbeginn</span>
-        <div class="seg" role="group" aria-labelledby="wniv-l"><button type="button" data-wniv="48">48 %<br><small>heute</small></button><button type="button" data-wniv="46">46 %<br><small>2040</small></button><button type="button" data-wniv="44">44 %<br><small>Mitte</small></button><button type="button" data-wniv="43">43 %<br><small>Vorsicht</small></button><button type="button" data-wniv="40">40 %<br><small>Härte</small></button></div>
+        <div class="seg" role="group" aria-labelledby="wniv-l"><button type="button" data-wniv="48">48 %<br><small>heute</small></button><button type="button" data-wniv="46">46 %<br><small>2040</small></button><button type="button" data-wniv="44">44 %<br><small>Mitte</small></button><button type="button" data-wniv="43">43 %<br><small>Vorsicht</small></button><button type="button" data-wniv="40">40 %<br><small>Härte</small></button></div>
         <p class="hint" id="wniv-h"></p></div>
     </div>
     <section class="panel wz-step" data-step="3"><h2>Rechnest du mit einer gesetzlichen Rente?</h2><p class="lead">Den Betrag findest du in der jährlichen Renteninformation.</p>
@@ -354,7 +356,7 @@ body.has-rbar { padding-bottom: 76px; }
         <div class="wz-sub" id="wz-pkv">
           <div class="wz-body" data-els="ppkv0,ktg"></div>
           <div class="ctl"><span class="lbl" id="wpk-l">PKV-Beitrag steigt pro Jahr</span>
-            <div class="seg" role="group" aria-labelledby="wpk-l"><button type="button" data-wpkvg="2.5">2,5 %<br><small>günstig</small></button><button type="button" data-wpkvg="3.5">3,5 %<br><small>Branche</small></button><button type="button" data-wpkvg="4.5">4,5 %<br><small>vorsichtig</small></button></div>
+            <div class="seg" role="group" aria-labelledby="wpk-l"><button type="button" data-wpkvg="2.5">2,5 %<br><small>günstig</small></button><button type="button" data-wpkvg="3.5">3,5 %<br><small>Branche</small></button><button type="button" data-wpkvg="4.5">4,5 %<br><small>vorsichtig</small></button></div>
             <p class="hint" id="wpk-h"></p></div>
           <div data-els="#pkv-h"></div>
         </div>
@@ -368,8 +370,8 @@ body.has-rbar { padding-bottom: 76px; }
       <h3 style="margin:8px 0 0">Hast du eine vermietete Immobilie?</h3>
       <div class="pick" data-yn="rOn"><button type="button" data-v="1"><strong>Ja</strong><span>Miete, Kredit und Steuer einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>ohne vermietete Immobilie</span></button></div>
       <div class="wz-body" data-els="rv,rdebt,rlz,rlzb,rrate,rrent,rkost,rtax,#rent-h" data-if="rOn"></div></section>
-    <section class="panel wz-step" data-step="6"><h2>Wie viel Schwankung hältst du aus?</h2><p class="lead">Mehr Aktien wachsen im Schnitt stärker, fallen in Krisen aber tiefer. Der Rest liegt in Anleihen und 5 % auf Tagesgeld oder Geldmarkt.</p>
-      <div class="pick" id="wz-prof"><button type="button" data-p="30"><strong>Vorsichtig</strong><span>30 % Aktien: schwankt weniger, wächst langsamer</span></button><button type="button" data-p="60"><strong>Ausgewogen</strong><span>60 % Aktien: der Mittelweg</span></button><button type="button" data-p="90"><strong>Mutig</strong><span>90 % Aktien: wächst im Schnitt mehr, fällt tiefer</span></button></div>
+    <section class="panel wz-step" data-step="6"><h2>Wie viel Schwankung hältst du aus?</h2><p class="lead">Mehr Aktien wachsen im Schnitt stärker, fallen in Krisen aber tiefer. Der Rest liegt in Anleihen und 5 % auf Tagesgeld oder Geldmarkt.</p>
+      <div class="pick" id="wz-prof"><button type="button" data-p="30"><strong>Vorsichtig</strong><span>30 % Aktien: schwankt weniger, wächst langsamer</span></button><button type="button" data-p="60"><strong>Ausgewogen</strong><span>60 % Aktien: der Mittelweg</span></button><button type="button" data-p="90"><strong>Mutig</strong><span>90 % Aktien: wächst im Schnitt mehr, fällt tiefer</span></button></div>
       <p class="hint" id="wz-prof-h"></p></section>
     <section class="wz-step" data-step="7"><h2>Was, wenn es an der Börse schlecht läuft?</h2><p class="lead">Probier aus, wie sich dein Ergebnis mit vorsichtigeren Annahmen oder einer echten Krise verändert. Für den Anfang reichen „Wie früher“ und „Kein Test“.</p>
       <section class="panel wz-scen"><h3>Wie gut läuft die Börse?</h3><div data-els="@scen,ter"></div></section>
@@ -392,8 +394,8 @@ body.has-rbar { padding-bottom: 76px; }
         <div class="ctl"><div class="ctl-head"><label for="inc0">Dein Netto heute</label><output id="inc0-o" for="inc0"></output></div><input type="range" id="inc0" min="0" max="15000" step="50" value="2600"><p class="hint">Pro Monat, was heute auf dem Konto ankommt. Wird nur für „Rentenlücke schließen“ unter „Gesetzliche Rente“ gebraucht.</p></div>
         <div class="ctl"><div class="ctl-head"><label for="cap">Schon angelegt</label><output id="cap-o" for="cap"></output></div><input type="range" id="cap" min="0" max="2000000" step="5000" value="65000"></div>
         <div class="ctl" id="gain0-c"><div class="ctl-head"><label for="gain0">Davon bisheriger Gewinn</label><output id="gain0-o" for="gain0"></output></div><input type="range" id="gain0" min="0" max="80" step="5" value="25"><p class="hint">Wichtig für die Steuer beim späteren Verkauf.</p></div>
-        <div class="ctl"><div class="ctl-head"><label for="contrib">Sparrate pro Monat</label><output id="contrib-o" for="contrib"></output></div><input type="range" id="contrib" min="0" max="5000" step="25" value="350"><p class="hint">Bleibt in Euro gleich. Mit 2 % Steigerung hält sie etwa ihre Kaufkraft.</p></div>
-        <div class="ctl"><div class="ctl-head"><label for="cg">Sparrate steigt pro Jahr um</label><output id="cg-o" for="cg"></output></div><input type="range" id="cg" min="0" max="5" step="0.5" value="0"><p class="hint">Bei 2 % Inflation. 0 %: Die Rate bleibt in Euro gleich und verliert an Kaufkraft. Ist die Inflation höher, steigen Gehalt und Rate entsprechend mit.</p></div>
+        <div class="ctl"><div class="ctl-head"><label for="contrib">Sparrate pro Monat</label><output id="contrib-o" for="contrib"></output></div><input type="range" id="contrib" min="0" max="5000" step="25" value="350"><p class="hint">Bleibt in Euro gleich. Mit 2 % Steigerung hält sie etwa ihre Kaufkraft.</p></div>
+        <div class="ctl"><div class="ctl-head"><label for="cg">Sparrate steigt pro Jahr um</label><output id="cg-o" for="cg"></output></div><input type="range" id="cg" min="0" max="5" step="0.5" value="0"><p class="hint">Bei 2 % Inflation. 0 %: Die Rate bleibt in Euro gleich und verliert an Kaufkraft. Ist die Inflation höher, steigen Gehalt und Rate entsprechend mit.</p></div>
       </div>
       </details>
 
@@ -417,9 +419,9 @@ body.has-rbar { padding-bottom: 76px; }
           <div class="ctl">
             <span class="lbl" id="sw-l">Wie stark darf sie sich pro Jahr ändern?</span>
             <div class="seg" role="group" aria-labelledby="sw-l">
-              <button type="button" data-swing="5">wenig<br><small>±5 %</small></button>
-              <button type="button" data-swing="10">mittel<br><small>±10 %</small></button>
-              <button type="button" data-swing="15">stark<br><small>±15 %</small></button>
+              <button type="button" data-swing="5">wenig<br><small>±5 %</small></button>
+              <button type="button" data-swing="10">mittel<br><small>±10 %</small></button>
+              <button type="button" data-swing="15">stark<br><small>±15 %</small></button>
             </div>
           </div>
           <div class="ctl"><div class="ctl-head"><label for="dfloor">Aber nie weniger als</label><output id="dfloor-o" for="dfloor"></output></div><input type="range" id="dfloor" min="40" max="100" step="5" value="75"></div>
@@ -434,8 +436,8 @@ body.has-rbar { padding-bottom: 76px; }
         <div class="gin">
           <div class="ctl"><div class="ctl-head"><label for="pens">Rente laut Renteninformation</label><output id="pens-o" for="pens"></output></div><input type="range" id="pens" min="0" max="5000" step="25" value="1650"><p class="hint">Brutto pro Monat, in heutigen Werten ohne künftige Erhöhungen, so wie in der Renteninformation.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="pAge">Rente ab</label><output id="pAge-o" for="pAge"></output></div><input type="range" id="pAge" min="60" max="75" step="1" value="67"><p class="hint">Liegt der Rentenbeginn nach dem Start der Entnahme, überbrückt das Depot die Zeit dazwischen allein.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="pg">Rentensteigerung pro Jahr</label><output id="pg-o" for="pg"></output></div><input type="range" id="pg" min="0" max="4" step="0.25" value="2"><p class="hint">Gilt ab heute bis zum Rentenbeginn und danach, bei 2 % Inflation. Ist die Inflation höher, steigt die Rente mit einem Jahr Verzögerung entsprechend mehr. 2 % heißt: Die Rente behält ihre Kaufkraft.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="pniv">Rentenniveau bei Rentenbeginn</label><output id="pniv-o" for="pniv"></output></div><input type="range" id="pniv" min="40" max="50" step="0.5" value="48"><p class="hint">Heute 48 %, festgeschrieben bis 2031. Die Rentenversicherung erwartet danach bis 2040 etwa 46,4 %. Weniger heißt: Deine Rente fällt im Verhältnis niedriger aus als in der Renteninformation.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="pg">Rentensteigerung pro Jahr</label><output id="pg-o" for="pg"></output></div><input type="range" id="pg" min="0" max="4" step="0.25" value="2"><p class="hint">Gilt ab heute bis zum Rentenbeginn und danach, bei 2 % Inflation. Ist die Inflation höher, steigt die Rente mit einem Jahr Verzögerung entsprechend mehr. 2 % heißt: Die Rente behält ihre Kaufkraft.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="pniv">Rentenniveau bei Rentenbeginn</label><output id="pniv-o" for="pniv"></output></div><input type="range" id="pniv" min="40" max="50" step="0.5" value="48"><p class="hint">Heute 48 %, festgeschrieben bis 2031. Die Rentenversicherung erwartet danach bis 2040 etwa 46,4 %. Weniger heißt: Deine Rente fällt im Verhältnis niedriger aus als in der Renteninformation.</p></div>
           <div class="ctl" id="ptm-c">
             <span class="lbl" id="ptm-l">Steuer auf die Rente</span>
             <div class="seg two" role="group" aria-labelledby="ptm-l">
@@ -444,22 +446,22 @@ body.has-rbar { padding-bottom: 76px; }
             </div>
             <p class="hint" id="ptm-h"></p>
           </div>
-          <div class="ctl" id="tg-c"><div class="ctl-head"><label for="tg">Steuertarif steigt pro Jahr um</label><output id="tg-o" for="tg"></output></div><input type="range" id="tg" min="0" max="4" step="0.25" value="2"><p class="hint">So stark wachsen Grundfreibetrag und Tarifgrenzen bei 2 % Inflation; bei mehr Inflation entsprechend mehr. Steigt die Rente schneller, wird ein größerer Teil besteuert.</p></div>
+          <div class="ctl" id="tg-c"><div class="ctl-head"><label for="tg">Steuertarif steigt pro Jahr um</label><output id="tg-o" for="tg"></output></div><input type="range" id="tg" min="0" max="4" step="0.25" value="2"><p class="hint">So stark wachsen Grundfreibetrag und Tarifgrenzen bei 2 % Inflation; bei mehr Inflation entsprechend mehr. Steigt die Rente schneller, wird ein größerer Teil besteuert.</p></div>
           <div class="ctl" id="ptax-c"><div class="ctl-head"><label for="ptax">Steuersatz im Alter</label><output id="ptax-o" for="ptax"></output></div><input type="range" id="ptax" min="0" max="45" step="1" value="20"><p class="hint">Durchschnittlicher Satz auf den steuerpflichtigen Teil. Wie viel davon steuerpflichtig ist, rechnet der Rechner nach dem Jahr des Rentenbeginns aus.</p></div>
           <div class="ctl" id="kvm-c"><span class="lbl" id="kvm-l">Krankenversicherung im Alter</span>
             <div class="seg two" role="group" aria-labelledby="kvm-l"><button type="button" data-kvm="gkv">Gesetzlich</button><button type="button" data-kvm="pkv">Privat</button></div></div>
-          <div class="ctl" id="pkv-c"><div class="ctl-head"><label for="pkv">Kranken- und Pflegeversicherung</label><output id="pkv-o" for="pkv"></output></div><input type="range" id="pkv" min="0" max="25" step="0.05" value="12.35"><div class="ctl-eur"><label for="pkvE">Das sind heute im Monat</label><span class="numw"><input class="num" id="pkvE" type="text" inputmode="numeric" autocomplete="off"><span class="u">€</span></span></div><p class="hint" id="pkv-h">Pflichtversichert 2026: 7,3 % plus halber Zusatzbeitrag (im Schnitt 1,45 %) plus Pflege 3,6 %, kinderlos 4,2 %. Der Euro-Betrag ergibt sich aus der Rente; du kannst ihn auch selbst eintragen, etwa bei freiwilliger Versicherung.</p></div>
+          <div class="ctl" id="pkv-c"><div class="ctl-head"><label for="pkv">Kranken- und Pflegeversicherung</label><output id="pkv-o" for="pkv"></output></div><input type="range" id="pkv" min="0" max="25" step="0.05" value="12.35"><div class="ctl-eur"><label for="pkvE">Das sind heute im Monat</label><span class="numw"><input class="num" id="pkvE" type="text" inputmode="numeric" autocomplete="off"><span class="u">€</span></span></div><p class="hint" id="pkv-h">Pflichtversichert 2026: 7,3 % plus halber Zusatzbeitrag (im Schnitt 1,45 %) plus Pflege 3,6 %, kinderlos 4,2 %. Der Euro-Betrag ergibt sich aus der Rente; du kannst ihn auch selbst eintragen, etwa bei freiwilliger Versicherung.</p></div>
           <div class="subctl" id="pkv-priv" hidden>
             <div class="ctl"><div class="ctl-head"><label for="ppkv0">PKV-Beitrag heute</label><output id="ppkv0-o" for="ppkv0"></output></div><input type="range" id="ppkv0" min="0" max="2000" step="10" value="700"><p class="hint">Pro Monat gesamt, wie er heute an die PKV geht, mit Pflege und mit dem Anteil deines Arbeitgebers. Den gesetzlichen 10-%-Zuschlag rechnet der Rechner selbst heraus.</p></div>
             <div class="ctl"><div class="ctl-head"><label for="ktg">davon fällt mit der Rente weg</label><output id="ktg-o" for="ktg"></output></div><input type="range" id="ktg" min="0" max="500" step="5" value="0"><p class="hint">Krankentagegeld, Beiträge für Kinder und der Beitrag für einen Beitragsentlastungstarif. Steht in deiner Beitragsübersicht.</p></div>
             <div class="ctl"><div class="ctl-head"><label for="bel">Beitragsentlastung ab Rente</label><output id="bel-o" for="bel"></output></div><input type="range" id="bel" min="0" max="500" step="5" value="0"><p class="hint">Falls du einen Beitragsentlastungstarif hast: der Betrag, um den er den Beitrag im Alter senkt.</p></div>
-            <div class="ctl"><div class="ctl-head"><label for="pkvg">PKV-Beitrag steigt pro Jahr</label><output id="pkvg-o" for="pkvg"></output></div><input type="range" id="pkvg" min="0" max="6" step="0.25" value="3.5"><p class="hint">Laut PKV-Verband stiegen die Beiträge je Versicherten von 2006 bis 2026 im Schnitt um 3,4 % pro Jahr. Gilt bei 2 % Inflation; bei mehr Inflation steigt der Beitrag entsprechend mehr.</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="pkvg">PKV-Beitrag steigt pro Jahr</label><output id="pkvg-o" for="pkvg"></output></div><input type="range" id="pkvg" min="0" max="6" step="0.25" value="3.5"><p class="hint">Laut PKV-Verband stiegen die Beiträge je Versicherten von 2006 bis 2026 im Schnitt um 3,4 % pro Jahr. Gilt bei 2 % Inflation; bei mehr Inflation steigt der Beitrag entsprechend mehr.</p></div>
             <p class="loanbox" id="pkv-h"></p>
           </div>
           <p class="loanbox" id="pens-h"></p>
           <div class="check" id="gapOn-c"><input type="checkbox" id="gapOn"><label for="gapOn">Rentenlücke schließen</label><p class="hint">Das Wunscheinkommen im Alter ergibt sich dann aus deinem heutigen Netto. Das Depot soll die Lücke zur Rente füllen.</p></div>
           <div class="subctl" id="gap-c" hidden>
-            <div class="ctl"><div class="ctl-head"><label for="gapPct">Anteil, den du im Alter brauchst</label><output id="gapPct-o" for="gapPct"></output></div><input type="range" id="gapPct" min="50" max="300" step="5" value="100"><p class="hint">Bezogen auf dein Netto ohne Sparrate, und ohne Kreditrate, wenn der Kredit vor der Entnahme abbezahlt ist. Über 100 %, wenn du im Alter mehr ausgeben willst.</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="gapPct">Anteil, den du im Alter brauchst</label><output id="gapPct-o" for="gapPct"></output></div><input type="range" id="gapPct" min="50" max="300" step="5" value="100"><p class="hint">Bezogen auf dein Netto ohne Sparrate, und ohne Kreditrate, wenn der Kredit vor der Entnahme abbezahlt ist. Über 100 %, wenn du im Alter mehr ausgeben willst.</p></div>
             <p class="loanbox" id="gap-h"></p>
           </div>
           <div class="check incl"><input type="checkbox" id="pOn"><label for="pOn">Mit einbeziehen</label><p class="hint">Dann wird „Entnahme pro Monat“ zum gewünschten Netto-Einkommen aus Rente und Depot zusammen. Das Depot deckt nur noch die Lücke.</p></div>
@@ -484,8 +486,8 @@ body.has-rbar { padding-bottom: 76px; }
           <span class="lbl" id="band-l">Wann umschichten?</span>
           <div class="seg" role="group" aria-labelledby="band-l">
             <button type="button" data-band="0">jedes Jahr</button>
-            <button type="button" data-band="5">ab ±5 Pkt.</button>
-            <button type="button" data-band="10">ab ±10 Pkt.</button>
+            <button type="button" data-band="5">ab ±5 Pkt.</button>
+            <button type="button" data-band="10">ab ±10 Pkt.</button>
           </div>
           <p class="hint">Sparraten und Entnahmen gleichen zuerst aus. Verkauft wird erst bei größerer Abweichung; das kostet Steuern.</p>
         </div>
@@ -514,7 +516,7 @@ body.has-rbar { padding-bottom: 76px; }
           <div class="ctl"><div class="ctl-head"><label for="debt">Restschuld heute</label><output id="debt-o" for="debt"></output></div><input type="range" id="debt" min="0" max="1000000" step="5000" value="285000"></div>
           <div class="ctl"><div class="ctl-head"><label for="lz">Sollzins</label><output id="lz-o" for="lz"></output></div><input type="range" id="lz" min="0" max="8" step="0.01" value="3.4"></div>
           <div class="ctl"><div class="ctl-head"><label for="lzb">Zinsbindung noch</label><output id="lzb-o" for="lzb"></output></div><input type="range" id="lzb" min="0" max="30" step="1" value="10"></div>
-          <div class="ctl"><div class="ctl-head"><label for="lz2">Zins danach</label><output id="lz2-o" for="lz2"></output></div><input type="range" id="lz2" min="0" max="10" step="0.1" value="4.5"><p class="hint">Anschlusszins nach der Zinsbindung, im Durchschnitt bei 2 % Inflation; ist sie höher, steigt er entsprechend. Im realistischen Modell gilt alle 10 Jahre der Zins der jeweiligen Zukunft. Die Rate bleibt gleich, solange sie für Zins und 1 % Tilgung reicht.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="lz2">Zins danach</label><output id="lz2-o" for="lz2"></output></div><input type="range" id="lz2" min="0" max="10" step="0.1" value="4.5"><p class="hint">Anschlusszins nach der Zinsbindung, im Durchschnitt bei 2 % Inflation; ist sie höher, steigt er entsprechend. Im realistischen Modell gilt alle 10 Jahre der Zins der jeweiligen Zukunft. Die Rate bleibt gleich, solange sie für Zins und 1 % Tilgung reicht.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="lrate">Rate pro Monat</label><output id="lrate-o" for="lrate"></output></div><input type="range" id="lrate" min="0" max="6000" step="25" value="1350"><p class="hint">Wie im Kreditvertrag; bleibt in Euro gleich.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="lshare">Dein Anteil an Rate und Sondertilgung</label><output id="lshare-o" for="lshare"></output></div><input type="range" id="lshare" min="0" max="100" step="5" value="50"><p class="hint">Zahlen zwei Personen den Kredit, trägst du nur diesen Teil der Rate und der Sondertilgung. Derselbe Anteil gilt für die frei werdende Rate nach dem Kreditende. Wem wie viel vom Haus gehört, stellst du beim Hauswert ein.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="lsond">Sondertilgung pro Jahr</label><output id="lsond-o" for="lsond"></output></div><input type="range" id="lsond" min="0" max="50000" step="500" value="2000"></div>
@@ -522,7 +524,7 @@ body.has-rbar { padding-bottom: 76px; }
           <p class="loanbox" id="loan-h"></p>
           <div class="ctl"><div class="ctl-head"><label for="hv">Hauswert heute</label><output id="hv-o" for="hv"></output></div><input type="range" id="hv" min="0" max="3000000" step="10000" value="420000"></div>
           <div class="ctl"><div class="ctl-head"><label for="hshare">Dein Anteil am Haus</label><output id="hshare-o" for="hshare"></output></div><input type="range" id="hshare" min="0" max="100" step="5" value="50"><p class="hint">Wie viel vom Haus dir gehört, etwa laut Grundbuch. Zählt für Hauswert und Restschuld im Gesamtvermögen und für den Erlös bei einem Verkauf. Unabhängig davon, wer wie viel der Rate zahlt.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="hg">Wertsteigerung über der Inflation</label><output id="hg-o" for="hg"></output></div><input type="range" id="hg" min="-2" max="3" step="0.25" value="0"><p class="hint">0 %: Das Haus behält seine Kaufkraft.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="hg">Wertsteigerung über der Inflation</label><output id="hg-o" for="hg"></output></div><input type="range" id="hg" min="-2" max="3" step="0.25" value="0"><p class="hint">0 %: Das Haus behält seine Kaufkraft.</p></div>
           <p class="hint">Mietfreies Wohnen senkt die nötige Entnahme.</p>
           <div class="check"><input type="checkbox" id="flowsOn"><label for="flowsOn">Einmalige Zahlungen</label><p class="hint">Dach, Heizung, Erbe oder Hausverkauf.</p></div>
           <div class="subctl" id="flows-c" hidden>
@@ -564,10 +566,10 @@ body.has-rbar { padding-bottom: 76px; }
           <div class="ctl"><div class="ctl-head"><label for="rlz">Sollzins</label><output id="rlz-o" for="rlz"></output></div><input type="range" id="rlz" min="0" max="8" step="0.01" value="3.5"></div>
           <div class="ctl"><div class="ctl-head"><label for="rlzb">Zinsbindung noch</label><output id="rlzb-o" for="rlzb"></output></div><input type="range" id="rlzb" min="0" max="30" step="1" value="10"></div>
           <div class="ctl"><div class="ctl-head"><label for="rrate">Rate pro Monat</label><output id="rrate-o" for="rrate"></output></div><input type="range" id="rrate" min="0" max="10000" step="25" value="1000"><p class="hint">Nach der Zinsbindung gilt der Zins danach aus „Eigenes Haus“, im realistischen Modell schwankend mit dem Zinsniveau der jeweiligen Zukunft.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="rrent">Kaltmiete pro Monat</label><output id="rrent-o" for="rrent"></output></div><input type="range" id="rrent" min="0" max="10000" step="25" value="1100"><p class="hint">Steigt mit der Inflation. Für Leerstand und Mietausfall zieht der Rechner 4 % ab.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="rkost">Eigene Kosten pro Monat</label><output id="rkost-o" for="rkost"></output></div><input type="range" id="rkost" min="0" max="2000" step="5" value="190"><p class="hint">Was der Mieter nicht zahlt: Hausgeld ohne Umlagen, Instandhaltung, Verwaltung. Faustwert 15 bis 20 % der Kaltmiete. Steigt mit der Inflation.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rrent">Kaltmiete pro Monat</label><output id="rrent-o" for="rrent"></output></div><input type="range" id="rrent" min="0" max="10000" step="25" value="1100"><p class="hint">Steigt mit der Inflation. Für Leerstand und Mietausfall zieht der Rechner 4 % ab.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rkost">Eigene Kosten pro Monat</label><output id="rkost-o" for="rkost"></output></div><input type="range" id="rkost" min="0" max="2000" step="5" value="190"><p class="hint">Was der Mieter nicht zahlt: Hausgeld ohne Umlagen, Instandhaltung, Verwaltung. Faustwert 15 bis 20 % der Kaltmiete. Steigt mit der Inflation.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="rafaE">Abschreibung pro Jahr</label><output id="rafaE-o" for="rafaE"></output></div><input type="range" id="rafaE" min="0" max="50000" step="100" value="4200"><p class="hint">Steht als AfA in der Anlage V deiner Steuererklärung.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="rbuyY">Kaufjahr</label><output id="rbuyY-o" for="rbuyY"></output></div><input type="range" id="rbuyY" min="1980" max="2026" step="1" value="2020"><p class="hint">Die Abschreibung endet 50 Jahre nach dem Kauf.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rbuyY">Kaufjahr</label><output id="rbuyY-o" for="rbuyY"></output></div><input type="range" id="rbuyY" min="1980" max="2026" step="1" value="2020"><p class="hint">Die Abschreibung endet 50 Jahre nach dem Kauf.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="rtax">Grenzsteuersatz im Berufsleben</label><output id="rtax-o" for="rtax"></output></div><input type="range" id="rtax" min="0" max="50" step="1" value="35"><p class="hint">Mit Soli und Kirchensteuer. Ein Verlust aus der Vermietung senkt deine Lohnsteuer. Ab der Entnahme rechnet der Rechner mit dem Tarif, zusammen mit der gesetzlichen Rente.</p></div>
           <p class="hint" id="rent-h"></p>
         </div>
@@ -587,18 +589,18 @@ body.has-rbar { padding-bottom: 76px; }
           </div>
           <p class="hint" id="scen-h"></p>
         </div>
-        <div class="ctl"><div class="ctl-head"><label for="ter">Kosten pro Jahr</label><output id="ter-o" for="ter"></output></div><input type="range" id="ter" min="0" max="1.5" step="0.05" value="0.3"><p class="hint">Alles zusammen: Fondskosten (TER), Handel im Fonds, Depot und Kaufgebühren. Geht jedes Jahr von der Rendite ab. Breite ETFs beim Neobroker liegen bei etwa 0,2–0,3 %.</p></div>
+        <div class="ctl"><div class="ctl-head"><label for="ter">Kosten pro Jahr</label><output id="ter-o" for="ter"></output></div><input type="range" id="ter" min="0" max="1.5" step="0.05" value="0.3"><p class="hint">Alles zusammen: Fondskosten (TER), Handel im Fonds, Depot und Kaufgebühren. Geht jedes Jahr von der Rendite ab. Breite ETFs beim Neobroker liegen bei etwa 0,2–0,3 %.</p></div>
         <details class="adv" id="adv-d">
           <summary>Renditen, Schwankung, Inflation</summary>
           <div class="advin">
             <div class="ctl"><div class="ctl-head"><label for="re">Aktien pro Jahr</label><output id="re-o" for="re"></output></div><input type="range" id="re" min="2" max="10" step="0.25" value="7"></div>
             <div class="ctl"><div class="ctl-head"><label for="rb">Anleihen pro Jahr</label><output id="rb-o" for="rb"></output></div><input type="range" id="rb" min="0" max="6" step="0.25" value="3.75"><p class="hint">Kurze Laufzeiten bringen meist weniger, lange mehr (Zinsstrukturkurve).</p></div>
             <div class="ctl"><div class="ctl-head"><label for="rc">Geldmarkt pro Jahr</label><output id="rc-o" for="rc"></output></div><input type="range" id="rc" min="0" max="5" step="0.25" value="2"></div>
-            <div class="ctl"><div class="ctl-head"><label for="rg">Gold pro Jahr</label><output id="rg-o" for="rg"></output></div><input type="range" id="rg" min="0" max="8" step="0.25" value="3.5"><p class="hint">Langfristig real etwa 0 %; 1971–2025 in Euro 7,5 % im Jahr (ab Ende der Goldbindung).</p></div>
-            <div class="ctl"><div class="ctl-head"><label for="ve">Schwankung Aktien</label><output id="ve-o" for="ve"></output></div><input type="range" id="ve" min="5" max="40" step="1" value="16"><p class="hint">Weltweite Aktien schwankten früher um etwa 16 % im Jahr.</p></div>
-            <div class="ctl"><div class="ctl-head"><label for="vb">Schwankung Anleihen</label><output id="vb-o" for="vb"></output></div><input type="range" id="vb" min="1" max="12" step="0.5" value="4"><p class="hint">Kurz etwa 2 %, gemischt 4–5 %, lang 8 % und mehr.</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="rg">Gold pro Jahr</label><output id="rg-o" for="rg"></output></div><input type="range" id="rg" min="0" max="8" step="0.25" value="3.5"><p class="hint">Langfristig real etwa 0 %; 1971–2025 in Euro 7,5 % im Jahr (ab Ende der Goldbindung).</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="ve">Schwankung Aktien</label><output id="ve-o" for="ve"></output></div><input type="range" id="ve" min="5" max="40" step="1" value="16"><p class="hint">Weltweite Aktien schwankten früher um etwa 16 % im Jahr.</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="vb">Schwankung Anleihen</label><output id="vb-o" for="vb"></output></div><input type="range" id="vb" min="1" max="12" step="0.5" value="4"><p class="hint">Kurz etwa 2 %, gemischt 4–5 %, lang 8 % und mehr.</p></div>
             <div class="ctl"><div class="ctl-head"><label for="vg">Schwankung Gold</label><output id="vg-o" for="vg"></output></div><input type="range" id="vg" min="5" max="30" step="1" value="15"><p class="hint">Gerechnet unabhängig von Aktien; das macht Gold eher zu gut.</p></div>
-            <div class="ctl"><div class="ctl-head"><label for="inf">Inflation im Durchschnitt</label><output id="inf-o" for="inf"></output></div><input type="range" id="inf" min="0" max="5" step="0.25" value="2"><p class="hint">Alle Renditen und Steigerungen gelten bei 2 % Inflation. Ist sie höher, steigen Zinsen, Geldmarkt, Gold, Rente, PKV und Sparrate mit, Aktien zu drei Vierteln. Was bleibt: Steuer auf Scheingewinne, fester Sparerpauschbetrag, Kreditrate wird real leichter.</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="inf">Inflation im Durchschnitt</label><output id="inf-o" for="inf"></output></div><input type="range" id="inf" min="0" max="5" step="0.25" value="2"><p class="hint">Alle Renditen und Steigerungen gelten bei 2 % Inflation. Ist sie höher, steigen Zinsen, Geldmarkt, Gold, Rente, PKV und Sparrate mit, Aktien zu drei Vierteln. Was bleibt: Steuer auf Scheingewinne, fester Sparerpauschbetrag, Kreditrate wird real leichter.</p></div>
             <div class="ctl">
               <span class="lbl">Rechenmodell</span>
               <div class="seg two" role="group" aria-label="Rechenmodell">
@@ -617,19 +619,19 @@ body.has-rbar { padding-bottom: 76px; }
         <div class="ctl">
           <span class="lbl" id="fb-l">Sparerpauschbetrag</span>
           <div class="seg two" role="group" aria-labelledby="fb-l">
-            <button type="button" data-fb="1000">1.000 €<br><small>allein</small></button>
-            <button type="button" data-fb="2000">2.000 €<br><small>Ehepaar</small></button>
+            <button type="button" data-fb="1000">1.000 €<br><small>allein</small></button>
+            <button type="button" data-fb="2000">2.000 €<br><small>Ehepaar</small></button>
           </div>
         </div>
         <div class="ctl">
           <span class="lbl" id="ks-l">Kirchensteuer</span>
           <div class="seg" role="group" aria-labelledby="ks-l">
             <button type="button" data-ks="0">keine</button>
-            <button type="button" data-ks="8">8 %<br><small>BY, BW</small></button>
-            <button type="button" data-ks="9">9 %<br><small>übrige</small></button>
+            <button type="button" data-ks="8">8 %<br><small>BY, BW</small></button>
+            <button type="button" data-ks="9">9 %<br><small>übrige</small></button>
           </div>
         </div>
-        <div class="ctl"><div class="ctl-head"><label for="bz">Basiszins für die Vorabpauschale</label><output id="bz-o" for="bz"></output></div><input type="range" id="bz" min="0" max="5" step="0.1" value="3.2"><p class="hint">2026: 3,20 %. Durchschnitt bei 2 % Inflation, bei mehr Inflation entsprechend höher. Im realistischen Modell schwankt er mit dem Zinsniveau der jeweiligen Zukunft.</p></div>
+        <div class="ctl"><div class="ctl-head"><label for="bz">Basiszins für die Vorabpauschale</label><output id="bz-o" for="bz"></output></div><input type="range" id="bz" min="0" max="5" step="0.1" value="3.2"><p class="hint">2026: 3,20 %. Durchschnitt bei 2 % Inflation, bei mehr Inflation entsprechend höher. Im realistischen Modell schwankt er mit dem Zinsniveau der jeweiligen Zukunft.</p></div>
       </div>
       </details>
       <button type="button" class="reset" id="reset">Alles zurücksetzen</button>
@@ -674,9 +676,9 @@ body.has-rbar { padding-bottom: 76px; }
         <div class="card-head"><h3>So entwickelt sich dein Vermögen</h3></div>
         <div class="chart" id="ch-w"></div>
         <div class="legend">
-          <span><i class="sw" style="background:var(--accent);opacity:.35"></i>hier liegen 50 % aller Zukünfte</span>
+          <span><i class="sw" style="background:var(--accent);opacity:.35"></i>hier liegen 50 % aller Zukünfte</span>
           <span><i class="sw line" style="background:var(--accent)"></i>typisch</span>
-          <span><i class="sw dash"></i>wenn es schlecht läuft (nur 10 % der Zukünfte sind schlechter)</span>
+          <span><i class="sw dash"></i>wenn es schlecht läuft (nur 10 % der Zukünfte sind schlechter)</span>
           <span id="leg-net" hidden><i class="sw" style="height:0;border-top:2px dashed var(--ink);border-radius:0"></i>Gesamtvermögen inkl. deines Hausanteils, abzüglich deines Anteils an der Restschuld (typisch)</span>
         </div>
       </section>
@@ -705,7 +707,7 @@ body.has-rbar { padding-bottom: 76px; }
         <div class="chart" id="ch-t"></div>
         <div class="legend">
           <span><i class="sw line" style="background:var(--accent)"></i>typisch</span>
-          <span><i class="sw dot2"></i>hoch (nur 10 % der Zukünfte zahlen mehr)</span>
+          <span><i class="sw dot2"></i>hoch (nur 10 % der Zukünfte zahlen mehr)</span>
         </div>
         <p class="hint" id="tax-h" style="margin-top:8px"></p>
       </section>
@@ -716,9 +718,9 @@ body.has-rbar { padding-bottom: 76px; }
         <div class="ctl" style="margin-top:10px">
           <span class="lbl" id="when-l">Wann trifft die Krise?</span>
           <div class="seg" role="group" aria-labelledby="when-l">
-            <button type="button" data-when="start">gleich zu Beginn</button>
-            <button type="button" data-when="pre5">5 Jahre vor der Entnahme</button>
-            <button type="button" data-when="ret">zum Start der Entnahme</button>
+            <button type="button" data-when="start">gleich<br><small>zu Beginn</small></button>
+            <button type="button" data-when="pre5">5 Jahre<br><small>vor der Rente</small></button>
+            <button type="button" data-when="ret">zum Start<br><small>der Entnahme</small></button>
           </div>
         </div>
         <div class="seg" role="group" aria-label="Kein Härtetest" style="grid-template-columns:1fr;margin-top:12px">
@@ -726,16 +728,16 @@ body.has-rbar { padding-bottom: 76px; }
         </div>
         <h4 class="stress-l">Ein großer Crash</h4>
         <div class="seg stress" role="group" aria-label="Crash">
-          <button type="button" data-stress="c87">Schwarzer Montag<br><small>1987 · −24 %</small></button>
-          <button type="button" data-stress="cdot">Dotcom-Blase<br><small>2000 · −51 %</small></button>
-          <button type="button" data-stress="cgfc">Finanzkrise<br><small>2007 · −59 %</small></button>
-          <button type="button" data-stress="ccov">Corona<br><small>2020 · −34 %</small></button>
-          <button type="button" data-stress="c22">Zinsanstieg<br><small>2022 · −27 %</small></button>
+          <button type="button" data-stress="c87">Schwarzer Montag<br><small>1987 · −24 %</small></button>
+          <button type="button" data-stress="cdot">Dotcom-Blase<br><small>2000 · −51 %</small></button>
+          <button type="button" data-stress="cgfc">Finanzkrise<br><small>2007 · −59 %</small></button>
+          <button type="button" data-stress="ccov">Corona<br><small>2020 · −34 %</small></button>
+          <button type="button" data-stress="c22">Zinsanstieg<br><small>2022 · −27 %</small></button>
         </div>
         <h4 class="stress-l">Lange schwierige Phasen</h4>
         <div class="seg" role="group" aria-label="Lange Phasen">
           <button type="button" data-stress="lost">Börsenflaute<br><small>2000–2012</small></button>
-          <button type="button" data-stress="infl">Hohe Inflation<br><small>wie in den 1970ern</small></button>
+          <button type="button" data-stress="infl">Inflation<br><small>1973–1982</small></button>
           <button type="button" data-stress="gfall">Goldabsturz<br><small>1981–1985</small></button>
         </div>
         <p class="hint" id="stress-h" style="margin-top:10px"></p>
@@ -746,13 +748,13 @@ body.has-rbar { padding-bottom: 76px; }
         <div class="fz">
         <ol>
           <li><strong>Am meisten bewirken Sparrate, Zeit und Aktienanteil.</strong> Wer mehr spart, früher anfängt und genug in Aktien anlegt, verbessert das Ergebnis viel stärker als mit Feinheiten wie Anleihezelt, Gold oder der Reihenfolge beim Verkauf.</li>
-          <li><strong>Eine anpassbare Rate macht den Plan sicherer.</strong> Wer in schlechten Börsenjahren etwas weniger entnimmt, schont das Depot genau dann, wenn es am meisten zählt. Dafür schwankt die monatliche Rate. In einer Testrechnung stieg die Erfolgsquote dadurch von rund 91 auf 97 %.</li>
+          <li><strong>Eine anpassbare Rate macht den Plan sicherer.</strong> Wer in schlechten Börsenjahren etwas weniger entnimmt, schont das Depot genau dann, wenn es am meisten zählt. Dafür schwankt die monatliche Rate. In einer Testrechnung stieg die Erfolgsquote dadurch von rund 91 auf 97 %.</li>
           <li><strong>Das Anleihezelt ist eine Versicherung.</strong> Es hilft, wenn die Börse genau zum Rentenbeginn einbricht; in einem Test brachte das rund 8 Prozentpunkte. Bleibt der Crash aus, bringt es kaum etwas, und der Umbau kostet Steuern, weil dafür Aktien verkauft werden. Allein über die Sparrate lässt es sich kaum aufbauen. Ob es sich lohnt, ist auch in der Forschung umstritten.</li>
           <li><strong>Steuern lassen sich vor allem verschieben, kaum vermeiden.</strong> Die Vorabpauschale ist eine Steuer im Voraus, die beim späteren Verkauf angerechnet wird. Teuer wird es vor allem beim Umschichten und beim Verkauf in der Rente. Der Zweitdepot-Trick senkt die Steuer in den ersten Rentenjahren deutlich, macht den Plan aber kaum sicherer.</li>
           <li><strong>Gold spart Steuern, bringt aber wenig Rendite.</strong> Gold-Wertpapiere mit Lieferanspruch sind nach einem Jahr steuerfrei. Langfristig hat Gold nach Abzug der Inflation aber kaum etwas verdient. Weil der Rechner Gold unabhängig von Aktien rechnet, sieht es hier eher zu gut aus. Wenn überhaupt, dann als kleine Beimischung.</li>
           <li><strong>Das eigene Haus sichert das Wohnen, das Depot sichert die Rente.</strong> Ist das Haus vor der Rente abbezahlt, braucht man im Alter weniger und kann die frühere Rate sparen; große Reparaturen wie Dach oder Heizung sollte man trotzdem einplanen. Läuft der Kredit bis in die Rente, muss das Depot die Rate mittragen.
             <ul class="sub">
-              <li><strong>Als Geldanlage schwach:</strong> In Deutschland stiegen die Hauspreise nach Inflation von 1970 bis 2024 im Schnitt nur um 0,1 % pro Jahr; der Ertrag kommt fast nur aus der gesparten Miete. Ein einzelnes, mit Kredit bezahltes Haus ist zudem schlecht gestreut und teuer zu kaufen und zu verkaufen. Ein breites Depot daneben ist deshalb wichtig.</li>
+              <li><strong>Als Geldanlage schwach:</strong> In Deutschland stiegen die Hauspreise nach Inflation von 1970 bis 2024 im Schnitt nur um 0,1 % pro Jahr; der Ertrag kommt fast nur aus der gesparten Miete. Ein einzelnes, mit Kredit bezahltes Haus ist zudem schlecht gestreut und teuer zu kaufen und zu verkaufen. Ein breites Depot daneben ist deshalb wichtig.</li>
               <li><strong>Schutz und Steuer:</strong> Wer selbst wohnt, ist vor Mieterhöhungen geschützt, solange ein Kredit läuft aber nur bis zum Ende der Zinsbindung. Die gesparte Miete ist steuerfrei, ein Verkauf ebenfalls, wenn man im Verkaufsjahr und den zwei Jahren davor selbst darin gewohnt hat.</li>
               <li><strong>Sondertilgung oder Depot:</strong> Tilgen bringt sicher und steuerfrei den Kreditzins, das Depot im Schnitt mehr, aber mit Schwankung und Steuer. Je höher der Zins nach der Zinsbindung, desto eher lohnt das Tilgen.</li>
               <li><strong>Nötig ist es nicht:</strong> Eigentümer sind im Alter meist reicher, vor allem aber, weil sie mehr verdienen, mehr sparen und öfter erben. Wer mietet und den Unterschied konsequent anlegt, hatte in Deutschland seit 1970 meist mehr Vermögen (Berechnungen von Gerd Kommer, dessen Firma ETF-Verwaltung verkauft). Als Mieter braucht man dafür im Alter aber ein größeres Depot, weil die Miete weiterläuft und mit der Inflation steigt; im Rechner heißt das eine höhere Entnahme. Ob Kaufen sich rechnet, zeigt vor allem das Verhältnis von Kaufpreis zu Jahresmiete: Je höher es ist, desto eher spricht es fürs Mieten. Gute Gründe fürs Haus sind eher sicheres Wohnen, Gestaltungsfreiheit und das Zwangssparen.</li>
@@ -761,9 +763,9 @@ body.has-rbar { padding-bottom: 76px; }
           <li><strong>Die gesetzliche Rente ist der sichere Boden.</strong> Sie läuft lebenslang und steigt mit den Löhnen, egal wie die Börse läuft. Das Depot muss nur die Lücke füllen; ist es aufgebraucht, bleibt die Rente. Wer eine solide Rente hat, kann im Depot deshalb eher mehr Aktien halten, weil die Rente schon wie ein großer, sicherer Anleihenanteil wirkt.
             <ul class="sub">
               <li><strong>Kein Versprechen:</strong> Der Wert in der Renteninformation setzt voraus, dass man bis zur Rente so weiter einzahlt wie im Schnitt der letzten fünf Jahre, und er ist brutto. Teilzeit oder Lücken senken ihn; nach Kranken- und Pflegeversicherung, Steuer und Inflation bleibt deutlich weniger.</li>
-              <li><strong>Die Regeln können sich ändern:</strong> Das Rentenniveau ist bis 2031 bei 48 % festgeschrieben. Für die Zeit danach schlägt die Rentenkommission vor, die Erhöhungen wieder stärker zu bremsen, wenn es mehr Rentner pro Beitragszahler gibt, und das Rentenalter an die Lebenserwartung zu koppeln. Die Regierung will das umsetzen, beschlossen ist es noch nicht. Vorsichtig gerechnet heißt das: Rentensteigerung leicht unter der Inflation und Rentenbeginn eher ein bis zwei Jahre später. Mit 0 % Steigerung sieht man, wie stark der Plan an der Rente hängt.</li>
-              <li><strong>Zwei weitere Risiken:</strong> Die Beiträge zur Kranken- und Pflegeversicherung steigen seit Jahren (Zusatzbeitrag 2021 im Schnitt 1,3 %, 2026 schon 2,9 %); vorsichtig gerechnet stellt man den Regler etwas höher. Und die Rente folgt den Löhnen, nicht den Preisen: Bei hoher Inflation hinkt sie hinterher, 2004 bis 2006 gab es gar keine Erhöhung. Gekürzt wird sie nicht, sie hängt aber ganz an Deutschland; ein weltweit gestreutes Depot ergänzt sie deshalb gut.</li>
-              <li><strong>Früher aufhören kostet doppelt:</strong> Das Depot zahlt die Jahre bis zur Rente allein, und wer die Rente vorzeitig nimmt, bekommt dauerhaft 0,3 % weniger Rente für jeden Monat, den sie früher beginnt. Nicht eingerechnet sind Witwenrente, Betriebsrente und die geplante Pflicht-Kapitalrente.</li>
+              <li><strong>Die Regeln können sich ändern:</strong> Das Rentenniveau ist bis 2031 bei 48 % festgeschrieben. Für die Zeit danach schlägt die Rentenkommission vor, die Erhöhungen wieder stärker zu bremsen, wenn es mehr Rentner pro Beitragszahler gibt, und das Rentenalter an die Lebenserwartung zu koppeln. Die Regierung will das umsetzen, beschlossen ist es noch nicht. Vorsichtig gerechnet heißt das: Rentensteigerung leicht unter der Inflation und Rentenbeginn eher ein bis zwei Jahre später. Mit 0 % Steigerung sieht man, wie stark der Plan an der Rente hängt.</li>
+              <li><strong>Zwei weitere Risiken:</strong> Die Beiträge zur Kranken- und Pflegeversicherung steigen seit Jahren (Zusatzbeitrag 2021 im Schnitt 1,3 %, 2026 schon 2,9 %); vorsichtig gerechnet stellt man den Regler etwas höher. Und die Rente folgt den Löhnen, nicht den Preisen: Bei hoher Inflation hinkt sie hinterher, 2004 bis 2006 gab es gar keine Erhöhung. Gekürzt wird sie nicht, sie hängt aber ganz an Deutschland; ein weltweit gestreutes Depot ergänzt sie deshalb gut.</li>
+              <li><strong>Früher aufhören kostet doppelt:</strong> Das Depot zahlt die Jahre bis zur Rente allein, und wer die Rente vorzeitig nimmt, bekommt dauerhaft 0,3 % weniger Rente für jeden Monat, den sie früher beginnt. Nicht eingerechnet sind Witwenrente, Betriebsrente und die geplante Pflicht-Kapitalrente.</li>
             </ul>
           </li>
           <li><strong>Lieber vorsichtig rechnen.</strong> „Wie früher“ ist die freundliche Annahme. Ein guter Plan trägt auch mit „Eher schwach“ und in den Härtetests. Ohne eingerechnete Rente ist die Entnahme nur das, was das Depot zusätzlich liefern muss. Das Ganze ist eine Modellrechnung, keine Prognose und keine Anlageberatung.</li>
@@ -774,15 +776,15 @@ body.has-rbar { padding-bottom: 76px; }
         <summary>Wie wird gerechnet?</summary>
         <div style="display:grid;gap:8px;margin-top:10px">
           <p><strong>Ablauf pro Jahr:</strong> Im Januar wird die Steuer auf die Vorabpauschale des Vorjahres fällig. In der Ansparphase kommt danach die Sparrate ins Depot, und zwar zuerst in die Anlageklassen, die unter ihrer Zielquote liegen; die Steuer wird von der Sparrate abgezogen. In der Entnahmephase wird so viel verkauft, dass nach Steuern deine Rate ankommt, zuerst aus den übergewichteten Klassen. Weicht die Aktienquote danach noch stärker ab als erlaubt, wird umgeschichtet. Dann entwickeln sich die Märkte über das Jahr.</p>
-          <p><strong>Steuern:</strong> 25 % Abgeltungsteuer plus Solidaritätszuschlag, auf Wunsch Kirchensteuer. Bei Aktien-ETFs sind 30 % der Erträge steuerfrei (Teilfreistellung), bei Anleihe- und Geldmarkt-ETFs nichts. Der Sparerpauschbetrag bleibt über alle Jahre gleich hoch und ist dadurch real immer weniger wert. Verluste werden vorgetragen. Jede Sparrate wird als eigener Kauf geführt, damit beim Verkauf der richtige Einstand zählt.</p>
+          <p><strong>Steuern:</strong> 25 % Abgeltungsteuer plus Solidaritätszuschlag, auf Wunsch Kirchensteuer. Bei Aktien-ETFs sind 30 % der Erträge steuerfrei (Teilfreistellung), bei Anleihe- und Geldmarkt-ETFs nichts. Der Sparerpauschbetrag bleibt über alle Jahre gleich hoch und ist dadurch real immer weniger wert. Verluste werden vorgetragen. Jede Sparrate wird als eigener Kauf geführt, damit beim Verkauf der richtige Einstand zählt.</p>
           <p><strong>Vorabpauschale:</strong> Wert zum Jahresanfang × Basiszins × 0,7, höchstens so viel, wie der ETF im Jahr gewonnen hat. Der versteuerte Betrag erhöht den Einstand und mindert so die Steuer beim späteren Verkauf. Nicht berücksichtigt ist die Kürzung im Kaufjahr (ein Zwölftel pro vollem Monat vor dem Kauf). Alle ETFs sind thesaurierend.</p>
           <p><strong>Zweitdepot-Trick:</strong> Im selben Depot gelten immer die ältesten Anteile als zuerst verkauft (§ 20 Abs. 4 Satz 7 EStG). Wer vor dem Verkauf die älteren Anteile in ein zweites Depot überträgt, verkauft im ersten die jüngeren mit weniger Gewinn. Der Übertrag selbst löst keine Steuer aus. Das kostet jedes Jahr etwas Aufwand. Eine Alternative ist, alle paar Jahre einen neuen, gleichwertigen ETF zu besparen.</p>
           <p><strong>Eigenes Haus:</strong> Der Kredit wird Monat für Monat getilgt, Sondertilgungen am Jahresende. Ist er in der Ansparphase abbezahlt, fließen Rate und Sondertilgung ab dann zusätzlich in den Sparplan. Läuft er in die Entnahme, wird die Rate bis zum Ende zusätzlich aus dem Depot genommen. Beim Hausverkauf fließt der Hauswert abzüglich Restschuld ins Depot; der Verkauf ist steuerfrei, wenn man im Verkaufsjahr und den zwei Jahren davor selbst darin gewohnt hat. Danach fällt Miete an, die in die Entnahme gehört. Der Hauswert entwickelt sich ohne Zufall; er zählt nur ins Gesamtvermögen, nicht in die Erfolgsquote.</p>
           <p><strong>Gold:</strong> Gerechnet wie ein Gold-Wertpapier mit Lieferanspruch (etwa Xetra-Gold). Der Bundesfinanzhof behandelt es wie physisches Gold: Gewinne sind nach mindestens einem Jahr steuerfrei, Verluste zählen dann aber auch nicht. Es ist kein Fonds, also fällt keine Vorabpauschale an. Der Rechner unterstellt, dass Gold immer erst nach über einem Jahr verkauft wird. In den Härtetests laufen die echten Jahresrenditen von Gold in Euro mit (LBMA-Jahresschlusskurse, vor 1999 aus der D-Mark umgerechnet; die Inflationsphase der 1970er in US-Dollar wie die übrigen Werte dort). Achtung: Die meisten Krisen dieser Auswahl waren gute Goldjahre. Der Gegentest „Goldabsturz“ zeigt die andere Seite; die Aktien laufen dort zufällig.</p>
-          <p><strong>Anleihezelt, Forschungsstand:</strong> Pfau und Kitces fanden mit US-Daten, dass ein in der Rente steigender Aktienanteil das Risiko senken kann, das Geld zu früh aufzubrauchen. Estrada kam mit Daten aus 19 Ländern über 110 Jahre eher zu festen Quoten; Blanchett fand keinen Verlauf, der für alle am besten ist. Nach Early Retirement Now hilft ein Zelt vor allem, wenn die Börse zum Start teuer bewertet ist; das bildet dieser Rechner nicht ab. Anarkulova, Cederburg und O’Doherty stellen grundsätzlich infrage, dass man mit dem Alter mehr Anleihen halten sollte. Die Studien rechnen meist ohne Steuer; in einem deutschen Depot kostet der Aufbau des Zelts Steuer auf die verkauften Aktiengewinne.</p>
-          <p><strong>Modell:</strong> Börsenjahre mit häufigeren Extremjahren, schwankende Inflation und ein Zinsniveau, das mit der halben Inflationsabweichung und eigenen Realzins-Schocks schwankt (etwa ±2 Punkte). Anleihen erhalten den Zins des Vorjahrs und verlieren bei steigendem Zins Kurs, umso mehr, je höher ihre Schwankung ist; Geldmarkt folgt dem Zins, Aktien geben bei steigendem Realzins etwas nach. Basiszins der Vorabpauschale und Anschlusszins der Kredite (alle 10 Jahre neu) folgen demselben Zinsniveau. Rente, PKV-Beitrag, Steuertarif und Sparrate folgen der Inflation des jeweiligen Verlaufs mit einem Jahr Verzögerung. Alle eingestellten Renditen, Zinsen und Steigerungen gelten bei 2 % Inflation; bei höherer Durchschnittsinflation steigen Zinsen, Geldmarkt und Gold voll mit, Aktien zu drei Vierteln.  Die eingestellten Renditen gelten vor Kosten; die Kosten gehen jedes Jahr von allen Anlagen ab. Der Härtetest ersetzt einige Jahre durch echte Werte aus der Vergangenheit (Aktien: MSCI World, Anleihen: deutsche Staatsanleihen bzw. 2022 der breite Euro-Anleihenindex).</p>
-          <p><strong>Gesetzliche Rente:</strong> Die Rente aus der Renteninformation steigt jedes Jahr um die eingestellte Rate. Davon gehen Kranken- und Pflegeversicherung ab und die Steuer auf den steuerpflichtigen Teil. Dieser Besteuerungsanteil hängt vom Jahr des Rentenbeginns ab: 2026 sind es 84 %, jedes Jahr 0,5 Punkte mehr, ab 2058 100 %. Der steuerfreie Rest bleibt als fester Euro-Betrag, Erhöhungen sind voll steuerpflichtig. Mit eingerechneter Rente zählt als Netto-Einkommen Rente plus Depot; liegt die Netto-Rente über dem Wunsch, ist die ganze Rente das Einkommen und das Depot zahlt nichts. Mit „Rentenlücke schließen“ ist das Wunscheinkommen das heutige Netto ohne Sparrate (und ohne Kreditrate, wenn der Kredit vor der Entnahme abbezahlt ist), mal dem gewählten Anteil, in heutiger Kaufkraft. Ein Extra für die aktiven Jahre kommt bis zum gewählten Alter dazu. Beginnt die Entnahme nach dem gewählten Rentenalter, startet die Rente mit der Entnahme, ohne Zuschläge für den späteren Beginn. Beginnt sie vorher, zahlt das Depot die Jahre bis zur Rente allein; bei flexibler Rate bleibt die Rate in diesen Jahren fest, die flexible Regel beginnt mit der Rente und bezieht sich auf den Teil, den das Depot dann noch zahlt. Das Rentenniveau bei Rentenbeginn skaliert die Rente aus der Renteninformation (die mit heute 48 % rechnet) im Verhältnis, 46 % ergeben also 46/48 der Rente. Privat Versicherte geben ihren heutigen Gesamtbeitrag ein: Ohne Krankentagegeld und ohne den gesetzlichen 10-%-Zuschlag (fällt ab 60 weg) wächst er um die eingestellte Rate, abzüglich einer Beitragsentlastung; die Rentenversicherung zahlt einen Zuschuss von 8,75 % der Bruttorente, höchstens die Hälfte des Beitrags. Vereinfacht: Der Zuschlag wird auch auf den Pflegeanteil herausgerechnet. Die Einkommensteuer rechnet der Rechner nach dem Tarif 2026 (Grundtarif, Einzelveranlagung), dessen Grenzen bis zum jeweiligen Jahr um die eingestellte Rate wachsen; abgezogen werden Kranken- und Pflegeversicherung und die Pauschalen von 138 €, dazu kommt gegebenenfalls Kirchensteuer. Wahlweise gilt ein eigener fester Satz. Nicht enthalten: weitere Einkünfte im Alter, Splitting mit einer Partnerrente, Hinterbliebenenrente, keine Abschläge bei früherem Rentenbeginn; die stehen in der Renteninformation.</p>
-          <p><strong>Ergebnis:</strong> Die Erfolgsquote ist auf 5 Punkte gerundet, weil Annahmen zum Markt sie um 20 Punkte und mehr verschieben; die Spanne zeigt beide Annahmen zum Markt. Die Tabelle „Wie lange muss es reichen?“ nutzt die Sterbetafel 2020/2022 des Statistischen Bundesamts, deren Sterblichkeit um 1 % pro Jahr sinkt (steigende Lebenserwartung); das Risiko zu Lebzeiten gewichtet jede Zukunft, in der das Depot leer wird, mit der Wahrscheinlichkeit, dieses Alter zu erleben.</p>
+          <p><strong>Anleihezelt, Forschungsstand:</strong> Pfau und Kitces fanden mit US-Daten, dass ein in der Rente steigender Aktienanteil das Risiko senken kann, das Geld zu früh aufzubrauchen. Estrada kam mit Daten aus 19 Ländern über 110 Jahre eher zu festen Quoten; Blanchett fand keinen Verlauf, der für alle am besten ist. Nach Early Retirement Now hilft ein Zelt vor allem, wenn die Börse zum Start teuer bewertet ist; das bildet dieser Rechner nicht ab. Anarkulova, Cederburg und O’Doherty stellen grundsätzlich infrage, dass man mit dem Alter mehr Anleihen halten sollte. Die Studien rechnen meist ohne Steuer; in einem deutschen Depot kostet der Aufbau des Zelts Steuer auf die verkauften Aktiengewinne.</p>
+          <p><strong>Modell:</strong> Börsenjahre mit häufigeren Extremjahren, schwankende Inflation und ein Zinsniveau, das mit der halben Inflationsabweichung und eigenen Realzins-Schocks schwankt (etwa ±2 Punkte). Anleihen erhalten den Zins des Vorjahrs und verlieren bei steigendem Zins Kurs, umso mehr, je höher ihre Schwankung ist; Geldmarkt folgt dem Zins, Aktien geben bei steigendem Realzins etwas nach. Basiszins der Vorabpauschale und Anschlusszins der Kredite (alle 10 Jahre neu) folgen demselben Zinsniveau. Rente, PKV-Beitrag, Steuertarif und Sparrate folgen der Inflation des jeweiligen Verlaufs mit einem Jahr Verzögerung. Alle eingestellten Renditen, Zinsen und Steigerungen gelten bei 2 % Inflation; bei höherer Durchschnittsinflation steigen Zinsen, Geldmarkt und Gold voll mit, Aktien zu drei Vierteln.  Die eingestellten Renditen gelten vor Kosten; die Kosten gehen jedes Jahr von allen Anlagen ab. Der Härtetest ersetzt einige Jahre durch echte Werte aus der Vergangenheit (Aktien: MSCI World, Anleihen: deutsche Staatsanleihen bzw. 2022 der breite Euro-Anleihenindex).</p>
+          <p><strong>Gesetzliche Rente:</strong> Die Rente aus der Renteninformation steigt jedes Jahr um die eingestellte Rate. Davon gehen Kranken- und Pflegeversicherung ab und die Steuer auf den steuerpflichtigen Teil. Dieser Besteuerungsanteil hängt vom Jahr des Rentenbeginns ab: 2026 sind es 84 %, jedes Jahr 0,5 Punkte mehr, ab 2058 100 %. Der steuerfreie Rest bleibt als fester Euro-Betrag, Erhöhungen sind voll steuerpflichtig. Mit eingerechneter Rente zählt als Netto-Einkommen Rente plus Depot; liegt die Netto-Rente über dem Wunsch, ist die ganze Rente das Einkommen und das Depot zahlt nichts. Mit „Rentenlücke schließen“ ist das Wunscheinkommen das heutige Netto ohne Sparrate (und ohne Kreditrate, wenn der Kredit vor der Entnahme abbezahlt ist), mal dem gewählten Anteil, in heutiger Kaufkraft. Ein Extra für die aktiven Jahre kommt bis zum gewählten Alter dazu. Beginnt die Entnahme nach dem gewählten Rentenalter, startet die Rente mit der Entnahme, ohne Zuschläge für den späteren Beginn. Beginnt sie vorher, zahlt das Depot die Jahre bis zur Rente allein; bei flexibler Rate bleibt die Rate in diesen Jahren fest, die flexible Regel beginnt mit der Rente und bezieht sich auf den Teil, den das Depot dann noch zahlt. Das Rentenniveau bei Rentenbeginn skaliert die Rente aus der Renteninformation (die mit heute 48 % rechnet) im Verhältnis, 46 % ergeben also 46/48 der Rente. Privat Versicherte geben ihren heutigen Gesamtbeitrag ein: Ohne Krankentagegeld und ohne den gesetzlichen 10-%-Zuschlag (fällt ab 60 weg) wächst er um die eingestellte Rate, abzüglich einer Beitragsentlastung; die Rentenversicherung zahlt einen Zuschuss von 8,75 % der Bruttorente, höchstens die Hälfte des Beitrags. Vereinfacht: Der Zuschlag wird auch auf den Pflegeanteil herausgerechnet. Die Einkommensteuer rechnet der Rechner nach dem Tarif 2026 (Grundtarif, Einzelveranlagung), dessen Grenzen bis zum jeweiligen Jahr um die eingestellte Rate wachsen; abgezogen werden Kranken- und Pflegeversicherung und die Pauschalen von 138 €, dazu kommt gegebenenfalls Kirchensteuer. Wahlweise gilt ein eigener fester Satz. Nicht enthalten: weitere Einkünfte im Alter, Splitting mit einer Partnerrente, Hinterbliebenenrente, keine Abschläge bei früherem Rentenbeginn; die stehen in der Renteninformation.</p>
+          <p><strong>Ergebnis:</strong> Die Erfolgsquote ist auf 5 Punkte gerundet, weil Annahmen zum Markt sie um 20 Punkte und mehr verschieben; die Spanne zeigt beide Annahmen zum Markt. Die Tabelle „Wie lange muss es reichen?“ nutzt die Sterbetafel 2020/2022 des Statistischen Bundesamts, deren Sterblichkeit um 1 % pro Jahr sinkt (steigende Lebenserwartung); das Risiko zu Lebzeiten gewichtet jede Zukunft, in der das Depot leer wird, mit der Wahrscheinlichkeit, dieses Alter zu erleben.</p>
           <div class="life" id="life"></div>
           <p><strong>Nicht enthalten:</strong> ausschüttende ETFs, Günstigerprüfung, Steueränderungen in der Zukunft. Modellrechnung, keine Prognose und keine Anlageberatung.</p>
           <p>Quellen: <a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Rente/Rentenreform" target="_blank" rel="noopener">Vorschläge der Rentenkommission (DRV)</a> · <a href="https://www.deutsche-rentenversicherung.de/SharedDocs/FAQ/Gesetzesaenderungen/Rentenanpassung/FAQ-Rentenanpassung-2026/Rentenanpassung-2026.html" target="_blank" rel="noopener">Haltelinie und Rentenanpassung 2026 (DRV)</a> · <a href="https://www.haufe.de/id/beitrag/private-kapitaleinkuenfte-in-der-anlagekap-inv-fuer-den-v-g-darstellung-in-der-anlagekap-inv-2025-HI17221637.html" target="_blank" rel="noopener">FIFO nach § 20 EStG (Haufe)</a> · <a href="https://www.finanztip.de/daily/etf-steuern-sparen-beim-verkauf/" target="_blank" rel="noopener">Zweitdepot-Trick (Finanztip)</a> · <a href="https://www.otto-schmidt.de/news/steuerrecht/basiszins-zur-berechnung-der-vorabpauschale-gem-18-absatz-4-invstg-basiszins-zum-2-1-2026-2026-01-15.html" target="_blank" rel="noopener">Basiszins 2026 (BMF)</a> · <a href="https://financialplanningassociation.org/article/journal/JAN14-reducing-retirement-risk-rising-equity-glide-path" target="_blank" rel="noopener">Pfau und Kitces</a> · <a href="https://blog.iese.edu/jestrada/files/2015/09/CFA-IRP-G2.pdf" target="_blank" rel="noopener">Estrada</a> · <a href="https://financialplanningassociation.org/article/journal/FEB15-revisiting-optimal-distribution-glide-path" target="_blank" rel="noopener">Blanchett</a> · <a href="https://earlyretirementnow.com/swr20" target="_blank" rel="noopener">Early Retirement Now</a> · <a href="https://www.aeaweb.org/conference/2025/program/paper/EFddaa8b" target="_blank" rel="noopener">Anarkulova u. a.</a> · <a href="https://www.test.de/Xetra-Gold-Steuerlich-wie-Barren-4910289-0/" target="_blank" rel="noopener">Xetra-Gold steuerlich (Stiftung Warentest)</a> · <a href="https://www.kettner-edelmetalle.de/wissen/goldpreisentwicklung-pro-jahr-tabelle-seit-1971" target="_blank" rel="noopener">Goldpreis pro Jahr seit 1971</a> · <a href="https://www.nber.org/papers/w18706" target="_blank" rel="noopener">Erb und Harvey</a> · <a href="https://www.kreditwesen.de/sites/default/files/content/articledownloads/2015/09/lak_11_17_571-573.pdf" target="_blank" rel="noopener">Hauspreise real 1970–2010</a> · <a href="https://epflicht-hessen.hebis.de/ubffm/download/pdf/8422827" target="_blank" rel="noopener">Renditedreieck Wohnimmobilien 1970–2022</a> · <a href="https://www.destatis.de/DE/Presse/Pressemitteilungen/2026/09/PD26_336_61262.html" target="_blank" rel="noopener">Häuserpreisindex 2. Quartal 2026 (Destatis)</a> · <a href="https://www.newyorkfed.org/medialibrary/media/research/staff_reports/sr999.pdf" target="_blank" rel="noopener">Renditen in Großstädten</a> · <a href="https://www.nber.org/papers/w24112" target="_blank" rel="noopener">Jordà u. a.: Rate of Return on Everything</a> · <a href="https://www.nber.org/papers/w9462" target="_blank" rel="noopener">Sinai und Souleles: Wohneigentum als Schutz vor Mietrisiko</a> · <a href="https://www.bundesbank.de/de/bundesbank/forschung/studie-zur-wirtschaftlichen-lage-privater-haushalte-phf/ergebnisse" target="_blank" rel="noopener">Vermögensbefragung der Bundesbank (PHF)</a> · <a href="https://gerd-kommer.de/blog/mythen-eigenheimbesitz/" target="_blank" rel="noopener">Kommer: Eigenheimbesitzer im Alter vermögender?</a> · <a href="https://gerd-kommer.de/blog/kredithebel-immobilien/" target="_blank" rel="noopener">Kommer: Kredithebel bei Immobilien</a></p>
@@ -1726,15 +1728,15 @@ const $ = id => document.getElementById(id);
 const nf0 = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 });
 const nf1 = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 1, minimumFractionDigits: 0 });
 const nf2 = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2, minimumFractionDigits: 0 });
-const eur = v => nf0.format(Math.round(v)) + " €";
-const eur10 = v => nf0.format(Math.round(v / 10) * 10) + " €";
-const eurR = v => { const a = Math.abs(v); if (a >= 1e6) return nf1.format(v / 1e6) + " Mio. €"; if (a >= 1e4) return nf0.format(Math.round(v / 1000) * 1000) + " €"; return nf0.format(Math.round(v / 10) * 10) + " €"; };
-const axisEur = v => v >= 1e6 ? nf1.format(v / 1e6) + " Mio." : v >= 1000 ? nf0.format(v / 1000) + " T€" : nf0.format(v) + " €";
+const eur = v => nf0.format(Math.round(v)) + " €";
+const eur10 = v => nf0.format(Math.round(v / 10) * 10) + " €";
+const eurR = v => { const a = Math.abs(v); if (a >= 1e6) return nf1.format(v / 1e6) + " Mio. €"; if (a >= 1e4) return nf0.format(Math.round(v / 1000) * 1000) + " €"; return nf0.format(Math.round(v / 10) * 10) + " €"; };
+const axisEur = v => v >= 1e6 ? nf1.format(v / 1e6) + " Mio." : v >= 1000 ? nf0.format(v / 1000) + " T€" : nf0.format(v) + " €";
 const yrs = v => v + (v == 1 ? " Jahr" : " Jahre");
 
 const SCEN = {
-  v: { re: 5, rb: 2.75, rc: 1, rg: 2.5, text: "Aktien bringen 5 % im Jahr, Anleihen 2,75 %, Geldmarkt 1 %, Gold 2,5 %. Vorsichtig gerechnet, etwa für ein schwächeres Jahrzehnt." },
-  o: { re: 7, rb: 3.75, rc: 2, rg: 3.5, text: "Aktien bringen 7 % im Jahr, Anleihen 3,75 %, Geldmarkt 2 %, Gold 3,5 %, etwa wie im langjährigen Durchschnitt." },
+  v: { re: 5, rb: 2.75, rc: 1, rg: 2.5, text: "Aktien bringen 5 % im Jahr, Anleihen 2,75 %, Geldmarkt 1 %, Gold 2,5 %. Vorsichtig gerechnet, etwa für ein schwächeres Jahrzehnt." },
+  o: { re: 7, rb: 3.75, rc: 2, rg: 3.5, text: "Aktien bringen 7 % im Jahr, Anleihen 3,75 %, Geldmarkt 2 %, Gold 3,5 %, etwa wie im langjährigen Durchschnitt." },
 };
 const MODEL_TXT = {
   r: "Mit Extremjahren, schwankender Inflation und Anleihen, die bei Inflationsschüben mit den Aktien fallen.",
@@ -1751,18 +1753,18 @@ const SELL_TXT = {
 const STRESS_H = {
   none: "",
   lost: "Zwei Crashs kurz hintereinander, erst nach über zehn Jahren wieder auf dem alten Stand. Anleihen wie deutsche Staatsanleihen 2000–2012.",
-  c87: "Aktien fallen um 24 % und brauchen 2 Jahre bis zum alten Stand. Anleihen wie deutsche Staatsanleihen 1987–1989.",
-  cdot: "Aktien fallen um 51 % und brauchen 5 Jahre bis zum alten Stand. Anleihen legten damals zusammen 23 % zu und federten ab.",
-  cgfc: "Aktien fallen um 59 % und brauchen rund 5 Jahre bis zum alten Stand. Anleihen 2008 +10 %, weil Anleger in sichere Anlagen flüchteten.",
-  ccov: "Aktien fallen um 34 % und sind ein Jahr später wieder auf dem alten Stand. Anleihen schwanken wie im normalen Modell.",
-  c22: "Aktien fallen um 27 %, die Inflation steigt auf 6,9 %, und Anleihen fallen mit (−17 %). Danach ein Jahr bis zum alten Stand.",
-  infl: "Zehn Jahre mit Inflation bis 13 %. Die Rate steigt kräftig mit, während Aktien und Anleihen real kaum zulegen. Gold stieg damals stark, 1979 allein um 127 % in US-Dollar.",
+  c87: "Aktien fallen um 24 % und brauchen 2 Jahre bis zum alten Stand. Anleihen wie deutsche Staatsanleihen 1987–1989.",
+  cdot: "Aktien fallen um 51 % und brauchen 5 Jahre bis zum alten Stand. Anleihen legten damals zusammen 23 % zu und federten ab.",
+  cgfc: "Aktien fallen um 59 % und brauchen rund 5 Jahre bis zum alten Stand. Anleihen 2008 +10 %, weil Anleger in sichere Anlagen flüchteten.",
+  ccov: "Aktien fallen um 34 % und sind ein Jahr später wieder auf dem alten Stand. Anleihen schwanken wie im normalen Modell.",
+  c22: "Aktien fallen um 27 %, die Inflation steigt auf 6,9 %, und Anleihen fallen mit (−17 %). Danach ein Jahr bis zum alten Stand.",
+  infl: "Zehn Jahre mit Inflation bis 13 %. Die Rate steigt kräftig mit, während Aktien und Anleihen real kaum zulegen. Gold stieg damals stark, 1979 allein um 127 % in US-Dollar.",
   gfall: "Gold verliert in fünf Jahren über ein Drittel, wie 1981–1985 in Euro. Aktien und Anleihen laufen zufällig weiter. Ohne Gold im Depot ändert dieser Test nichts.",
 };
 // Erfolgsquote ehrlich runden: das Modell ist nicht auf den Prozentpunkt genau
 const succTxt = s => s >= 0.975 ? "über 95\u00a0%" : s <= 0.025 ? "unter 5\u00a0%" : "etwa " + Math.round(s * 20) * 5 + "\u00a0%";
 const pInt = s => Math.round(s * 100) + "\u00a0%", p5 = s => s >= 0.975 ? "über 95\u00a0%" : s <= 0.025 ? "unter 5\u00a0%" : Math.round(s * 20) * 5 + "\u00a0%";
-// Sterbetafel 2020/2022 (Destatis), Überlebende lx im Alter 30 bis 100; Sterblichkeit sinkt um 1 % pro Jahr ab 2021
+// Sterbetafel 2020/2022 (Destatis), Überlebende lx im Alter 30 bis 100; Sterblichkeit sinkt um 1 % pro Jahr ab 2021
 const LXM = [98950,98896,98840,98780,98717,98642,98562,98472,98367,98258,98141,98012,97875,97725,97556,97374,97183,96974,96742,96483,96188,95861,95503,95108,94681,94206,93664,93068,92416,91688,90889,90001,89023,87959,86802,85543,84178,82711,81143,79469,77695,75842,73869,71820,69620,67348,64909,62408,59741,56951,54070,50964,47721,44325,40784,37110,33288,29406,25480,21710,18044,14635,11575,8834,6559,4697,3247,2143,1381,871,529];
 const LXF = [99327,99301,99271,99239,99203,99162,99117,99072,99020,98961,98897,98832,98755,98674,98581,98482,98377,98258,98131,97976,97810,97628,97430,97217,96979,96709,96415,96093,95736,95341,94901,94407,93876,93296,92654,91951,91183,90352,89471,88503,87447,86312,85081,83748,82293,80745,79035,77208,75198,73021,70683,68088,65270,62157,58742,55015,50908,46504,41808,37035,32165,27294,22621,18249,14325,10899,8028,5672,3896,2565,1645];
 const qOf = (L, x) => { if (x < 30) x = 30; if (x < 100) return 1 - L[x - 29] / L[x - 30]; const q99 = 1 - L[70] / L[69]; return Math.min(0.7, q99 * Math.pow(1.1, x - 99)); };
@@ -1776,17 +1778,17 @@ const DEFAULTS = { rOn: false, rv: 300000, rdebt: 200000, rlz: 3.5, rlzb: 10, rr
 const S = { kvm: "gkv", ptm: "fix", wmode: "fix", swing: 10, band: 5, fb: 1000, ks: 0, sell: "fifo", scen: "o", model: "r", stress: "none", when: "ret", mode: "real" };
 
 const fmts = {
-  rv: v => eur(v), rdebt: v => eur(v), rlz: v => nf2.format(v) + " %", rlzb: v => v + " Jahre", rrate: v => eur(v), rrent: v => eur(v),
-  rkost: v => eur(v), rafaE: v => eur(v), rbuyY: v => String(v), rtax: v => v + " %",
-  lshare: v => v + " %", hshare: v => v + " %", inc0: v => eur(v), gapPct: v => v + " %", xtra: v => eur(v), xAge: v => v + " Jahre",
-  age0: v => v + " Jahre", cap: v => eur(v), gain0: v => v + " %", contrib: v => eur(v), cg: v => nf1.format(v) + " %",
-  retAge: v => "mit " + v + " Jahren", age1: v => v + " Jahre", net: v => eur(v),
-  dfloor: v => eur10(gv("net") * v / 100), wE: v => v + " %", wC: v => v + " %", wG: v => v + " %", rg: v => nf2.format(v) + " %", vg: v => v + " %",
-  tUp: v => v == 0 ? "zum Rentenbeginn" : yrs(v) + " vorher", tPeak: v => v + " %", tDown: v => v == 0 ? "sofort" : yrs(v), tLate: v => v + " %",
-  ppkv0: v => eur(v), ktg: v => eur(v), bel: v => eur(v), pkvg: v => nf2.format(v) + " %", pniv: v => nf1.format(v) + " %", pens: v => eur(v), pAge: v => "mit " + v + " Jahren", pg: v => nf2.format(v) + " %", ptax: v => nf1.format(v) + " %", tg: v => nf2.format(v) + " %", pkv: v => nf2.format(v) + " %",
-  sc: v => nf1.format(v) + " %", fp: v => v + " %", debt: v => eur(v), lz: v => nf2.format(v) + " %", lz2: v => nf2.format(v) + " %", lzb: v => v + " Jahre", lrate: v => eur(v), lsond: v => eur(v), hv: v => eur(v), hg: v => (v > 0 ? "+" : "") + nf2.format(v) + " %",
-  ter: v => nf2.format(v) + " %", bz: v => nf2.format(v) + " %", re: v => nf2.format(v) + " %", rb: v => nf2.format(v) + " %", rc: v => nf2.format(v) + " %",
-  ve: v => v + " %", vb: v => nf1.format(v) + " %", inf: v => nf2.format(v) + " %",
+  rv: v => eur(v), rdebt: v => eur(v), rlz: v => nf2.format(v) + " %", rlzb: v => v + " Jahre", rrate: v => eur(v), rrent: v => eur(v),
+  rkost: v => eur(v), rafaE: v => eur(v), rbuyY: v => String(v), rtax: v => v + " %",
+  lshare: v => v + " %", hshare: v => v + " %", inc0: v => eur(v), gapPct: v => v + " %", xtra: v => eur(v), xAge: v => v + " Jahre",
+  age0: v => v + " Jahre", cap: v => eur(v), gain0: v => v + " %", contrib: v => eur(v), cg: v => nf1.format(v) + " %",
+  retAge: v => "mit " + v + " Jahren", age1: v => v + " Jahre", net: v => eur(v),
+  dfloor: v => eur10(gv("net") * v / 100), wE: v => v + " %", wC: v => v + " %", wG: v => v + " %", rg: v => nf2.format(v) + " %", vg: v => v + " %",
+  tUp: v => v == 0 ? "zum Rentenbeginn" : yrs(v) + " vorher", tPeak: v => v + " %", tDown: v => v == 0 ? "sofort" : yrs(v), tLate: v => v + " %",
+  ppkv0: v => eur(v), ktg: v => eur(v), bel: v => eur(v), pkvg: v => nf2.format(v) + " %", pniv: v => nf1.format(v) + " %", pens: v => eur(v), pAge: v => "mit " + v + " Jahren", pg: v => nf2.format(v) + " %", ptax: v => nf1.format(v) + " %", tg: v => nf2.format(v) + " %", pkv: v => nf2.format(v) + " %",
+  sc: v => nf1.format(v) + " %", fp: v => v + " %", debt: v => eur(v), lz: v => nf2.format(v) + " %", lz2: v => nf2.format(v) + " %", lzb: v => v + " Jahre", lrate: v => eur(v), lsond: v => eur(v), hv: v => eur(v), hg: v => (v > 0 ? "+" : "") + nf2.format(v) + " %",
+  ter: v => nf2.format(v) + " %", bz: v => nf2.format(v) + " %", re: v => nf2.format(v) + " %", rb: v => nf2.format(v) + " %", rc: v => nf2.format(v) + " %",
+  ve: v => v + " %", vb: v => nf1.format(v) + " %", inf: v => nf2.format(v) + " %",
 };
 const ranges = Object.keys(fmts);
 // Zahlenfelder neben allen Reglern: der getippte Wert gilt exakt, der Regler zeigt ihn gerundet an
@@ -1855,7 +1857,7 @@ function readFlows(age0, age1) {
     if (a < age0 || a >= age1) { h.textContent = `Das Alter muss zwischen ${age0} und ${age1 - 1} liegen.`; return; }
     if (t === "sale") {
       if (!isHome()) { h.textContent = "Für einen Hausverkauf unten „Mit einbeziehen“ anhaken."; return; }
-      h.textContent = `Erlös: Hauswert zu diesem Zeitpunkt abzüglich ${nf1.format(gv("sc"))} % Verkaufskosten und Restschuld.`; out.push({ type: t, age: a, y: a - age0, amt: 0, label: $(`f${n}-l`).value.trim() || "Hausverkauf" }); return;
+      h.textContent = `Erlös: Hauswert zu diesem Zeitpunkt abzüglich ${nf1.format(gv("sc"))} % Verkaufskosten und Restschuld.`; out.push({ type: t, age: a, y: a - age0, amt: 0, label: $(`f${n}-l`).value.trim() || "Hausverkauf" }); return;
     }
     if (!isFinite(v) || v <= 0) { h.textContent = "Bitte einen Betrag eintragen."; return; }
     h.textContent = ""; out.push({ type: t, age: a, y: a - age0, amt: v, label: $(`f${n}-l`).value.trim() || (t === "in" ? "Einnahme" : "Ausgabe") });
@@ -1891,15 +1893,15 @@ const SCEN_NAME = { v: "Eher schwach", o: "Wie früher", e: "Individuell" };
 function updSums() {
   const g = id => gv(id), e = g("wE"), c = g("wC"), gd = g("wG"), b = Math.round((100 - e - c - gd) * 10) / 10;
   const set = (k, t) => { const el = $("sum-" + k); if (el) el.textContent = t; };
-  set("ansparen", `${g("age0")} Jahre · ${eurR(g("cap"))} angelegt · ${eur(g("contrib"))} im Monat`);
+  set("ansparen", `${g("age0")} Jahre · ${eurR(g("cap"))} angelegt · ${eur(g("contrib"))} im Monat`);
   set("entnehmen", `ab ${g("retAge")} bis ${g("age1")} · ${eur(g("net"))} im Monat${gv("xtra") > 0 ? ` + ${eur(gv("xtra"))} bis ${gv("xAge")}` : ""}${$("pOn").checked ? " mit Rente" : ""} · ${S.wmode === "dyn" ? "flexibel" : "fest"}`);
-  set("rente", $("pOn").checked ? `${eur(g("pens"))} brutto ab ${g("pAge")} · +${nf2.format(g("pg"))} % pro Jahr${gv("pniv") !== 48 ? ` · Niveau ${nf1.format(gv("pniv"))} %` : ""} · ${S.ptm === "auto" ? "Steuer nach Tarif" : "Steuer " + nf1.format(gv("ptax")) + " %"}${S.kvm === "pkv" ? " · privat versichert" : ""}` : "nicht einbezogen");
+  set("rente", $("pOn").checked ? `${eur(g("pens"))} brutto ab ${g("pAge")} · +${nf2.format(g("pg"))} % pro Jahr${gv("pniv") !== 48 ? ` · Niveau ${nf1.format(gv("pniv"))} %` : ""} · ${S.ptm === "auto" ? "Steuer nach Tarif" : "Steuer " + nf1.format(gv("ptax")) + " %"}${S.kvm === "pkv" ? " · privat versichert" : ""}` : "nicht einbezogen");
   set("miete", $("rOn").checked ? `Wert ${eurR(g("rv"))} · Restschuld ${eurR(g("rdebt"))} · Miete ${eur(g("rrent"))} · Rate ${eur(g("rrate"))}` : "nicht einbezogen");
-  set("haus", isHome() ? `Restschuld ${eurR(g("debt"))} · ${eur(g("lrate"))} Rate · Anteil Rate ${g("lshare")} % · Hauswert ${eurR(g("hv"))}, dir gehören ${g("hshare")} %` + ($("flowsOn").checked ? " · mit Einmalzahlungen" : "") : "nicht einbezogen");
-  set("aufteilung", `Aktien ${nf1.format(e)} % · Anleihen ${nf1.format(b)} % · Geldmarkt ${nf1.format(c)} %` + (gd > 0 ? ` · Gold ${nf1.format(gd)} %` : "") + ($("tent").checked ? " · Anleihezelt" : ""));
-  set("fein", [gd > 0 && `Gold ${nf1.format(gd)} %`, $("tent").checked && "Anleihezelt", S.sell === "trick" && "Zweitdepot-Trick", `umschichten ${S.band ? "ab ±" + S.band + " Pkt." : "jedes Jahr"}`].filter(Boolean).join(" · "));
-  set("markt", `${SCEN_NAME[S.scen]} · Aktien ${nf2.format(g("re"))} % · Kosten ${nf2.format(g("ter"))} % · Inflation ${nf2.format(g("inf"))} %` + (S.model === "s" ? " · einfaches Modell" : ""));
-  set("steuern", `${S.fb === 2000 ? "2.000" : "1.000"} € Freibetrag · ${S.ks ? S.ks + " % Kirchensteuer" : "ohne Kirchensteuer"} · ${S.sell === "trick" ? "Zweitdepot-Trick" : "FIFO"} · Basiszins ${nf2.format(g("bz"))} %`);
+  set("haus", isHome() ? `Restschuld ${eurR(g("debt"))} · ${eur(g("lrate"))} Rate · Anteil Rate ${g("lshare")} % · Hauswert ${eurR(g("hv"))}, dir gehören ${g("hshare")} %` + ($("flowsOn").checked ? " · mit Einmalzahlungen" : "") : "nicht einbezogen");
+  set("aufteilung", `Aktien ${nf1.format(e)} % · Anleihen ${nf1.format(b)} % · Geldmarkt ${nf1.format(c)} %` + (gd > 0 ? ` · Gold ${nf1.format(gd)} %` : "") + ($("tent").checked ? " · Anleihezelt" : ""));
+  set("fein", [gd > 0 && `Gold ${nf1.format(gd)} %`, $("tent").checked && "Anleihezelt", S.sell === "trick" && "Zweitdepot-Trick", `umschichten ${S.band ? "ab ±" + S.band + " Pkt." : "jedes Jahr"}`].filter(Boolean).join(" · "));
+  set("markt", `${SCEN_NAME[S.scen]} · Aktien ${nf2.format(g("re"))} % · Kosten ${nf2.format(g("ter"))} % · Inflation ${nf2.format(g("inf"))} %` + (S.model === "s" ? " · einfaches Modell" : ""));
+  set("steuern", `${S.fb === 2000 ? "2.000" : "1.000"} € Freibetrag · ${S.ks ? S.ks + " % Kirchensteuer" : "ohne Kirchensteuer"} · ${S.sell === "trick" ? "Zweitdepot-Trick" : "FIFO"} · Basiszins ${nf2.format(g("bz"))} %`);
 }
 // Kranken- und Pflegeversicherung: standardmäßig Prozent der Rente; ein selbst eingetragener Euro-Betrag (heutige Werte) bleibt fest
 let pkvEur = null, pAgeWant = 67;
@@ -1915,8 +1917,8 @@ function syncPtax() {
   ptaxTarif = pl.first ? Math.round(pl.first.rate * 1000) / 10 : null;
   if (ptaxLinked && ptaxTarif != null) setV("ptax", ptaxTarif);
   if (S.ptm === "fix") $("ptm-h").textContent = ptaxTarif == null ? "" : ptaxLinked
-    ? `Voreingestellt nach dem Steuertarif für deine Rente: ${nf1.format(ptaxTarif)} % auf den steuerpflichtigen Teil (allein veranlagt, Tarif steigt ${nf2.format(gv("tg"))} % pro Jahr). Hast du weitere Einkünfte, trag einen eigenen Satz ein.`
-    : `Eigener Satz. Nach dem Steuertarif wären es für deine Rente etwa ${nf1.format(ptaxTarif)} %.`;
+    ? `Voreingestellt nach dem Steuertarif für deine Rente: ${nf1.format(ptaxTarif)} % auf den steuerpflichtigen Teil (allein veranlagt, Tarif steigt ${nf2.format(gv("tg"))} % pro Jahr). Hast du weitere Einkünfte, trag einen eigenen Satz ein.`
+    : `Eigener Satz. Nach dem Steuertarif wären es für deine Rente etwa ${nf1.format(ptaxTarif)} %.`;
 }
 // Rentenlücke: Ziel im Alter aus dem heutigen Netto (ohne Sparrate, ohne Kreditrate wenn der Kredit vorher abbezahlt ist)
 let GAP = null;
@@ -1949,7 +1951,7 @@ function syncOutputs() {
   $("dfloor-u").textContent = "% · " + fmts.dfloor(gv("dfloor"));
   const e = gv("wE"), c = gv("wC"), g = gv("wG"), b = Math.round((100 - e - c - g) * 10) / 10;
   $("mx-e").style.width = e + "%"; $("mx-b").style.width = b + "%"; $("mx-c").style.width = c + "%"; $("mx-g").style.width = g + "%";
-  $("mixl").innerHTML = `<span><i class="dot" style="background:var(--eq)"></i>Aktien <b>${nf1.format(e)} %</b></span><span><i class="dot" style="background:var(--bd)"></i>Anleihen <b>${nf1.format(b)} %</b></span><span><i class="dot" style="background:var(--mm)"></i>Geldmarkt <b>${nf1.format(c)} %</b></span>` + (g > 0 ? `<span><i class="dot" style="background:var(--gd)"></i>Gold <b>${nf1.format(g)} %</b></span>` : "");
+  $("mixl").innerHTML = `<span><i class="dot" style="background:var(--eq)"></i>Aktien <b>${nf1.format(e)} %</b></span><span><i class="dot" style="background:var(--bd)"></i>Anleihen <b>${nf1.format(b)} %</b></span><span><i class="dot" style="background:var(--mm)"></i>Geldmarkt <b>${nf1.format(c)} %</b></span>` + (g > 0 ? `<span><i class="dot" style="background:var(--gd)"></i>Gold <b>${nf1.format(g)} %</b></span>` : "");
   $("gain0-c").hidden = gv("cap") === 0;
   $("tent-c").hidden = !$("tent").checked;
   $("flows-c").hidden = !$("flowsOn").checked;
@@ -2007,7 +2009,7 @@ function drawLines(el, ages, series, opts) {
   s += `<path class="mid" d="${path(series.mid)}"/><line class="cursor" x1="0" x2="0" y1="${f.T}" y2="${f.H - f.B}" visibility="hidden"/>`;
   s += `<rect x="${f.L}" y="${f.T}" width="${f.W - f.L - f.R}" height="${f.H - f.T - f.B}" fill="transparent"/></svg><div class="tip" hidden></div>`;
   el.innerHTML = s;
-  hover(el, ages, f, k => `<b>Mit ${ages[k]} Jahren</b>` + opts.rows.map(([name, arr]) => `<div><span>${name}</span><span>${opts.tipFmt(arr[k])}</span></div>`).join(""));
+  hover(el, ages, f, k => `<b>Mit ${ages[k]} Jahren</b>` + opts.rows.map(([name, arr]) => `<div><span>${name}</span><span>${opts.tipFmt(arr[k])}</span></div>`).join(""));
 }
 function hover(el, ages, f, html) {
   const svg = el.querySelector("svg"), tip = el.querySelector(".tip"), cur = el.querySelector(".cursor");
@@ -2023,7 +2025,7 @@ function hover(el, ages, f, html) {
   svg.addEventListener("pointerleave", () => { tip.hidden = true; cur.setAttribute("visibility", "hidden"); });
 }
 function drawAlloc(el, ages, Wt, opts) {
-  const f = frame(el, ages, 100, v => v + " %", Object.assign({ noRet: true }, opts)); const { xs, ys } = f; let s = f.s;
+  const f = frame(el, ages, 100, v => v + " %", Object.assign({ noRet: true }, opts)); const { xs, ys } = f; let s = f.s;
   const cum = Wt.map(w => [w[2] * 100, (w[2] + w[1]) * 100, (w[2] + w[1] + w[3]) * 100, 100]); // von unten: Geldmarkt, Anleihen, Gold, Aktien
   const layer = (lo, hi, col) => {
     const up = ages.map((a, k) => `${k ? "L" : "M"}${xs(a).toFixed(1)} ${ys(hi(k)).toFixed(1)}`).join(" ");
@@ -2037,8 +2039,8 @@ function drawAlloc(el, ages, Wt, opts) {
   // Legende nur mit Klassen, die irgendwann tatsächlich Bestand haben
   const leg = $(el.id + "-leg");
   if (leg) leg.innerHTML = [[0, "--eq", "Aktien"], [1, "--bd", "Anleihen"], [3, "--gd", "Gold"], [2, "--mm", "Geldmarkt"]].filter(([i]) => Wt.some(w => w[i] > 0.0005)).map(([, c, n]) => `<span><i class="sw" style="background:var(${c})"></i>${n}</span>`).join("");
-  const pc = x => Math.round(x * 100) + " %";
-  hover(el, ages, f, k => `<b>Mit ${ages[k]} Jahren</b><div><span>Aktien</span><span>${pc(Wt[k][0])}</span></div><div><span>Anleihen</span><span>${pc(Wt[k][1])}</span></div><div><span>Geldmarkt</span><span>${pc(Wt[k][2])}</span></div>` + (Wt[k][3] > 0 ? `<div><span>Gold</span><span>${pc(Wt[k][3])}</span></div>` : ""));
+  const pc = x => Math.round(x * 100) + " %";
+  hover(el, ages, f, k => `<b>Mit ${ages[k]} Jahren</b><div><span>Aktien</span><span>${pc(Wt[k][0])}</span></div><div><span>Anleihen</span><span>${pc(Wt[k][1])}</span></div><div><span>Geldmarkt</span><span>${pc(Wt[k][2])}</span></div>` + (Wt[k][3] > 0 ? `<div><span>Gold</span><span>${pc(Wt[k][3])}</span></div>` : ""));
 }
 
 /* ---------- Rechnen und Anzeigen ---------- */
@@ -2126,8 +2128,8 @@ function undoLever() {
   syncAll(); schedule();
 }
 function renderLev(d, p) {
-  const ul = $("lev"), pts = x => Math.round(x * 100), pf = s => pts(s) + " %", base = d.base;
-  const diff = s => { const x = Math.round((pts(s) - pts(base)) * 10) / 10; return `${pf(s)} (${x > 0 ? "+" : x < 0 ? "−" : "±"}${nf1.format(Math.abs(x))} Pkt.)`; };
+  const ul = $("lev"), pts = x => Math.round(x * 100), pf = s => pts(s) + " %", base = d.base;
+  const diff = s => { const x = Math.round((pts(s) - pts(base)) * 10) / 10; return `${pf(s)} (${x > 0 ? "+" : x < 0 ? "−" : "±"}${nf1.format(Math.abs(x))} Pkt.)`; };
   let ri = 0;
   const row = (l, b, cls) => `<li><button type="button" class="levbtn" data-li="${ri++}" title="Übernehmen"><span>${esc(l)}</span><b class="${cls}">${esc(b)}</b></button></li>`;
   const incl = p.pOn ? "Wunscheinkommen" : "Entnahme";
@@ -2136,9 +2138,9 @@ function renderLev(d, p) {
       return d.mode === "below" ? (i.ok ? `Sparrate um ${eur(i.v)} erhöhen, auf ${eur(p.contrib + i.v)} im Monat${z}` : `Sparrate: auch ${eur(i.v)} mehr im Monat reichen allein nicht`) : `Sparrate ${eur(i.v)} höher${z}`; },
     contribMinus: i => `Sparrate ${eur(i.v)} niedriger` + (p.gapLink ? `, Ziel im Alter dann ${eur(Math.max(100, Math.round((p.gapLink.base + i.v) * p.gapLink.pct / 100 / 50) * 50))}` : ""),
     dyn: i => d.mode === "below" ? "Rate flexibel statt fest" : "Rate darf sich anpassen (flexibel)",
-    later: i => d.mode === "below" && !i.ok ? `Später beginnen: auch ${i.v} Jahre später reichen allein nicht` : `${i.v} ${i.v === 1 ? "Jahr" : "Jahre"} später beginnen, mit ${p.retAge + i.v}`,
-    earlier: i => `${i.v} Jahre früher, mit ${p.retAge - i.v}`,
-    net: i => { const pc = p.gapOn && GAP && GAP.base > 0 ? ` (Anteil etwa ${Math.round(i.v / GAP.base * 100)} %)` : "";
+    later: i => d.mode === "below" && !i.ok ? `Später beginnen: auch ${i.v} Jahre später reichen allein nicht` : `${i.v}\u00a0${i.v === 1 ? "Jahr" : "Jahre"} später beginnen, mit ${p.retAge + i.v}`,
+    earlier: i => `${i.v} Jahre früher, mit ${p.retAge - i.v}`,
+    net: i => { const pc = p.gapOn && GAP && GAP.base > 0 ? ` (Anteil etwa ${Math.round(i.v / GAP.base * 100)} %)` : "";
       return d.mode === "below" ? (i.ok ? `${p.gapOn ? "Ziel im Alter" : incl} auf ${eur(i.v)} im Monat senken${pc || ` (${eur(p.net - i.v)} weniger)`}` : `${p.gapOn ? "Ziel im Alter" : incl} senken: reicht allein kaum`) : `${eur(i.v)} statt ${eur(p.net)} im Monat${pc}`; },
   };
   ul.innerHTML = d.items.map(i => d.mode === "below" ? row(L[i.k](i), (i.ok ? "" : "nur ") + pf(i.s), i.ok ? "up" : "")
@@ -2148,10 +2150,10 @@ function renderLev(d, p) {
   $("lev-t").textContent = d.mode === "roomy" ? "Dein Plan hat Luft: So viel Spielraum ist da" : d.mode === "green" ? "Im grünen Bereich: So wird es noch sicherer" : found ? "So kommst du in den grünen Bereich" : "Allein reicht keine Stellschraube für Grün";
   const undo = $("lev-u"); if (undo) { undo.hidden = !LEVUNDO; if (LEVUNDO) $("lev-ut").textContent = `Übernommen: ${LEVUNDO.label}.`; }
   $("lev-h").textContent = d.mode !== "below" ? `Jeweils nur eine Änderung, in genau denselben 2.000 Zukünften. Heute: ${pf(base)}. Tippe eine Zeile an, um sie zu übernehmen.`
-    : found ? `Jede grüne Zeile bringt das Ergebnis allein auf mindestens 80 %, ab da zeigt die Ampel Grün. Kombiniert reicht von jedem weniger. Gerechnet in denselben 2.000 Zukünften, heute ${pf(base)}. Tippe eine Zeile an, um sie zu übernehmen.`
+    : found ? `Jede grüne Zeile bringt das Ergebnis allein auf mindestens 80 %, ab da zeigt die Ampel Grün. Kombiniert reicht von jedem weniger. Gerechnet in denselben 2.000 Zukünften, heute ${pf(base)}. Tippe eine Zeile an, um sie zu übernehmen.`
     : `Kombiniere mehrere Stellschrauben, zum Beispiel mehr sparen und flexibel entnehmen. Heute: ${pf(base)}.`;
 }
-// Vermietete Immobilie: Rechnung des ersten Jahres, Kreditende, Vergleich mit Verkauf heute (bei 2 % Inflation, ohne Zufall)
+// Vermietete Immobilie: Rechnung des ersten Jahres, Kreditende, Vergleich mit Verkauf heute (bei 2 % Inflation, ohne Zufall)
 function renderRent() {
   const h = $("rent-h"); if (!h || !last) return;
   const p = readParams(), on = p.rOn; p.rOn = true;
@@ -2164,10 +2166,10 @@ function renderRent() {
   let t = `Heute im Monat: Miete ${eur(Math.round(f.rent))} − Kosten ${eur(Math.round(f.cost))} − Rate ${eur(Math.round(f.pay))} ${f.tax <= 0 ? "+ Steuererstattung " + eur(Math.round(-f.tax)) : "− Steuer " + eur(Math.round(f.tax))} = ${sg(f.cf)} (${f.cf >= 0 ? "geht ins Depot" : "kommt aus dem Depot"}).`;
   const noi = (f.rent - f.cost) * 12, kz = [];
   if (p.rrent > 0 && p.rv > 0) kz.push(`Kaufpreisfaktor ${nf1.format(p.rv / (12 * p.rrent))} (Marktwert durch Jahreskaltmiete)`);
-  if (p.rv > 0) kz.push(`Netto-Mietrendite auf den Marktwert ${nf1.format(noi / p.rv * 100)} %`);
+  if (p.rv > 0) kz.push(`Netto-Mietrendite auf den Marktwert ${nf1.format(noi / p.rv * 100)} %`);
   if (kz.length) t += ` ${kz.join(", ")}; nach Kosten und Mietausfall, vor Kredit und Steuer.`;
   if (p.rdebt > 0 && L.payoff != null) t += ` Kredit abbezahlt mit ${Math.round(p.age0 + L.payoff)}` + (det.after ? `, danach etwa ${sg(det.after.cf)} im Monat nach Steuer, in heutiger Kaufkraft.` : ".");
-  if (on && last.cmp && last.cmp.noRent) { const n = rentSellNet(p), y0 = p.year0 || 2026; t += ` Heute verkauft, ${n >= 0 ? eur(Math.round(n / 100) * 100) + " Erlös ins Depot" : eur(Math.round(-n / 100) * 100) + " Restschuld aus dem Depot getilgt"}: ${pInt(last.cmp.noRent.success)} statt ${pInt(last.r.success)} beim Halten (nach ${Math.round(RSELL * 100)} % Verkaufskosten${y0 - p.rbuyY < 10 ? ", ohne Steuer auf den Gewinn, weil noch keine 10 Jahre" : ""}${p.rdebt > 0 && p.rlzb > 0 ? ", ohne Vorfälligkeitsentschädigung" : ""}).`; }
+  if (on && last.cmp && last.cmp.noRent) { const n = rentSellNet(p), y0 = p.year0 || 2026; t += ` Heute verkauft, ${n >= 0 ? eur(Math.round(n / 100) * 100) + " Erlös ins Depot" : eur(Math.round(-n / 100) * 100) + " Restschuld aus dem Depot getilgt"}: ${pInt(last.cmp.noRent.success)} statt ${pInt(last.r.success)} beim Halten (nach ${Math.round(RSELL * 100)} % Verkaufskosten${y0 - p.rbuyY < 10 ? ", ohne Steuer auf den Gewinn, weil noch keine 10 Jahre" : ""}${p.rdebt > 0 && p.rlzb > 0 ? ", ohne Vorfälligkeitsentschädigung" : ""}).`; }
   h.textContent = t;
 }
 let METERCLS = "good", VERDICT_SEEN = true;
@@ -2225,7 +2227,7 @@ function renderLife() {
   const rm = risk(LXM), rf = risk(LXF), om = sv(LXM, p.age1), of = sv(LXF, p.age1);
   LIFETXT = `Gewichtet mit der Lebenserwartung geht das Geld bis ${p.age1} zu Lebzeiten aus: bei einem Mann in ${succTxt(rm)} der Fälle, bei einer Frau in ${succTxt(rf)}. Älter als ${p.age1} werden ${succTxt(om)} der Männer und ${succTxt(of)} der Frauen deines Jahrgangs; darüber rechnet der Rechner nicht.`;
   h += `<p hidden>Geld reicht ${ages.map(A => "bis " + A + ": " + c5(ok(A))).join(", ")}. Erleben Männer ${ages.map(A => A + ": " + c5(sv(LXM, A))).join(", ")}; Frauen ${ages.map(A => A + ": " + c5(sv(LXF, A))).join(", ")}.</p>`;
-  h += `<p class="hint">${LIFETXT} Grundlage: Sterbetafel 2020/2022 des Statistischen Bundesamts, Sterblichkeit sinkt um 1 % pro Jahr.</p>`;
+  h += `<p class="hint">${LIFETXT} Grundlage: Sterbetafel 2020/2022 des Statistischen Bundesamts, Sterblichkeit sinkt um 1 % pro Jahr.</p>`;
   el.innerHTML = h;
 }
 function renderCmp() {
@@ -2235,16 +2237,16 @@ function renderCmp() {
   if (!p.tent && !p.trick && !(p.wG > 0)) { box.innerHTML = ""; box.hidden = true; return; }
   box.hidden = false;
   if (!cmp) return;
-  const pf = x => nf1.format(x) + " %";
-  const diff = d => { d = Math.round(d); return (d > 0 ? "+" : d < 0 ? "−" : "±") + Math.abs(d) + " Pkt."; };
+  const pf = x => nf1.format(x) + " %";
+  const diff = d => { d = Math.round(d); return (d > 0 ? "+" : d < 0 ? "−" : "±") + Math.abs(d) + " Pkt."; };
   let h = `<h3>Was bringen deine Schalter?</h3>`;
   if (cmp.tent) {
     const a = pts(r.success), b = pts(cmp.tent.success);
-    h += `<div class="cmp"><span class="l">Anleihezelt</span><span class="r">${pf(a)} statt ${pf(b)} (${diff(a - b)})</span><span class="h">Typisch mit ${p.retAge}: ${eurR(r.retMed)} statt ${eurR(cmp.tent.retMed)}, schlecht: ${eurR(r.retLow)} statt ${eurR(cmp.tent.retLow)}. Übrig mit ${p.age1}: ${eurR(r.endMed)} statt ${eurR(cmp.tent.endMed)}. Steuern in der Ansparphase: ${eurR(r.taxAcc)} statt ${eurR(cmp.tent.taxAcc)}.${p.stress !== "none" && S.when === "ret" ? " Achtung: Eine Krise genau zum Start der Entnahme ist der günstigste Fall fürs Zelt. Prüfe es auch ohne Härtetest und mit Krise 5 Jahre vorher." : p.stress === "none" ? " Ohne Härtetest zeigt sich, was das Zelt im Durchschnitt kostet oder bringt." : ""}</span></div>`;
+    h += `<div class="cmp"><span class="l">Anleihezelt</span><span class="r">${pf(a)} statt ${pf(b)} (${diff(a - b)})</span><span class="h">Typisch mit ${p.retAge}: ${eurR(r.retMed)} statt ${eurR(cmp.tent.retMed)}, schlecht: ${eurR(r.retLow)} statt ${eurR(cmp.tent.retLow)}. Übrig mit ${p.age1}: ${eurR(r.endMed)} statt ${eurR(cmp.tent.endMed)}. Steuern in der Ansparphase: ${eurR(r.taxAcc)} statt ${eurR(cmp.tent.taxAcc)}.${p.stress !== "none" && S.when === "ret" ? " Achtung: Eine Krise genau zum Start der Entnahme ist der günstigste Fall fürs Zelt. Prüfe es auch ohne Härtetest und mit Krise 5 Jahre vorher." : p.stress === "none" ? " Ohne Härtetest zeigt sich, was das Zelt im Durchschnitt kostet oder bringt." : ""}</span></div>`;
   }
   if (cmp.trick) {
     const a = pts(r.success), b = pts(cmp.trick.success);
-    h += `<div class="cmp"><span class="l">Zweitdepot-Trick</span><span class="r">${pf(a)} statt ${pf(b)} (${diff(a - b)})</span><span class="h">Steuern in den ersten 10 Jahren der Entnahme: ${eurR(r.taxRet10)} statt ${eurR(cmp.trick.taxRet10)}; während der ganzen Entnahme ${eurR(r.taxRet)} statt ${eurR(cmp.trick.taxRet)}. Übrig mit ${p.age1}: ${eurR(r.endMed)} statt ${eurR(cmp.trick.endMed)}.</span></div>`;
+    h += `<div class="cmp"><span class="l">Zweitdepot-Trick</span><span class="r">${pf(a)} statt ${pf(b)} (${diff(a - b)})</span><span class="h">Steuern in den ersten 10 Jahren der Entnahme: ${eurR(r.taxRet10)} statt ${eurR(cmp.trick.taxRet10)}; während der ganzen Entnahme ${eurR(r.taxRet)} statt ${eurR(cmp.trick.taxRet)}. Übrig mit ${p.age1}: ${eurR(r.endMed)} statt ${eurR(cmp.trick.endMed)}.</span></div>`;
   }
   if (cmp.gold) {
     const a = pts(r.success), b = pts(cmp.gold.success);
@@ -2263,7 +2265,7 @@ function render() {
   const st = STRESS[p.stress];
   const bar = $("stressbar"); bar.className = "stressbar" + (st ? " on" : "");
   const sAge = p.age0 + p.off;
-  bar.textContent = st ? `Härtetest aktiv: ${st.name}, beginnend mit ${sAge} Jahren.` : "";
+  bar.textContent = st ? `Härtetest aktiv: ${st.name}, beginnend mit ${sAge} Jahren.` : "";
   const unit = real ? "in heutiger Kaufkraft" : "auf dem Kontoauszug";
 
   // Urteil
@@ -2286,7 +2288,7 @@ function render() {
     // nur Zukünfte, in denen das Depot reicht; die anderen beschreibt der Satz davor
     for (let i = 0; i < n; i++) { if (!(r.totR && r.totR[Y * n + i] > 0)) continue; let m = Infinity; for (let y = RY; y < Y; y++) { const v = r.rateR[y * n + i]; if (v > 0 && v < m) m = v; } if (isFinite(m)) lows.push(m); }
     lows.sort((a, b) => a - b); const cut = lows.filter(v => v < p.net * 0.9).length / n;
-    if (cut >= 0.01 && lows.length) sub += ` Auch wo es reicht, sinkt dein Einkommen mit der flexiblen Rate in ${succTxt(cut)} der Zukünfte zeitweise um mehr als 10 %, im schlechtesten Zehntel davon bis auf etwa ${eur10(lows[Math.floor(lows.length * 0.1)])} im Monat.`;
+    if (cut >= 0.01 && lows.length) sub += ` Auch wo es reicht, sinkt dein Einkommen mit der flexiblen Rate in ${succTxt(cut)} der Zukünfte zeitweise um mehr als 10 %, im schlechtesten Zehntel davon bis auf etwa ${eur10(lows[Math.floor(lows.length * 0.1)])} im Monat.`;
   }
   if (p.pOn && r.pension && r.pension.first) { const nr = r.pension.first.net / Math.pow(1 + p.inf, r.pension.PY); sub += nr >= p.net ? ` Die gesetzliche Rente (etwa ${eur10(nr)}) liegt ab ${p.age0 + r.pension.PY} über deinem Wunsch. Dann ist die ganze Rente dein Einkommen, und das Depot muss nichts dazu beitragen; es zahlt nur seine eigene Steuer.` : ` Die gesetzliche Rente deckt ab ${p.age0 + r.pension.PY} davon etwa ${eur10(nr)}, den Rest liefert das Depot.`; }
   if (p.extra > 0) sub += ` Bis ${p.xAge} kommen ${eur(p.extra)} im Monat für die aktiven Jahre dazu.`;
@@ -2322,8 +2324,8 @@ function render() {
     const pl = r.pension && r.pension.first ? r.pension : pensionPlan(Object.assign({}, p, { pOn: true }), r.Y), el = $("pens-h");
     if (pl && pl.first) {
       const dfl = Math.pow(1 + p.inf, pl.PY), netR = pl.first.net / dfl, dep = Math.max(0, p.net - netR);
-      el.textContent = `Mit ${p.age0 + pl.PY} (${pl.year}): brutto ${eur10(pl.first.gross)}, davon ${eur10(pl.first.kv)} ${p.kvPriv ? "PKV nach Zuschuss" : "Kranken- und Pflegeversicherung"} und ${eur10(pl.first.tax)} Steuer (steuerpflichtig sind ${nf1.format(pl.BA * 100)} %, darauf ${nf1.format(pl.first.rate * 100)} %${p.ptaxAuto ? `; Grundfreibetrag ${pl.year} angenommen ${eur10(pl.first.gfb)}` : ""}). Netto ${eur10(pl.first.net)} im Monat, in heutiger Kaufkraft etwa ${eur10(netR)}.` +
-        (Math.abs(p.pniv - 0.48) > 1e-9 ? ` Bei ${nf1.format(p.pniv * 100)} % statt 48 % Rentenniveau sind das etwa ${eur10(Math.abs(netR - pensionPlan(Object.assign({}, p, { pOn: true, pniv: 0.48 }), r.Y).first.net / dfl))} ${p.pniv < 0.48 ? "weniger" : "mehr"} im Monat.` : "") +
+      el.textContent = `Mit ${p.age0 + pl.PY} (${pl.year}): brutto ${eur10(pl.first.gross)}, davon ${eur10(pl.first.kv)} ${p.kvPriv ? "PKV nach Zuschuss" : "Kranken- und Pflegeversicherung"} und ${eur10(pl.first.tax)} Steuer (steuerpflichtig sind ${nf1.format(pl.BA * 100)} %, darauf ${nf1.format(pl.first.rate * 100)} %${p.ptaxAuto ? `; Grundfreibetrag ${pl.year} angenommen ${eur10(pl.first.gfb)}` : ""}). Netto ${eur10(pl.first.net)} im Monat, in heutiger Kaufkraft etwa ${eur10(netR)}.` +
+        (Math.abs(p.pniv - 0.48) > 1e-9 ? ` Bei ${nf1.format(p.pniv * 100)} % statt 48 % Rentenniveau sind das etwa ${eur10(Math.abs(netR - pensionPlan(Object.assign({}, p, { pOn: true, pniv: 0.48 }), r.Y).first.net / dfl))} ${p.pniv < 0.48 ? "weniger" : "mehr"} im Monat.` : "") +
         (p.pOn ? (dep > 0 ? ` Vom gewünschten Einkommen muss das Depot dann noch etwa ${eur10(dep)} liefern.` : " Damit liegt die Rente über deinem Wunsch; dein Einkommen ist dann die ganze Rente, das Depot zahlt nichts dazu.") : "");
     } else el.textContent = "";
   }
@@ -2334,7 +2336,7 @@ function render() {
     const pl = r.pension && r.pension.first ? r.pension : null, nr = p.pOn && pl ? pl.first.net / Math.pow(1 + p.inf, pl.PY) : 0, ag = pl ? p.age0 + pl.PY : p.retAge;
     const parts = [`Netto ${eur(GAP.inc0)}`]; if (GAP.sav) parts.push(`Sparrate ${eur(GAP.sav)}`); if (GAP.loan) parts.push(`Kreditrate ${eur(Math.round(GAP.loan))}`);
     const gap = Math.max(0, GAP.target - nr), gapX = Math.max(0, GAP.target + p.extra - nr);
-    let t = `Ziel im Alter: (${parts.join(" − ")}) × ${GAP.pct} % = ${eur(GAP.target)} im Monat. `;
+    let t = `Ziel im Alter: (${parts.join(" − ")}) × ${GAP.pct} % = ${eur(GAP.target)} im Monat. `;
     t += p.pOn ? `Gesetzliche Rente mit ${ag} netto, in heutiger Kaufkraft: etwa ${eur10(nr)}. ` : "Ohne eingerechnete Rente muss das Depot das ganze Ziel liefern. ";
     t += gap > 0 ? `Rentenlücke: etwa ${eur10(gap)} im Monat` : "Die Rente deckt das Ziel bereits, es gibt keine Lücke";
     if (p.extra > 0) t += `, in den aktiven Jahren bis ${p.xAge} mit dem Extra etwa ${eur10(gapX)}`;
@@ -2348,15 +2350,15 @@ function render() {
     if (pa == null) t = sale ? `Der Kredit ist bis zum Hausverkauf mit ${sale.age} nicht abbezahlt; die Restschuld wird aus dem Erlös getilgt.` : `Mit dieser Rate wird der Kredit nicht abbezahlt, bevor das Geld bis ${p.age1} reichen soll. Die Rate deckt kaum mehr als die Zinsen.`;
     else {
       const age = p.age0 + pa, ageS = nf1.format(Math.round(age * 10) / 10);
-      t = age <= p.retAge ? (p.fp > 0 ? `Abbezahlt mit ${ageS} Jahren. Ab dann fließen ${mo} im Monat zusätzlich in den Sparplan (${Math.round(p.fp * 100)} % von deinem Anteil an Rate und Sondertilgung, ${eur((p.lrate + p.lsond / 12) * p.lshare)}).` : `Abbezahlt mit ${ageS} Jahren. Danach fließt nichts zusätzlich ins Depot.`)
-        : `Abbezahlt erst mit ${ageS} Jahren, also nach dem Start der Entnahme. Bis dahin wird die Rate zusätzlich aus dem Depot genommen.`;
+      t = age <= p.retAge ? (p.fp > 0 ? `Abbezahlt mit ${ageS} Jahren. Ab dann fließen ${mo} im Monat zusätzlich in den Sparplan (${Math.round(p.fp * 100)} % von deinem Anteil an Rate und Sondertilgung, ${eur((p.lrate + p.lsond / 12) * p.lshare)}).` : `Abbezahlt mit ${ageS} Jahren. Danach fließt nichts zusätzlich ins Depot.`)
+        : `Abbezahlt erst mit ${ageS} Jahren, also nach dem Start der Entnahme. Bis dahin wird die Rate zusätzlich aus dem Depot genommen.`;
     }
     const L2 = loanPlan(p, Math.max(1, p.age1 - p.age0), Infinity);
-    if (L2.rate2 > p.lrate + 0.5) t += ` Nach der Zinsbindung reicht die Rate nicht mehr für Zins und 1 % Tilgung und steigt auf ${eur(Math.round(L2.rate2))}. Dein Anteil an der Differenz (${eur(Math.round((L2.rate2 - p.lrate) * p.lshare))}) geht bis zur Rente von der Sparrate ab.`;
+    if (L2.rate2 > p.lrate + 0.5) t += ` Nach der Zinsbindung reicht die Rate nicht mehr für Zins und 1 % Tilgung und steigt auf ${eur(Math.round(L2.rate2))}. Dein Anteil an der Differenz (${eur(Math.round((L2.rate2 - p.lrate) * p.lshare))}) geht bis zur Rente von der Sparrate ab.`;
     $("loan-h").textContent = t;
   } else $("loan-h").textContent = p.home ? "Ohne Restschuld: kein Kredit, nur der Hauswert zählt ins Gesamtvermögen." : "";
   $("k3").textContent = eurR(real ? r.taxRet : r.taxRetN);
-  $("k3-s").textContent = `typisch, ${unit}${p.pOn ? ", nur aufs Depot" : ""} · davon in den ersten 10 Jahren ${eurR(real ? r.taxRet10 : r.taxRet10N)}` + (RY > 0 ? ` · in der Ansparphase ${eurR(real ? r.taxAcc : r.taxAccN)}` : "");
+  $("k3-s").textContent = `typisch, ${unit}${p.pOn ? ", nur aufs Depot" : ""} · davon in den ersten 10 Jahren ${eurR(real ? r.taxRet10 : r.taxRet10N)}` + (RY > 0 ? ` · in der Ansparphase ${eurR(real ? r.taxAcc : r.taxAccN)}` : "");
   $("k4-l").textContent = `Übrig mit ${p.age1}`; $("k4").textContent = eurR(Wv.p50[Y]);
 
   const stressSpan = st ? [sAge, sAge + Math.max(st.eq.length, (st.gd || []).length)] : null;
@@ -2364,15 +2366,15 @@ function render() {
   const marks = p.flows.map((f, k) => ({ age: f.age, type: f.type === "out" ? "out" : "in", label: (f.type === "out" ? "− " : "+ ") + f.label, row: k }));
   drawLines($("ch-w"), ages, { band: [Wv.p25, Wv.p75], mid: Wv.p50, low: Wv.p10, tot: NW ? NW.p50 : null, top: NW ? Wv.p75.concat(NW.p50) : Wv.p75 },
     { fmt: axisEur, label: "Vermögensverlauf", ret: p.retAge, stress: stressSpan, tipFmt: eurR, marks,
-      rows: [["typisch", Wv.p50], ["schlecht (untere 10 %)", Wv.p10], ["gut (obere 25 %)", Wv.p75]].concat(NW ? [["inkl. Haus (typisch)", NW.p50]] : []) });
+      rows: [["typisch", Wv.p50], ["schlecht (untere 10 %)", Wv.p10], ["gut (obere 25 %)", Wv.p75]].concat(NW ? [["inkl. Haus (typisch)", NW.p50]] : []) });
   $("leg-net").hidden = !NW;
   // Aufteilung
   const Wt = r.W.concat([r.W[r.W.length - 1]]);
   drawAlloc($("ch-a"), ages, Wt, { label: "Aufteilung nach Alter", ret: p.retAge });
   const w0 = r.W[0], wr = r.W[Math.min(RY, Y - 1)];
   $("alloc-h").textContent = p.tent
-    ? `Zielquoten, auf die jedes Jahr hingearbeitet wird. Aktien von ${Math.round(w0[0] * 100)} % auf ${Math.round(wr[0] * 100)} % zum Rentenbeginn, danach über ${yrs(p.tDown)} auf ${Math.round(p.tLate * 100)} %. Der Aufbau des Zelts bedeutet Aktienverkäufe; die Steuer darauf ist eingerechnet.`
-    : `Zielquoten, auf die jedes Jahr hingearbeitet wird: immer ${Math.round(w0[0] * 100)} % Aktien, ${Math.round(w0[1] * 100)} % Anleihen, ${Math.round(w0[2] * 100)} % Geldmarkt` + (w0[3] > 0 ? `, ${Math.round(w0[3] * 100)} % Gold.` : ".");
+    ? `Zielquoten, auf die jedes Jahr hingearbeitet wird. Aktien von ${Math.round(w0[0] * 100)} % auf ${Math.round(wr[0] * 100)} % zum Rentenbeginn, danach über ${yrs(p.tDown)} auf ${Math.round(p.tLate * 100)} %. Der Aufbau des Zelts bedeutet Aktienverkäufe; die Steuer darauf ist eingerechnet.`
+    : `Zielquoten, auf die jedes Jahr hingearbeitet wird: immer ${Math.round(w0[0] * 100)} % Aktien, ${Math.round(w0[1] * 100)} % Anleihen, ${Math.round(w0[2] * 100)} % Geldmarkt` + (w0[3] > 0 ? `, ${Math.round(w0[3] * 100)} % Gold.` : ".");
   // Rate
   if (RY < Y) {
     $("rate-p").hidden = false;
@@ -2380,16 +2382,16 @@ function render() {
     const PEN = p.pOn && r.pension && r.pension.first ? (real ? stats(r.penR, RY, Y).p50 : Array.from(r.pension.PN.slice(RY, Y))) : null; last.ch.PEN = PEN;
     $("leg-pen").hidden = !PEN;
     drawLines($("ch-r"), ra, { area: PEN, mid: RT.p50, low: RT.p10, high: RT.p90, top: RT.p90.concat(RT.p50.map(v => v * 1.25)) },
-      { fmt: v => nf0.format(v) + " €", label: "Verlauf der Monatsrate", ref: real ? p.net : 0, refLabel: (p.pOn || p.gapOn ? "Ziel " : "Start ") + eur(p.net) + (p.extra > 0 ? `, bis ${p.xAge} + ${eur(p.extra)}` : ""), stress: stressSpan, tipFmt: eur10,
-        rows: [["typisch", RT.p50], ["schlecht (untere 10 %)", RT.p10], ["gut (obere 10 %)", RT.p90]].concat(PEN ? [["davon Rente (netto)", PEN]] : []) });
+      { fmt: v => nf0.format(v) + " €", label: "Verlauf der Monatsrate", ref: real ? p.net : 0, refLabel: (p.pOn || p.gapOn ? "Ziel " : "Start ") + eur(p.net) + (p.extra > 0 ? `, bis ${p.xAge} + ${eur(p.extra)}` : ""), stress: stressSpan, tipFmt: eur10,
+        rows: [["typisch", RT.p50], ["schlecht (untere 10 %)", RT.p10], ["gut (obere 10 %)", RT.p90]].concat(PEN ? [["davon Rente (netto)", PEN]] : []) });
     $("rate-t").textContent = p.pOn ? "So entwickelt sich dein Netto-Einkommen" : "So entwickelt sich deine Monatsrate";
-    $("rate-h").textContent = (real ? "In heutiger Kaufkraft, nach Steuern. " : "Auf dem Kontoauszug, nach Steuern. ") + (p.pOn ? "Rente und Depot zusammen. Ist das Depot aufgebraucht, bleibt nur die Rente." : "Fällt die Rate auf 0 €, ist das Geld aufgebraucht.");
+    $("rate-h").textContent = (real ? "In heutiger Kaufkraft, nach Steuern. " : "Auf dem Kontoauszug, nach Steuern. ") + (p.pOn ? "Rente und Depot zusammen. Ist das Depot aufgebraucht, bleibt nur die Rente." : "Fällt die Rate auf 0 €, ist das Geld aufgebraucht.");
   } else $("rate-p").hidden = true;
   // Steuern
   const ta = ages.slice(0, Y);
   drawLines($("ch-t"), ta, { mid: T.p50, high: T.p90, top: T.p90 },
-    { fmt: v => nf0.format(v) + " €", label: "Steuer pro Jahr", ret: p.retAge, stress: stressSpan, tipFmt: eur10,
-      rows: [["typisch", T.p50], ["hoch (obere 10 %)", T.p90]] });
+    { fmt: v => nf0.format(v) + " €", label: "Steuer pro Jahr", ret: p.retAge, stress: stressSpan, tipFmt: eur10,
+      rows: [["typisch", T.p50], ["hoch (obere 10 %)", T.p90]] });
   $("tax-h").textContent = "In heutiger Kaufkraft. In der Ansparphase ist das vor allem die Vorabpauschale und Steuer aufs Umschichten, in der Entnahme kommen die Gewinne aus den Verkäufen dazu. Der Freibetrag ist schon abgezogen.";
 }
 
@@ -2406,7 +2408,7 @@ function pdfEnc(s) {
 class Pdf {
   constructor() { this.W = 595.28; this.H = 841.89; this.pages = []; this.add(); }
   add() { this.c = []; this.pages.push(this.c); }
-  tw(s, size, bold) { const t = PDFW[bold ? "b" : "r"]; let w = 0; for (const ch of pdfEnc(s)) w += t[ch.charCodeAt(0) - 32] || 556; return w * size / 1000; }
+  tw(s, size, bold) { const t = PDFW[bold ? "b" : "r"]; let w = 0; for (const ch of pdfEnc(s).replace(/\u00a0/g, " ")) w += t[ch.charCodeAt(0) - 32] || 556; return w * size / 1000; }
   col(c) { return c.map(v => (v / 255).toFixed(3)).join(" "); }
   text(x, y, s, o = {}) {
     const size = o.size || 9.5, b = !!o.bold, e = pdfEnc(s); let xx = x;
@@ -2488,23 +2490,23 @@ function pdfLegend(P, x, y, items) {
 }
 const tx = id => ($(id) ? $(id).textContent.trim() : "");
 function pdfInputs() {
-  const p = last.p, r = last.r, pc = v => nf2.format(Math.round(v * 10000) / 100) + " %", S2 = [];
+  const p = last.p, r = last.r, pc = v => nf2.format(Math.round(v * 10000) / 100) + " %", S2 = [];
   const sec = (t, rows) => S2.push([t, rows.filter(Boolean)]);
-  sec("Ansparen", [["Alter heute", p.age0 + " Jahre"], GAP && GAP.on && ["Netto heute", eur(GAP.inc0) + " im Monat"], ["Schon angelegt", eur(p.cap) + (p.cap > 0 ? `, davon ${pc(p.gain0)} Gewinn` : "")], ["Sparrate pro Monat", eur(p.contrib) + (p.cg > 0 ? `, steigt um ${pc(p.cg)} pro Jahr` : ", bleibt gleich")]]);
+  sec("Ansparen", [["Alter heute", p.age0 + " Jahre"], GAP && GAP.on && ["Netto heute", eur(GAP.inc0) + " im Monat"], ["Schon angelegt", eur(p.cap) + (p.cap > 0 ? `, davon ${pc(p.gain0)} Gewinn` : "")], ["Sparrate pro Monat", eur(p.contrib) + (p.cg > 0 ? `, steigt um ${pc(p.cg)} pro Jahr` : ", bleibt gleich")]]);
   sec("Entnehmen", [["Zeitraum", `ab ${p.retAge} bis ${p.age1}`], [p.pOn ? "Gewünschtes Netto-Einkommen" : "Entnahme pro Monat", eur(p.net) + " nach Steuern, heutige Kaufkraft"],
     p.extra > 0 && ["Zusätzlich in den aktiven Jahren", `${eur(p.extra)} im Monat bis ${p.xAge}`],
-    ["Rate", p.wmode === "dyn" ? `flexibel, ±${S.swing} % pro Jahr, nie unter ${Math.round(p.dfloor * 100)} % (${eur10(p.net * p.dfloor)})` : "fest" + (p.indexed ? ", behält ihre Kaufkraft" : ", bleibt nominal gleich")]]);
-  if (p.pOn) { const f = r.pension && r.pension.first; sec("Gesetzliche Rente", [["Rente laut Renteninformation", eur(p.pens) + " brutto, heutige Werte"], ["Rente ab", p.pAge + " Jahren"], ["Steigerung pro Jahr", pc(p.pg)], ["Rentenniveau bei Rentenbeginn", pc(p.pniv) + (Math.abs(p.pniv - 0.48) > 1e-9 ? " (Renteninformation: 48 %)" : "")], ["Steuer auf die Rente", p.ptaxAuto ? `nach Tarif, Tarif steigt ${pc(p.tg)} pro Jahr; im ersten Jahr ${f ? nf1.format(f.rate * 100) + " % auf den steuerpflichtigen Teil" : ""}` : pc(p.ptax) + (ptaxLinked ? " fest, voreingestellt nach Tarif" : " fest, selbst eingetragen")], GAP && GAP.on && ["Rentenlücke schließen", tx("gap-h")], ["Kranken- und Pflegeversicherung", p.kvPriv ? `privat: heute ${eur(p.pkv0)} gesamt${p.ktg ? `, davon ${eur(p.ktg)} fällt mit der Rente weg` : ""}${p.bel ? `, Entlastung ${eur(p.bel)}` : ""}, steigt ${pc(p.pkvg)} pro Jahr. ${tx("pkv-h")}` : `${pc(p.pkv)}, heute ${eur(p.pens * p.pkv)} im Monat${pkvEur != null ? " (selbst eingetragen)" : ""}`], f && ["Netto im ersten Jahr", `${eur10(f.net)} im Monat, heutige Kaufkraft etwa ${eur10(f.net / Math.pow(1 + p.inf, r.pension.PY))}`]]); }
+    ["Rate", p.wmode === "dyn" ? `flexibel, ±${S.swing} % pro Jahr, nie unter ${Math.round(p.dfloor * 100)} % (${eur10(p.net * p.dfloor)})` : "fest" + (p.indexed ? ", behält ihre Kaufkraft" : ", bleibt nominal gleich")]]);
+  if (p.pOn) { const f = r.pension && r.pension.first; sec("Gesetzliche Rente", [["Rente laut Renteninformation", eur(p.pens) + " brutto, heutige Werte"], ["Rente ab", p.pAge + " Jahren"], ["Steigerung pro Jahr", pc(p.pg)], ["Rentenniveau bei Rentenbeginn", pc(p.pniv) + (Math.abs(p.pniv - 0.48) > 1e-9 ? " (Renteninformation: 48 %)" : "")], ["Steuer auf die Rente", p.ptaxAuto ? `nach Tarif, Tarif steigt ${pc(p.tg)} pro Jahr; im ersten Jahr ${f ? nf1.format(f.rate * 100) + " % auf den steuerpflichtigen Teil" : ""}` : pc(p.ptax) + (ptaxLinked ? " fest, voreingestellt nach Tarif" : " fest, selbst eingetragen")], GAP && GAP.on && ["Rentenlücke schließen", tx("gap-h")], ["Kranken- und Pflegeversicherung", p.kvPriv ? `privat: heute ${eur(p.pkv0)} gesamt${p.ktg ? `, davon ${eur(p.ktg)} fällt mit der Rente weg` : ""}${p.bel ? `, Entlastung ${eur(p.bel)}` : ""}, steigt ${pc(p.pkvg)} pro Jahr. ${tx("pkv-h")}` : `${pc(p.pkv)}, heute ${eur(p.pens * p.pkv)} im Monat${pkvEur != null ? " (selbst eingetragen)" : ""}`], f && ["Netto im ersten Jahr", `${eur10(f.net)} im Monat, heutige Kaufkraft etwa ${eur10(f.net / Math.pow(1 + p.inf, r.pension.PY))}`]]); }
   else sec("Gesetzliche Rente", [["", "nicht einbezogen"]]);
-  if (p.rOn) sec("Vermietete Immobilie", [["Marktwert heute", eur(p.rv) + ", ohne Schwankung angenommen"], ["Restschuld heute", eur(p.rdebt)], ["Sollzins", pc(p.rlz) + `, noch ${p.rlzb} Jahre, danach ${pc(p.rlz2)}`], ["Rate pro Monat", eur(p.rrate)], ["Kaltmiete pro Monat", eur(p.rrent) + `, ${pc(p.rvac)} Mietausfall`], ["Eigene Kosten pro Monat", eur(p.rkost)], ["Abschreibung pro Jahr", eur(p.rafaE) + `, bis ${p.rbuyY + 50}`], ["Grenzsteuersatz im Berufsleben", pc(p.rtax)], ["Gerechnet", "nur der Zufluss, ohne Verkauf; Miete und Kosten steigen mit der Inflation"]]);
-  if (p.home) sec("Eigenes Haus", [["Restschuld heute", eur(p.debt)], ["Sollzins", pc(p.lz) + `, noch ${p.lzb} Jahre, danach ${pc(p.lz2)}`], ["Rate pro Monat", eur(p.lrate)], ["Dein Anteil an Rate und Sondertilgung", Math.round(p.lshare * 100) + " %"], ["Dein Anteil am Haus", Math.round(p.hshare * 100) + " %"], ["Sondertilgung pro Jahr", eur(p.lsond)], ["Nach Kreditende ins Depot", pc(p.fp)], ["Hauswert heute", eur(p.hv) + (p.hg ? `, ${pc(p.hg)} pro Jahr über der Inflation` : "")], tx("loan-h") && ["Kredit", tx("loan-h")],
+  if (p.rOn) sec("Vermietete Immobilie", [["Marktwert heute", eur(p.rv) + ", ohne Schwankung angenommen"], ["Restschuld heute", eur(p.rdebt)], ["Sollzins", pc(p.rlz) + `, noch ${p.rlzb} Jahre, danach ${pc(p.rlz2)}`], ["Rate pro Monat", eur(p.rrate)], ["Kaltmiete pro Monat", eur(p.rrent) + `, ${pc(p.rvac)} Mietausfall`], ["Eigene Kosten pro Monat", eur(p.rkost)], ["Abschreibung pro Jahr", eur(p.rafaE) + `, bis ${p.rbuyY + 50}`], ["Grenzsteuersatz im Berufsleben", pc(p.rtax)], ["Gerechnet", "nur der Zufluss, ohne Verkauf; Miete und Kosten steigen mit der Inflation"]]);
+  if (p.home) sec("Eigenes Haus", [["Restschuld heute", eur(p.debt)], ["Sollzins", pc(p.lz) + `, noch ${p.lzb} Jahre, danach ${pc(p.lz2)}`], ["Rate pro Monat", eur(p.lrate)], ["Dein Anteil an Rate und Sondertilgung", Math.round(p.lshare * 100) + " %"], ["Dein Anteil am Haus", Math.round(p.hshare * 100) + " %"], ["Sondertilgung pro Jahr", eur(p.lsond)], ["Nach Kreditende ins Depot", pc(p.fp)], ["Hauswert heute", eur(p.hv) + (p.hg ? `, ${pc(p.hg)} pro Jahr über der Inflation` : "")], tx("loan-h") && ["Kredit", tx("loan-h")],
     ...p.flows.map(f => ["Einmalzahlung mit " + f.age, f.type === "sale" ? `Hausverkauf${f.label !== "Hausverkauf" ? " (" + f.label + ")" : ""}, ${pc(p.sc)} Verkaufskosten` : `${f.type === "out" ? "Ausgabe" : "Einnahme"} ${eur(f.amt)} (${f.label})`])]);
   else sec("Eigenes Haus", [["", "nicht einbezogen"]]);
   const wB = 1 - p.wE - p.wC - p.wG;
-  sec("Aufteilung", [["Aktien / Anleihen / Geldmarkt / Gold", [p.wE, wB, p.wC, p.wG].map(v => Math.round(v * 100) + " %").join(" / ")], ["Anleihezelt", p.tent ? `ja: Aufbau ${p.tUp} Jahre vorher, Aktien zum Rentenbeginn ${Math.round(p.tPeak * 100)} %, Abbau über ${p.tDown} Jahre auf ${Math.round(p.tLate * 100)} %` : "nein"], ["Umschichten ab Abweichung", S.band + " Prozentpunkte"]]);
+  sec("Aufteilung", [["Aktien / Anleihen / Geldmarkt / Gold", [p.wE, wB, p.wC, p.wG].map(v => Math.round(v * 100) + " %").join(" / ")], ["Anleihezelt", p.tent ? `ja: Aufbau ${p.tUp} Jahre vorher, Aktien zum Rentenbeginn ${Math.round(p.tPeak * 100)} %, Abbau über ${p.tDown} Jahre auf ${Math.round(p.tLate * 100)} %` : "nein"], ["Umschichten ab Abweichung", S.band + " Prozentpunkte"]]);
   sec("Markt", [["Annahmen", SCEN_NAME[S.scen] + (S.model === "s" ? ", einfaches Modell" : ", realistisches Modell")], ["Rendite pro Jahr", `Aktien ${pc(p.re)}, Anleihen ${pc(p.rb)}, Geldmarkt ${pc(p.rc)}` + (p.wG ? `, Gold ${pc(p.rgo)}` : "")], ["Schwankung", `Aktien ${pc(p.ve)}, Anleihen ${pc(p.vb)}`], ["Kosten pro Jahr", pc(p.ter)], ["Inflation", pc(p.inf)],
-    ["Härtetest", p.stress === "none" ? "keiner" : `${STRESS[p.stress].name}, ${S.when === "start" ? "gleich zu Beginn" : S.when === "pre5" ? "5 Jahre vor der Entnahme" : "zum Start der Entnahme"}`]]);
-  sec("Steuern", [["Sparerpauschbetrag", eur(S.fb)], ["Kirchensteuer", S.ks ? S.ks + " %" : "keine"], ["Verkauf", S.sell === "trick" ? "Zweitdepot-Trick (neueste Anteile zuerst)" : "älteste Anteile zuerst (FIFO)"], ["Basiszins Vorabpauschale", pc(p.bz)]]);
+    ["Härtetest", p.stress === "none" ? "keiner" : `${STRESS[p.stress].name}, ${S.when === "start" ? "gleich zu Beginn" : S.when === "pre5" ? "5 Jahre vor der Entnahme" : "zum Start der Entnahme"}`]]);
+  sec("Steuern", [["Sparerpauschbetrag", eur(S.fb)], ["Kirchensteuer", S.ks ? S.ks + " %" : "keine"], ["Verkauf", S.sell === "trick" ? "Zweitdepot-Trick (neueste Anteile zuerst)" : "älteste Anteile zuerst (FIFO)"], ["Basiszins Vorabpauschale", pc(p.bz)]]);
   return S2;
 }
 function pdfBuild() {
@@ -2551,10 +2553,10 @@ function pdfBuild() {
     P.text(M, y, title, { size: 14, bold: true }); y += 22;
     P.text(M, y, "So entwickelt sich dein Vermögen", { size: 12, bold: true }); y += 12;
     y = pdfChart(P, M, y, CW, 220, c.ages, { band: [c.Wv.p25, c.Wv.p75], mid: c.Wv.p50, low: c.Wv.p10, tot: c.NW ? c.NW.p50 : null }, { fmt: axisEur, ret: p.retAge }) + 16;
-    pdfLegend(P, M, y, [["band", "50 % aller Zukünfte"], ["mid", "typisch"], ["low", "schlecht (10 % sind schlechter)"]].concat(c.NW ? [["tot", "inkl. Haus, abzgl. Restschuld"]] : [])); y += 30;
+    pdfLegend(P, M, y, [["band", "50 % aller Zukünfte"], ["mid", "typisch"], ["low", "schlecht (10 % sind schlechter)"]].concat(c.NW ? [["tot", "inkl. Haus, abzgl. Restschuld"]] : [])); y += 30;
     if (c.RT) {
       P.text(M, y, tx("rate-t"), { size: 12, bold: true }); y += 12;
-      y = pdfChart(P, M, y, CW, 190, c.ra, { area: c.PEN, mid: c.RT.p50, low: c.RT.p10, high: c.RT.p90 }, { fmt: v => nf0.format(v) + " €", ref: isReal ? p.net : 0 }) + 16;
+      y = pdfChart(P, M, y, CW, 190, c.ra, { area: c.PEN, mid: c.RT.p50, low: c.RT.p10, high: c.RT.p90 }, { fmt: v => nf0.format(v) + " €", ref: isReal ? p.net : 0 }) + 16;
       pdfLegend(P, M, y, [["mid", "typisch"], ["low", "schlecht"], ["high", "gut"]].concat(c.PEN ? [["pen", "davon gesetzliche Rente (netto, typisch)"]] : [])); y += 14;
       y = P.para(M, y, rateh, CW, { size: 8, color: PC.muted }) + 8;
     }
@@ -2761,11 +2763,11 @@ if ($("wiz")) {
     { const pg = gv("pg"), nv = gv("pniv");
       document.querySelectorAll("[data-wpg]").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.wpg === pg)));
       document.querySelectorAll("[data-wniv]").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.wniv === nv)));
-      $("wpg-h").textContent = [0, 2, 3].includes(pg) ? (pg === 0 ? "Die Rente steigt nie. Bei 2 % Inflation verliert sie jedes Jahr an Kaufkraft, ein harter Test für deinen Plan." : pg === 2 ? "Die Rente behält ihre Kaufkraft, wenn die Inflation bei 2 % liegt." : "Die Rente wächst wie die Löhne und damit etwas schneller als die Preise.") : `Eigener Wert aus der ausführlichen Ansicht: ${nf2.format(pg)} %.`;
-      $("wniv-h").textContent = [48, 46, 44, 43, 40].includes(nv) ? ({ 48: "Wie heute; damit rechnet auch die Renteninformation.", 46: "Prognose der Rentenversicherung für 2040.", 44: "Eine vernünftige Mitte für einen Rentenbeginn um 2057 nach heutigem Recht.", 43: "Vorsichtig, etwa wenn das Rentenalter an die Lebenserwartung gekoppelt wird.", 40: "Härtetest: Rentenalter bleibt bei 67, keine Gegenmaßnahmen bis 2070." }[nv] + (nv === 48 ? "" : ` Die Rente fällt etwa ${Math.round((1 - nv / 48) * 100)}\u00a0% niedriger aus als laut Renteninformation.`)) : `Eigener Wert aus der ausführlichen Ansicht: ${nf1.format(nv)} %.`; }
+      $("wpg-h").textContent = [0, 2, 3].includes(pg) ? (pg === 0 ? "Die Rente steigt nie. Bei 2 % Inflation verliert sie jedes Jahr an Kaufkraft, ein harter Test für deinen Plan." : pg === 2 ? "Die Rente behält ihre Kaufkraft, wenn die Inflation bei 2 % liegt." : "Die Rente wächst wie die Löhne und damit etwas schneller als die Preise.") : `Eigener Wert aus der ausführlichen Ansicht: ${nf2.format(pg)} %.`;
+      $("wniv-h").textContent = [48, 46, 44, 43, 40].includes(nv) ? ({ 48: "Wie heute; damit rechnet auch die Renteninformation.", 46: "Prognose der Rentenversicherung für 2040.", 44: "Eine vernünftige Mitte für einen Rentenbeginn um 2057 nach heutigem Recht.", 43: "Vorsichtig, etwa wenn das Rentenalter an die Lebenserwartung gekoppelt wird.", 40: "Härtetest: Rentenalter bleibt bei 67, keine Gegenmaßnahmen bis 2070." }[nv] + (nv === 48 ? "" : ` Die Rente fällt etwa ${Math.round((1 - nv / 48) * 100)}\u00a0% niedriger aus als laut Renteninformation.`)) : `Eigener Wert aus der ausführlichen Ansicht: ${nf1.format(nv)} %.`; }
     { $("wz-pkv").hidden = S.kvm !== "pkv"; const g = gv("pkvg");
       document.querySelectorAll("[data-wpkvg]").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.wpkvg === g)));
-      $("wpk-h").textContent = { 2.5: "Günstiger Verlauf, etwa bei einem stabilen Tarif.", 3.5: "Etwa der Schnitt der Branche von 2006 bis 2026 (3,4 % pro Jahr).", 4.5: "Vorsichtig: dein Tarif wird teurer als der Schnitt." }[g] || `Eigener Wert aus der ausführlichen Ansicht: ${nf2.format(g)} %.`;
+      $("wpk-h").textContent = { 2.5: "Günstiger Verlauf, etwa bei einem stabilen Tarif.", 3.5: "Etwa der Schnitt der Branche von 2006 bis 2026 (3,4 % pro Jahr).", 4.5: "Vorsichtig: dein Tarif wird teurer als der Schnitt." }[g] || `Eigener Wert aus der ausführlichen Ansicht: ${nf2.format(g)} %.`;
       if (gv("bel") > 0) $("wpk-h").textContent += ` Beitragsentlastung ${eur(gv("bel"))} aus der ausführlichen Ansicht ist eingerechnet.`; }
     $("wz-pa-h").textContent = `Im Hintergrund: Rente ab ${gv("pAge")}${gv("retAge") > pAgeWant ? ", weil die Entnahme erst dann beginnt; Zuschläge für den späteren Rentenbeginn sind nicht eingerechnet" : ""}. Ändern kannst du das in der ausführlichen Ansicht.`;
     const gapOn = $("gapOn").checked;
@@ -2773,7 +2775,7 @@ if ($("wiz")) {
     $("wz-net-l").textContent = gapOn ? "Aus deinem heutigen Netto und dem Anteil aus Schritt 3 berechnet, in heutiger Kaufkraft. Für die aktiven Jahre kannst du hier noch mehr einplanen." : pOn ? "Rente und Depot zusammen, nach Steuern und in heutiger Kaufkraft. Das Depot zahlt nur die Lücke." : "Zusätzlich zu einer Rente, nach Steuern und in heutiger Kaufkraft.";
     const wE = gv("wE"), std = gv("wC") === 5 && gv("wG") === 0 && !$("tent").checked && PROF.includes(wE);
     $("wz-prof").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(std && +b.dataset.p === wE)));
-    $("wz-prof-h").textContent = std ? "" : `Gerade eingestellt: ${wE} % Aktien, ${gv("wC")} % Geldmarkt${gv("wG") ? `, ${gv("wG")} % Gold` : ""}${$("tent").checked ? ", mit Anleihezelt" : ""}. Ein Klick auf ein Profil ersetzt das.`;
+    $("wz-prof-h").textContent = std ? "" : `Gerade eingestellt: ${wE} % Aktien, ${gv("wC")} % Geldmarkt${gv("wG") ? `, ${gv("wG")} % Gold` : ""}${$("tent").checked ? ", mit Anleihezelt" : ""}. Ein Klick auf ein Profil ersetzt das.`;
     $("wz-back").hidden = step === 1; $("wz-full").hidden = step !== NSTEP;
     $("wz-next").textContent = step === NSTEP - 1 ? "Ergebnis zeigen" : step === NSTEP ? "Von vorn" : "Weiter";
     if (step === NSTEP) { const extra = []; if (S.scen !== "o") extra.push(`Markt „${SCEN_NAME[S.scen]}“`); if (S.stress !== "none") extra.push(`Härtetest „${STRESS[S.stress].name}“`); if (S.sell === "trick") extra.push("Zweitdepot-Trick");
@@ -2821,17 +2823,17 @@ if ($("wiz")) {
     document.querySelectorAll("#qk [data-qkv]").forEach(e => { e.hidden = S.kvm !== "pkv"; });
     const nv = gv("pniv");
     document.querySelectorAll("[data-qniv]").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.qniv === nv)));
-    $("qniv-h").textContent = ([48, 44, 40].includes(nv) ? { 48: "Wie heute; damit rechnet auch die Renteninformation.", 44: "Vernünftige Mitte für einen Rentenbeginn in 20 bis 30 Jahren.", 40: "Vorsichtig: keine Gegenmaßnahmen bis 2070." }[nv] : `Eigener Wert: ${nf1.format(nv)} %.`) + (nv < 48 ? ` Die Rente fällt etwa ${Math.round((1 - nv / 48) * 100)}\u00a0% niedriger aus als laut Renteninformation.` : "");
+    $("qniv-h").textContent = ([48, 44, 40].includes(nv) ? { 48: "Wie heute; damit rechnet auch die Renteninformation.", 44: "Vernünftige Mitte für einen Rentenbeginn in 20 bis 30 Jahren.", 40: "Vorsichtig: keine Gegenmaßnahmen bis 2070." }[nv] : `Eigener Wert: ${nf1.format(nv)} %.`) + (nv < 48 ? ` Die Rente fällt etwa ${Math.round((1 - nv / 48) * 100)}\u00a0% niedriger aus als laut Renteninformation.` : "");
     $("qra-h").textContent = $("pOn").checked ? (gv("pAge") > gv("retAge") ? `Bis zur gesetzlichen Rente mit ${gv("pAge")} zahlt das Depot allein.` : `Die gesetzliche Rente beginnt mit ${gv("pAge")}.`) : "";
     const gp = gv("gapPct"), gon = $("gapOn").checked;
     document.querySelectorAll("[data-qgap]").forEach(b => b.setAttribute("aria-pressed", String(gon && +b.dataset.qgap === gp)));
-    $("qgap-h").textContent = gon && GAP ? `Ziel: ${eur(GAP.target)} im Monat in heutiger Kaufkraft (Netto ${eur(GAP.inc0)}${GAP.sav ? ` ohne Sparrate` : ""}${GAP.loan ? ` und ohne Kreditrate, weil der Kredit vorher abbezahlt ist` : ""}, mal ${gp} %).` + ([100, 120, 150].includes(gp) ? "" : " Eigener Anteil aus der ausführlichen Ansicht.")
+    $("qgap-h").textContent = gon && GAP ? `Ziel: ${eur(GAP.target)} im Monat in heutiger Kaufkraft (Netto ${eur(GAP.inc0)}${GAP.sav ? ` ohne Sparrate` : ""}${GAP.loan ? ` und ohne Kreditrate, weil der Kredit vorher abbezahlt ist` : ""}, mal ${gp} %).` + ([100, 120, 150].includes(gp) ? "" : " Eigener Anteil aus der ausführlichen Ansicht.")
       : `Bisher rechnest du mit festen ${eur(gv("net"))} im Monat. Ein Klick rechnet stattdessen vom heutigen Netto aus.`;
     document.querySelectorAll("[data-qwm]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.qwm === S.wmode)));
-    $("qwm-h").textContent = S.wmode === "dyn" ? `Nach schlechten Jahren sinkt die Rate um höchstens 10 % pro Jahr, aber nie unter ${Math.round(gv("dfloor"))} % vom Ziel. Das macht den Plan deutlich sicherer.` : "Die Rate bleibt immer gleich hoch, auch nach einem Crash.";
+    $("qwm-h").textContent = S.wmode === "dyn" ? `Nach schlechten Jahren sinkt die Rate um höchstens 10 % pro Jahr, aber nie unter ${Math.round(gv("dfloor"))} % vom Ziel. Das macht den Plan deutlich sicherer.` : "Die Rate bleibt immer gleich hoch, auch nach einem Crash.";
     const wE = gv("wE"), std = gv("wC") === 5 && gv("wG") === 0 && !$("tent").checked && PROF.includes(wE);
     $("qk-prof").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(std && +b.dataset.qp === wE)));
-    $("qp-h").textContent = std ? "Der Rest liegt in Anleihen und 5 % im Geldmarkt." : `Gerade eingestellt: ${wE} % Aktien, ${gv("wC")} % Geldmarkt${gv("wG") ? `, ${gv("wG")} % Gold` : ""}${$("tent").checked ? ", mit Anleihezelt" : ""}. Ein Klick auf ein Profil ersetzt das.`;
+    $("qp-h").textContent = std ? "Der Rest liegt in Anleihen und 5 % im Geldmarkt." : `Gerade eingestellt: ${wE} % Aktien, ${gv("wC")} % Geldmarkt${gv("wG") ? `, ${gv("wG")} % Gold` : ""}${$("tent").checked ? ", mit Anleihezelt" : ""}. Ein Klick auf ein Profil ersetzt das.`;
     $("qk-back").hidden = qs === 1; $("qk-full").hidden = qs !== QN;
     $("qk-next").textContent = qs === QN - 1 ? "Ergebnis zeigen" : qs === QN ? "Von vorn" : "Weiter";
     if (qs === QN) qkResult();
@@ -2844,7 +2846,7 @@ if ($("wiz")) {
     let h = `<h2>Beide Märkte im Vergleich</h2><div class="qk-two">` + (own ? tile("Normal", "Börse wie früher", normal) + tile("Vorsichtig", "Börse eher schwach", vors) : tile("Deine Annahmen", "aus der ausführlichen Ansicht", cur) + tile("Vorsichtig", "Börse eher schwach", oth)) + `</div>`;
     h += `<p>So oft reicht das Geld bis ${p.age1}. Ergebnis, Stellschrauben und Diagramme rechnen mit „${own ? (S.scen === "v" ? "Vorsichtig" : "Normal") : "deinen Annahmen"}“.</p>`;
     $("qk-res").innerHTML = h;
-    $("qk-ass").textContent = `Fest im Hintergrund, änderbar unter „Ausführlich“: Rente steigt ${pf0(p.pg)} pro Jahr${p.kvPriv ? `, PKV ${pf0(p.pkvg)}` : ""}, beides bei ${pf0(0.02)} Inflation; Inflation ${pf0(p.inf)}, Kosten ${pf0(p.ter)}, Planung bis ${p.age1}${p.home && p.debt > 0 ? `, Zins nach der Zinsbindung ${pf0(p.lz2)}` : ""}, Steuer ${p.ptaxAuto ? "nach Tarif" : "mit " + pf0(p.ptax) + " auf die Rente"}${p.home ? ", die Hälfte der frei werdenden Kreditrate wird gespart".replace("die Hälfte", p.fp === 0.5 ? "die Hälfte" : pf0(p.fp)) : ""}${p.rOn ? `; vermietete Immobilie nur als Zufluss, ohne Verkauf: ${pf0(p.rlz)} Zins für ${p.rlzb} Jahre, danach ${pf0(p.rlz2)}, eigene Kosten ${eur(p.rkost)} im Monat, Mietausfall ${pf0(p.rvac)}, Miete und Kosten steigen mit der Inflation, Abschreibung ${eur(p.rafaE)} pro Jahr, Grenzsteuersatz ${pf0(p.rtax)}` : ""}. Gerechnet mit 2.000 möglichen Zukünften und deutschen Steuern wie im echten Depot. Modellrechnung, keine Prognose und keine Anlage-, Steuer- oder Rechtsberatung.`;
+    $("qk-ass").textContent = `Fest im Hintergrund, änderbar unter „Ausführlich“: Rente steigt ${pf0(p.pg)} pro Jahr${p.kvPriv ? `, PKV ${pf0(p.pkvg)}` : ""}, beides bei ${pf0(0.02)} Inflation; Inflation ${pf0(p.inf)}, Kosten ${pf0(p.ter)}, Planung bis ${p.age1}${p.home && p.debt > 0 ? `, Zins nach der Zinsbindung ${pf0(p.lz2)}` : ""}, Steuer ${p.ptaxAuto ? "nach Tarif" : "mit " + pf0(p.ptax) + " auf die Rente"}${p.home ? ", die Hälfte der frei werdenden Kreditrate wird gespart".replace("die Hälfte", p.fp === 0.5 ? "die Hälfte" : pf0(p.fp)) : ""}${p.rOn ? `; vermietete Immobilie nur als Zufluss, ohne Verkauf: ${pf0(p.rlz)} Zins für ${p.rlzb} Jahre, danach ${pf0(p.rlz2)}, eigene Kosten ${eur(p.rkost)} im Monat, Mietausfall ${pf0(p.rvac)}, Miete und Kosten steigen mit der Inflation, Abschreibung ${eur(p.rafaE)} pro Jahr, Grenzsteuersatz ${pf0(p.rtax)}` : ""}. Gerechnet mit 2.000 möglichen Zukünften und deutschen Steuern wie im echten Depot. Modellrechnung, keine Prognose und keine Anlage-, Steuer- oder Rechtsberatung.`;
   }
   hookRender = () => { if (view === "quick") syncQk(); };
   function qgo(n) { qs = Math.max(1, Math.min(QN, n)); syncQk(); schedule(); window.scrollTo({ top: 0, behavior: "smooth" }); }
