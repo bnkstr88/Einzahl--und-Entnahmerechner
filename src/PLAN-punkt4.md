@@ -23,11 +23,12 @@ Stand 27.11.2026. Noch nichts davon umgesetzt.
 
 ## Härtetest
 - Ein aktiver Test bekommt am Urteil ein deutliches Band „Mit Härtetest: …“ mit dem Knopf „Test beenden“, und die Kacheln tragen denselben Hinweis. Das ist wichtig, weil `cmp.alt` nur den Markt ändert: der Test steckt in beiden Kacheln. Außerdem speichert die App `S.stress` mit.
+- Inflation im selben Block einstellbar: Knöpfe „2 % · 3 % · 4 %“ setzen den Regler `inf` (Ausführlich, Markt → „Renditen, Schwankung, Inflation“). Ein eigener Wert erscheint als „Eigener Wert: x %“. Ein Hinweis erklärt, was mitsteigt (Zinsen, Rente, PKV, Sparrate, Aktien zu drei Vierteln) und was schadet (Steuer auf Scheingewinne, fester Sparerpauschbetrag). Steht die Inflation nicht auf 2 %, nennt das Band am Urteil das mit („Mit 4 % Inflation“). In `qk-ass` fällt die Inflation dann weg. Im Test zusätzlich prüfen: die Knöpfe setzen `inf` und das Ergebnis rechnet neu.
 - Den Satz „Für den Anfang reichen …“ ersetzt `build.py` (assert n == 1). Er zieht mit in den Ergebnis-Block, die Ersetzung in `build.py` muss nachgezogen werden.
 
 ## Weitere Anpassungen
 - Den Hinweis zu `inc0` anpassen: Er verweist auf „Rentenlücke schließen unter Gesetzliche Rente“, das gibt es in „Schnell“ nicht.
-- In `qk-ass` nur noch nennen, was nicht einstellbar ist: Inflation, Sparanteil der frei werdenden Kreditrate, Mietausfall, Abschreibung.
+- In `qk-ass` nur noch nennen, was nicht einstellbar ist: Sparanteil der frei werdenden Kreditrate, Mietausfall, Abschreibung.
 - `build_demo.py` sucht `toggle viewsw three` und muss auf zwei Knöpfe umgestellt werden (CSS `.viewsw.three`).
 - `renderSpan` und `updBar` prüfen `VIEWNOW`; nach dem Umbau gibt es nur noch `quick`/`full`.
 
