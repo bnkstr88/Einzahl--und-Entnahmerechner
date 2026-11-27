@@ -343,7 +343,7 @@ details.adv[open] > summary::before { content: "–"; }
       <div class="wz-body" data-els="debt,lz,lzb,lz2,lrate,lshare,lsond,#loan-h,hv,hshare" data-if="home"></div>
       <h3 style="margin:8px 0 0">Hast du eine vermietete Immobilie?</h3>
       <div class="pick" data-yn="rOn"><button type="button" data-v="1"><strong>Ja</strong><span>Miete, Kredit und Steuer einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>ohne vermietete Immobilie</span></button></div>
-      <div class="wz-body" data-els="rv,rdebt,rlz,rlzb,rrate,rrent,rhgm,rqm,rbuy,rbuyY,rtax,#rent-h" data-if="rOn"></div></section>
+      <div class="wz-body" data-els="rv,rdebt,rlz,rlzb,rrate,rrent,rkost,rtax,#rent-h" data-if="rOn"></div></section>
     <section class="panel wz-step" data-step="6"><h2>Wie viel Schwankung hältst du aus?</h2><p class="lead">Mehr Aktien wachsen im Schnitt stärker, fallen in Krisen aber tiefer. Der Rest liegt in Anleihen und 5 % auf Tagesgeld oder Geldmarkt.</p>
       <div class="pick" id="wz-prof"><button type="button" data-p="30"><strong>Vorsichtig</strong><span>30 % Aktien: schwankt weniger, wächst langsamer</span></button><button type="button" data-p="60"><strong>Ausgewogen</strong><span>60 % Aktien: der Mittelweg</span></button><button type="button" data-p="90"><strong>Mutig</strong><span>90 % Aktien: wächst im Schnitt mehr, fällt tiefer</span></button></div>
       <p class="hint" id="wz-prof-h"></p></section>
@@ -521,28 +521,19 @@ details.adv[open] > summary::before { content: "–"; }
         <summary><span class="t">Vermietete Immobilie</span><span class="sum" id="sum-miete"></span></summary>
         <div class="gin">
         <div style="display:grid;gap:14px">
-          <div class="ctl"><div class="ctl-head"><label for="rv">Marktwert heute</label><output id="rv-o" for="rv"></output></div><input type="range" id="rv" min="0" max="2000000" step="5000" value="300000"><p class="hint">Dein Anteil, wenn dir die Wohnung nicht allein gehört; ebenso bei Restschuld, Rate und Miete.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rv">Marktwert heute</label><output id="rv-o" for="rv"></output></div><input type="range" id="rv" min="0" max="2000000" step="5000" value="300000"><p class="hint">Dein Anteil, wenn dir die Wohnung nicht allein gehört; ebenso bei Restschuld, Rate, Miete und Kosten. Zählt nur fürs Nettovermögen und den Vergleich mit einem Verkauf heute, ohne Schwankung.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="rdebt">Restschuld heute</label><output id="rdebt-o" for="rdebt"></output></div><input type="range" id="rdebt" min="0" max="2000000" step="5000" value="200000"></div>
           <div class="ctl"><div class="ctl-head"><label for="rlz">Sollzins</label><output id="rlz-o" for="rlz"></output></div><input type="range" id="rlz" min="0" max="8" step="0.01" value="3.5"></div>
           <div class="ctl"><div class="ctl-head"><label for="rlzb">Zinsbindung noch</label><output id="rlzb-o" for="rlzb"></output></div><input type="range" id="rlzb" min="0" max="30" step="1" value="10"></div>
-          <div class="ctl"><div class="ctl-head"><label for="rlz2">Zins danach</label><output id="rlz2-o" for="rlz2"></output></div><input type="range" id="rlz2" min="0" max="10" step="0.1" value="4.5"><p class="hint">Bei 2 % Inflation; ist sie höher, steigt er entsprechend.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="rrate">Rate pro Monat</label><output id="rrate-o" for="rrate"></output></div><input type="range" id="rrate" min="0" max="10000" step="25" value="1000"></div>
-          <div class="ctl"><div class="ctl-head"><label for="rrent">Kaltmiete pro Monat</label><output id="rrent-o" for="rrent"></output></div><input type="range" id="rrent" min="0" max="10000" step="25" value="1100"></div>
-          <div class="ctl"><div class="ctl-head"><label for="rhgm">Nicht umlagefähiges Hausgeld pro Monat</label><output id="rhgm-o" for="rhgm"></output></div><input type="range" id="rhgm" min="0" max="1000" step="5" value="120"><p class="hint">Aus der Hausgeldabrechnung alles, was der Mieter nicht zahlt: Verwaltung, Erhaltungsrücklage, Kontogebühren. Bei einem ganzen Haus 0.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="rqm">Wohnfläche</label><output id="rqm-o" for="rqm"></output></div><input type="range" id="rqm" min="0" max="400" step="1" value="80"></div>
-          <div class="ctl"><div class="ctl-head"><label for="rih">Eigene Instandhaltung pro m² und Jahr</label><output id="rih-o" for="rih"></output></div><input type="range" id="rih" min="0" max="30" step="0.5" value="10"><p class="hint">Was du selbst zahlst, zum Beispiel Bad, Böden, Heizung in der Wohnung. Wohnung etwa 6 bis 10 €, ganzes Haus 10 bis 15 €. Die Kosten steigen mit der Inflation.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="rvac">Leerstand und Mietausfall</label><output id="rvac-o" for="rvac"></output></div><input type="range" id="rvac" min="0" max="20" step="1" value="4"><p class="hint">Ein Monat Leerstand im Jahr sind 8 %. 3 bis 5 % sind für gute Lagen üblich.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="rmg">Mietsteigerung pro Jahr</label><output id="rmg-o" for="rmg"></output></div><input type="range" id="rmg" min="0" max="5" step="0.25" value="2"><p class="hint">Bei 2 % Inflation; ist sie höher, steigt die Miete entsprechend mehr. Die Kosten steigen mit der Inflation.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="rhg">Wertsteigerung über der Inflation</label><output id="rhg-o" for="rhg"></output></div><input type="range" id="rhg" min="-2" max="3" step="0.25" value="0"></div>
-          <div class="ctl"><div class="ctl-head"><label for="rbuy">Kaufpreis mit Nebenkosten</label><output id="rbuy-o" for="rbuy"></output></div><input type="range" id="rbuy" min="0" max="2000000" step="5000" value="280000"><p class="hint">Grundlage für die Abschreibung und für die Steuer bei einem Verkauf innerhalb von 10 Jahren.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="rbuyY">Kaufjahr</label><output id="rbuyY-o" for="rbuyY"></output></div><input type="range" id="rbuyY" min="1980" max="2026" step="1" value="2020"></div>
-          <div class="ctl"><div class="ctl-head"><label for="rbldg">Gebäudeanteil am Kaufpreis</label><output id="rbldg-o" for="rbldg"></output></div><input type="range" id="rbldg" min="0" max="100" step="5" value="75"><p class="hint">Nur das Gebäude wird abgeschrieben, nicht das Grundstück.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="rafa">Abschreibung pro Jahr</label><output id="rafa-o" for="rafa"></output></div><input type="range" id="rafa" min="0" max="5" step="0.5" value="2"><p class="hint">2 % für Baujahre 1925 bis 2022, 3 % ab 2023, 2,5 % vor 1925.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rrate">Rate pro Monat</label><output id="rrate-o" for="rrate"></output></div><input type="range" id="rrate" min="0" max="10000" step="25" value="1000"><p class="hint">Nach der Zinsbindung gilt der Zins danach aus „Eigenes Haus“, bei höherer Inflation entsprechend mehr.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rrent">Kaltmiete pro Monat</label><output id="rrent-o" for="rrent"></output></div><input type="range" id="rrent" min="0" max="10000" step="25" value="1100"><p class="hint">Steigt mit der Inflation. Für Leerstand und Mietausfall zieht der Rechner 4 % ab.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rkost">Eigene Kosten pro Monat</label><output id="rkost-o" for="rkost"></output></div><input type="range" id="rkost" min="0" max="2000" step="5" value="190"><p class="hint">Was der Mieter nicht zahlt: Hausgeld ohne Umlagen, Instandhaltung, Verwaltung. Faustwert 15 bis 20 % der Kaltmiete. Steigt mit der Inflation.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rafaE">Abschreibung pro Jahr</label><output id="rafaE-o" for="rafaE"></output></div><input type="range" id="rafaE" min="0" max="50000" step="100" value="4200"><p class="hint">Steht als AfA in der Anlage V deiner Steuererklärung.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rbuyY">Kaufjahr</label><output id="rbuyY-o" for="rbuyY"></output></div><input type="range" id="rbuyY" min="1980" max="2026" step="1" value="2020"><p class="hint">Die Abschreibung endet 50 Jahre nach dem Kauf.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="rtax">Grenzsteuersatz im Berufsleben</label><output id="rtax-o" for="rtax"></output></div><input type="range" id="rtax" min="0" max="50" step="1" value="35"><p class="hint">Mit Soli und Kirchensteuer. Ein Verlust aus der Vermietung senkt deine Lohnsteuer. Ab der Entnahme rechnet der Rechner mit dem Tarif, zusammen mit der gesetzlichen Rente.</p></div>
-          <div class="ctl"><div class="ctl-head"><label for="rSaleAge">Verkauf mit</label><output id="rSaleAge-o" for="rSaleAge"></output></div><input type="range" id="rSaleAge" min="40" max="100" step="1" value="100"><p class="hint">Ganz rechts: kein Verkauf. Nach 10 Jahren Besitz ist der Gewinn steuerfrei, der Erlös geht ins Depot.</p></div>
           <p class="hint" id="rent-h"></p>
         </div>
-        <div class="check incl"><input type="checkbox" id="rOn"><label for="rOn">Mit einbeziehen</label><p class="hint">Netto heute und Sparrate ohne die Immobilie eingeben: Miete, Kosten, Rate und Steuer rechnet der Rechner selbst. Ein Überschuss fließt ins Depot, eine Zuzahlung kommt aus dem Depot; ab der Entnahme zählt der Überschuss wie eine zweite Rente.</p></div>
+        <div class="check incl"><input type="checkbox" id="rOn"><label for="rOn">Mit einbeziehen</label><p class="hint">Gerechnet wird nur der Zufluss: Miete minus Kosten, Rate und Steuer. Netto heute und Sparrate ohne die Immobilie eingeben. Ein Überschuss fließt ins Depot, eine Zuzahlung kommt aus dem Depot; ab der Entnahme zählt der Überschuss wie eine zweite Rente. Ein Verkauf wird nicht gerechnet.</p></div>
         </div>
       </details>
 
@@ -956,13 +947,15 @@ function rentalFlows(p, Y, L, rsY, X, D, XT, RY, out) {
   const yrs0 = y0 - (p.rbuyY || y0), afaN = afaR > 0 ? 1 / afaR : 0;
   let afaCum = Math.min(basis, Math.max(0, yrs0) * basis * afaR);
   // Nicht umlagefähige Kosten pro Jahr (heute): Hausgeld der WEG plus eigene Instandhaltung nach Fläche; alte Eingabe in % der Miete bleibt lesbar
-  const costR0 = p.rhgm != null || p.rih != null ? 12 * (p.rhgm || 0) + (p.rqm || 0) * (p.rih || 0) : 12 * (p.rrent || 0) * (p.rcost || 0);
+  const costR0 = p.rkost != null ? 12 * p.rkost : p.rhgm != null || p.rih != null ? 12 * (p.rhgm || 0) + (p.rqm || 0) * (p.rih || 0) : 12 * (p.rrent || 0) * (p.rcost || 0);
+  // Abschreibung als fester Eurobetrag (aus der Anlage V), endet 50 Jahre nach dem Kauf
+  const afaE = p.rafaE != null ? p.rafaE : null, afaEnd = (p.rbuyY || y0) + 50;
   for (let y = 0; y < Y; y++) {
     if (y > rsY) break;
     const g = Math.pow(1 + (p.rmg == null ? 0.02 : p.rmg), y) * X[y];
     const rent = y < rsY ? 12 * p.rrent * (1 - (p.rvac || 0)) * g : 0, cost = y < rsY ? costR0 * Math.pow(1.02, y) * X[y] : 0;   // Kosten steigen mit der Inflation
     const pay = L.LP[y], interest = y < rsY ? Math.max(0, pay - (L.DEBT[y] - L.DEBT[y + 1])) : 0;
-    const afa = y < rsY && afaCum < basis && yrs0 + y < afaN ? Math.min(basis * afaR, basis - afaCum) : 0; afaCum += afa;
+    const afa = afaE != null ? (y < rsY && y0 + y < afaEnd ? afaE : 0) : y < rsY && afaCum < basis && yrs0 + y < afaN ? Math.min(basis * afaR, basis - afaCum) : 0; afaCum += afa;
     let vv = rent - cost - interest - afa, cash = rent - cost - pay;
     if (y === rsY) {
       const price = (p.rv || 0) * Math.pow(1 + (p.rhg || 0), y) * D[y] * (1 - (p.rsc == null ? 0.05 : p.rsc));
@@ -1396,13 +1389,15 @@ function rentalFlows(p, Y, L, rsY, X, D, XT, RY, out) {
   const yrs0 = y0 - (p.rbuyY || y0), afaN = afaR > 0 ? 1 / afaR : 0;
   let afaCum = Math.min(basis, Math.max(0, yrs0) * basis * afaR);
   // Nicht umlagefähige Kosten pro Jahr (heute): Hausgeld der WEG plus eigene Instandhaltung nach Fläche; alte Eingabe in % der Miete bleibt lesbar
-  const costR0 = p.rhgm != null || p.rih != null ? 12 * (p.rhgm || 0) + (p.rqm || 0) * (p.rih || 0) : 12 * (p.rrent || 0) * (p.rcost || 0);
+  const costR0 = p.rkost != null ? 12 * p.rkost : p.rhgm != null || p.rih != null ? 12 * (p.rhgm || 0) + (p.rqm || 0) * (p.rih || 0) : 12 * (p.rrent || 0) * (p.rcost || 0);
+  // Abschreibung als fester Eurobetrag (aus der Anlage V), endet 50 Jahre nach dem Kauf
+  const afaE = p.rafaE != null ? p.rafaE : null, afaEnd = (p.rbuyY || y0) + 50;
   for (let y = 0; y < Y; y++) {
     if (y > rsY) break;
     const g = Math.pow(1 + (p.rmg == null ? 0.02 : p.rmg), y) * X[y];
     const rent = y < rsY ? 12 * p.rrent * (1 - (p.rvac || 0)) * g : 0, cost = y < rsY ? costR0 * Math.pow(1.02, y) * X[y] : 0;   // Kosten steigen mit der Inflation
     const pay = L.LP[y], interest = y < rsY ? Math.max(0, pay - (L.DEBT[y] - L.DEBT[y + 1])) : 0;
-    const afa = y < rsY && afaCum < basis && yrs0 + y < afaN ? Math.min(basis * afaR, basis - afaCum) : 0; afaCum += afa;
+    const afa = afaE != null ? (y < rsY && y0 + y < afaEnd ? afaE : 0) : y < rsY && afaCum < basis && yrs0 + y < afaN ? Math.min(basis * afaR, basis - afaCum) : 0; afaCum += afa;
     let vv = rent - cost - interest - afa, cash = rent - cost - pay;
     if (y === rsY) {
       const price = (p.rv || 0) * Math.pow(1 + (p.rhg || 0), y) * D[y] * (1 - (p.rsc == null ? 0.05 : p.rsc));
@@ -1688,13 +1683,16 @@ const STRESS_H = {
   infl: "Zehn Jahre mit Inflation bis 13 %. Die Rate steigt kräftig mit, während Aktien und Anleihen real kaum zulegen. Gold stieg damals stark, 1979 allein um 127 % in US-Dollar.",
   gfall: "Gold verliert in fünf Jahren über ein Drittel, wie 1981–1985 in Euro. Aktien und Anleihen laufen zufällig weiter. Ohne Gold im Depot ändert dieser Test nichts.",
 };
-const DEFAULTS = { rOn: false, rv: 300000, rdebt: 200000, rlz: 3.5, rlzb: 10, rlz2: 4.5, rrate: 1000, rrent: 1100, rhgm: 120, rqm: 80, rih: 10, rvac: 4, rmg: 2, rhg: 0, rbuy: 280000, rbuyY: 2020, rbldg: 75, rafa: 2, rtax: 35, rSaleAge: 100, inc0: 2600, gapOn: false, gapPct: 100, xtra: 0, xAge: 75, pOn: false, pens: 1650, pAge: 67, pg: 2, pniv: 48, ppkv0: 700, ktg: 0, bel: 0, pkvg: 3.5, ptax: 20, tg: 2, pkv: 12.35, home: false, sc: 5, fp: 50, flowsOn: false, debt: 285000, lshare: 50, hshare: 50, lz: 3.4, lrate: 1350, lsond: 2000, hv: 420000, hg: 0, age0: 41, cap: 65000, gain0: 25, contrib: 350, cg: 0, retAge: 67, age1: 95, net: 900, dfloor: 75, wE: 60, wC: 5, wG: 0, rg: 3.5, vg: 15, tent: false, tUp: 10, tPeak: 40, tDown: 10, tLate: 60, bz: 3.2, re: 7, rb: 3.75, rc: 2, ve: 16, vb: 4, inf: 2, idx: true, ter: 0.3, lzb: 10, lz2: 4.5 };
+// Vermietung: fester Mietausfall; Verkauf heute: Kosten des Verkaufs
+const RVAC = 0.04, RSELL = 0.05;
+// Netto-Erlös, wenn die Wohnung heute verkauft wird (vor Steuer und Vorfälligkeitsentschädigung)
+const rentSellNet = p => (p.rv || 0) * (1 - RSELL) - (p.rdebt || 0);
+const DEFAULTS = { rOn: false, rv: 300000, rdebt: 200000, rlz: 3.5, rlzb: 10, rrate: 1000, rrent: 1100, rkost: 190, rafaE: 4200, rbuyY: 2020, rtax: 35, inc0: 2600, gapOn: false, gapPct: 100, xtra: 0, xAge: 75, pOn: false, pens: 1650, pAge: 67, pg: 2, pniv: 48, ppkv0: 700, ktg: 0, bel: 0, pkvg: 3.5, ptax: 20, tg: 2, pkv: 12.35, home: false, sc: 5, fp: 50, flowsOn: false, debt: 285000, lshare: 50, hshare: 50, lz: 3.4, lrate: 1350, lsond: 2000, hv: 420000, hg: 0, age0: 41, cap: 65000, gain0: 25, contrib: 350, cg: 0, retAge: 67, age1: 95, net: 900, dfloor: 75, wE: 60, wC: 5, wG: 0, rg: 3.5, vg: 15, tent: false, tUp: 10, tPeak: 40, tDown: 10, tLate: 60, bz: 3.2, re: 7, rb: 3.75, rc: 2, ve: 16, vb: 4, inf: 2, idx: true, ter: 0.3, lzb: 10, lz2: 4.5 };
 const S = { kvm: "gkv", ptm: "fix", wmode: "fix", swing: 10, band: 5, fb: 1000, ks: 0, sell: "fifo", scen: "o", model: "r", stress: "none", when: "ret", mode: "real" };
 
 const fmts = {
-  rv: v => eur(v), rdebt: v => eur(v), rlz: v => nf2.format(v) + " %", rlzb: v => v + " Jahre", rlz2: v => nf2.format(v) + " %", rrate: v => eur(v), rrent: v => eur(v),
-  rhgm: v => eur(v), rqm: v => v + " m²", rih: v => nf1.format(v) + " € pro m²", rvac: v => v + " %", rmg: v => nf2.format(v) + " %", rhg: v => (v > 0 ? "+" : "") + nf2.format(v) + " %", rbuy: v => eur(v), rbuyY: v => String(v),
-  rbldg: v => v + " %", rafa: v => nf1.format(v) + " %", rtax: v => v + " %", rSaleAge: v => v >= 100 ? "nie" : v + " Jahre",
+  rv: v => eur(v), rdebt: v => eur(v), rlz: v => nf2.format(v) + " %", rlzb: v => v + " Jahre", rrate: v => eur(v), rrent: v => eur(v),
+  rkost: v => eur(v), rafaE: v => eur(v), rbuyY: v => String(v), rtax: v => v + " %",
   lshare: v => v + " %", hshare: v => v + " %", inc0: v => eur(v), gapPct: v => v + " %", xtra: v => eur(v), xAge: v => v + " Jahre",
   age0: v => v + " Jahre", cap: v => eur(v), gain0: v => v + " %", contrib: v => eur(v), cg: v => nf1.format(v) + " %",
   retAge: v => "mit " + v + " Jahren", age1: v => v + " Jahre", net: v => eur(v),
@@ -1708,8 +1706,8 @@ const fmts = {
 const ranges = Object.keys(fmts);
 // Zahlenfelder neben allen Reglern: der getippte Wert gilt exakt, der Regler zeigt ihn gerundet an
 const NUMCFG = {
-  rv: { u: "€", d: 0, soft: 1e7 }, rdebt: { u: "€", d: 0, soft: 1e7 }, rlz: { u: "%", d: 2 }, rlzb: { u: "Jahre", d: 0 }, rlz2: { u: "%", d: 2 }, rrate: { u: "€", d: 0, soft: 5e4 }, rrent: { u: "€", d: 0, soft: 5e4 },
-  rhgm: { u: "€", d: 0, soft: 1e4 }, rqm: { u: "m²", d: 0, soft: 5000 }, rih: { u: "€", d: 1 }, rvac: { u: "%", d: 0 }, rmg: { u: "%", d: 2 }, rhg: { u: "%", d: 2 }, rbuy: { u: "€", d: 0, soft: 1e7 }, rbldg: { u: "%", d: 0 }, rafa: { u: "%", d: 1 }, rtax: { u: "%", d: 0 }, rbuyY: { u: "", d: 0, ng: 1 }, rSaleAge: { u: "Jahre", d: 0 },
+  rv: { u: "€", d: 0, soft: 1e7 }, rdebt: { u: "€", d: 0, soft: 1e7 }, rlz: { u: "%", d: 2 }, rlzb: { u: "Jahre", d: 0 }, rrate: { u: "€", d: 0, soft: 5e4 }, rrent: { u: "€", d: 0, soft: 5e4 },
+  rkost: { u: "€", d: 0, soft: 1e4 }, rafaE: { u: "€", d: 0, soft: 1e5 }, rtax: { u: "%", d: 0 }, rbuyY: { u: "", d: 0, ng: 1 },
   age0: { u: "Jahre", d: 0 }, cap: { u: "€", d: 0, soft: 2e7 }, gain0: { u: "%", d: 0 }, contrib: { u: "€", d: 0, soft: 1e5 }, cg: { u: "%", d: 1 },
   retAge: { pre: "mit", u: "Jahren", d: 0 }, age1: { u: "Jahre", d: 0 }, net: { u: "€", d: 0, soft: 5e4 }, dfloor: { u: "%", d: 0 },
   wE: { u: "%", d: 0 }, wC: { u: "%", d: 0 }, wG: { u: "%", d: 0 }, rg: { u: "%", d: 2 }, vg: { u: "%", d: 0 }, tUp: { u: "Jahre vorher", d: 0 }, tPeak: { u: "%", d: 0 }, tDown: { u: "Jahre", d: 0 }, tLate: { u: "%", d: 0 },
@@ -1753,8 +1751,8 @@ function readParams(over) {
     re: v("re") / 100, rb: v("rb") / 100, rc: v("rc") / 100, rgo: v("rg") / 100, vg: v("vg") / 100, ve: v("ve") / 100, vb: v("vb") / 100, inf: v("inf") / 100, ter: v("ter") / 100,
     extra: v("xtra"), xAge: v("xAge"), gapOn: $("gapOn").checked, gapLink: $("gapOn").checked && GAP ? { base: GAP.base, pct: GAP.pct } : null,
     pOn: $("pOn").checked, pens: v("pens"), pAge: Math.min(Math.max(v("pAge"), retAge), age1 - 1), pg: v("pg") / 100, pniv: v("pniv") / 100, kvPriv: S.kvm === "pkv", pkv0: v("ppkv0"), ktg: v("ktg"), bel: v("bel"), pkvg: v("pkvg") / 100, ptax: v("ptax") / 100, ptaxAuto: S.ptm === "auto", tg: v("tg") / 100, kst: S.ks / 100, pkv: v("pkv") / 100, year0: new Date().getFullYear(),
-    rOn: $("rOn").checked, rv: v("rv"), rdebt: v("rdebt"), rlz: v("rlz") / 100, rlzb: v("rlzb"), rlz2: v("rlz2") / 100, rrate: v("rrate"), rrent: v("rrent"), rhgm: v("rhgm"), rqm: v("rqm"), rih: v("rih"), rvac: v("rvac") / 100,
-    rmg: v("rmg") / 100, rhg: v("rhg") / 100, rbuy: v("rbuy"), rbuyY: v("rbuyY"), rbldg: v("rbldg") / 100, rafa: v("rafa") / 100, rtax: v("rtax") / 100, rSaleAge: v("rSaleAge") >= 100 ? 0 : v("rSaleAge"),
+    rOn: $("rOn").checked, rv: v("rv"), rdebt: v("rdebt"), rlz: v("rlz") / 100, rlzb: v("rlzb"), rlz2: v("lz2") / 100, rrate: v("rrate"), rrent: v("rrent"), rkost: v("rkost"), rafaE: v("rafaE"), rvac: RVAC,
+    rmg: 0.02, rhg: 0, rbuyY: v("rbuyY"), rtax: v("rtax") / 100, rSaleAge: 0,
     home: isHome(), debt: v("debt"), lz: v("lz") / 100, lzb: v("lzb"), lz2: v("lz2") / 100, lrate: v("lrate"), lshare: v("lshare") / 100, hshare: v("hshare") / 100, lsond: v("lsond"), fp: v("fp") / 100, sc: v("sc") / 100, hv: v("hv"), hg: v("hg") / 100,
     flows: isHome() && $("flowsOn").checked ? readFlows(age0, age1) : [],
     model: S.model, stress: S.stress, off, rate: KS_RATE[S.ks], fb: S.fb, bz: v("bz") / 100, trick: S.sell === "trick",
@@ -2001,7 +1999,7 @@ function startSide(p) {
   if (p.tent) cmp.tent = readParams({ tent: false });
   if (p.trick) cmp.trick = readParams({ trick: false });
   if (p.wG > 0) { const k = 1 / (1 - p.wG); cmp.gold = readParams({ wG: 0, wE: p.wE * k, wC: p.wC * k, tPeak: p.tPeak * k, tLate: p.tLate * k }); }
-  if (p.rOn) cmp.noRent = readParams({ rOn: false });
+  if (p.rOn) { const n = rentSellNet(p), c2 = Math.max(0, p.cap + n), b2 = Math.max(0, p.cap * (1 - p.gain0) + n); cmp.noRent = readParams({ rOn: false, cap: c2, gain0: c2 > 0 ? Math.max(0, 1 - b2 / c2) : 0 }); }
   if (VIEWNOW === "quick") { const a = SCEN[S.scen === "v" ? "o" : "v"]; cmp.alt = readParams({ re: a.re / 100, rb: a.rb / 100, rc: a.rc / 100, rgo: a.rg / 100 }); }
   if (Object.keys(cmp).some(k => k !== "alt" && k !== "noRent")) $("cmpbox").innerHTML = `<p class="busy">Vergleich wird berechnet …</p>`; else renderCmp();
   sideTimer = setTimeout(() => {
@@ -2064,7 +2062,7 @@ function renderLev(d, p) {
     : found ? `Jede grüne Zeile bringt das Ergebnis allein auf mindestens 80 %, ab da zeigt die Ampel Grün. Kombiniert reicht von jedem weniger. Gerechnet in denselben 2.000 Zukünften, heute ${pf(base)}. Tippe eine Zeile an, um sie zu übernehmen.`
     : `Kombiniere mehrere Stellschrauben, zum Beispiel mehr sparen und flexibel entnehmen. Heute: ${pf(base)}.`;
 }
-// Vermietete Immobilie: Rechnung des ersten Jahres, Kreditende, Vergleich ohne die Immobilie (bei 2 % Inflation, ohne Zufall)
+// Vermietete Immobilie: Rechnung des ersten Jahres, Kreditende, Vergleich mit Verkauf heute (bei 2 % Inflation, ohne Zufall)
 function renderRent() {
   const h = $("rent-h"); if (!h || !last) return;
   const p = readParams(), on = p.rOn; p.rOn = true;
@@ -2078,10 +2076,9 @@ function renderRent() {
   const noi = (f.rent - f.cost) * 12, kz = [];
   if (p.rrent > 0 && p.rv > 0) kz.push(`Kaufpreisfaktor ${nf1.format(p.rv / (12 * p.rrent))} (Marktwert durch Jahreskaltmiete)`);
   if (p.rv > 0) kz.push(`Netto-Mietrendite auf den Marktwert ${nf1.format(noi / p.rv * 100)} %`);
-  if (p.rbuy > 0) kz.push(`auf den Kaufpreis mit Nebenkosten ${nf1.format(noi / p.rbuy * 100)} %`);
-  if (kz.length) t += ` ${kz.join(", ")}; beide Renditen nach Kosten und Mietausfall, vor Kredit und Steuer.`;
+  if (kz.length) t += ` ${kz.join(", ")}; nach Kosten und Mietausfall, vor Kredit und Steuer.`;
   if (p.rdebt > 0 && L.payoff != null) t += ` Kredit abbezahlt mit ${Math.round(p.age0 + L.payoff)}` + (det.after ? `, danach etwa ${sg(det.after.cf)} im Monat nach Steuer, in heutiger Kaufkraft.` : ".");
-  if (on && last.cmp && last.cmp.noRent) t += ` Ohne die Immobilie: ${nf1.format(Math.round(last.cmp.noRent.success * 1000) / 10)} % statt ${nf1.format(Math.round(last.r.success * 1000) / 10)} %.`;
+  if (on && last.cmp && last.cmp.noRent) { const n = rentSellNet(p), y0 = p.year0 || 2026; t += ` Heute verkauft, ${n >= 0 ? eur(Math.round(n / 100) * 100) + " Erlös ins Depot" : eur(Math.round(-n / 100) * 100) + " Restschuld aus dem Depot getilgt"}: ${nf1.format(Math.round(last.cmp.noRent.success * 1000) / 10)} % statt ${nf1.format(Math.round(last.r.success * 1000) / 10)} % beim Halten (nach ${Math.round(RSELL * 100)} % Verkaufskosten${y0 - p.rbuyY < 10 ? ", ohne Steuer auf den Gewinn, weil noch keine 10 Jahre" : ""}${p.rdebt > 0 && p.rlzb > 0 ? ", ohne Vorfälligkeitsentschädigung" : ""}).`; }
   h.textContent = t;
 }
 function renderCmp() {
@@ -2318,7 +2315,7 @@ function pdfInputs() {
     ["Rate", p.wmode === "dyn" ? `flexibel, ±${S.swing} % pro Jahr, nie unter ${Math.round(p.dfloor * 100)} % (${eur10(p.net * p.dfloor)})` : "fest" + (p.indexed ? ", behält ihre Kaufkraft" : ", bleibt nominal gleich")]]);
   if (p.pOn) { const f = r.pension && r.pension.first; sec("Gesetzliche Rente", [["Rente laut Renteninformation", eur(p.pens) + " brutto, heutige Werte"], ["Rente ab", p.pAge + " Jahren"], ["Steigerung pro Jahr", pc(p.pg)], ["Rentenniveau bei Rentenbeginn", pc(p.pniv) + (Math.abs(p.pniv - 0.48) > 1e-9 ? " (Renteninformation: 48 %)" : "")], ["Steuer auf die Rente", p.ptaxAuto ? `nach Tarif, Tarif steigt ${pc(p.tg)} pro Jahr; im ersten Jahr ${f ? nf1.format(f.rate * 100) + " % auf den steuerpflichtigen Teil" : ""}` : pc(p.ptax) + (ptaxLinked ? " fest, voreingestellt nach Tarif" : " fest, selbst eingetragen")], GAP && GAP.on && ["Rentenlücke schließen", tx("gap-h")], ["Kranken- und Pflegeversicherung", p.kvPriv ? `privat: heute ${eur(p.pkv0)} gesamt${p.ktg ? `, davon ${eur(p.ktg)} fällt mit der Rente weg` : ""}${p.bel ? `, Entlastung ${eur(p.bel)}` : ""}, steigt ${pc(p.pkvg)} pro Jahr. ${tx("pkv-h")}` : `${pc(p.pkv)}, heute ${eur(p.pens * p.pkv)} im Monat${pkvEur != null ? " (selbst eingetragen)" : ""}`], f && ["Netto im ersten Jahr", `${eur10(f.net)} im Monat, heutige Kaufkraft etwa ${eur10(f.net / Math.pow(1 + p.inf, r.pension.PY))}`]]); }
   else sec("Gesetzliche Rente", [["", "nicht einbezogen"]]);
-  if (p.rOn) sec("Vermietete Immobilie", [["Marktwert heute", eur(p.rv)], ["Restschuld heute", eur(p.rdebt)], ["Sollzins", pc(p.rlz) + `, noch ${p.rlzb} Jahre, danach ${pc(p.rlz2)}`], ["Rate pro Monat", eur(p.rrate)], ["Kaltmiete pro Monat", eur(p.rrent)], ["Nicht umlagefähiges Hausgeld", eur(p.rhgm) + " im Monat"], ["Eigene Instandhaltung", nf1.format(p.rih) + " € pro m² und Jahr, " + p.rqm + " m²"], ["Leerstand und Mietausfall", pc(p.rvac)], ["Mietsteigerung", pc(p.rmg)], ["Wertsteigerung über Inflation", pc(p.rhg)], ["Kaufpreis, Kaufjahr", eur(p.rbuy) + ", " + p.rbuyY], ["Abschreibung", pc(p.rafa) + " auf " + pc(p.rbldg) + " Gebäudeanteil"], ["Grenzsteuersatz im Berufsleben", pc(p.rtax)], ["Verkauf", p.rSaleAge > 0 ? "mit " + p.rSaleAge : "nein"]]);
+  if (p.rOn) sec("Vermietete Immobilie", [["Marktwert heute", eur(p.rv) + ", ohne Schwankung angenommen"], ["Restschuld heute", eur(p.rdebt)], ["Sollzins", pc(p.rlz) + `, noch ${p.rlzb} Jahre, danach ${pc(p.rlz2)}`], ["Rate pro Monat", eur(p.rrate)], ["Kaltmiete pro Monat", eur(p.rrent) + `, ${pc(p.rvac)} Mietausfall`], ["Eigene Kosten pro Monat", eur(p.rkost)], ["Abschreibung pro Jahr", eur(p.rafaE) + `, bis ${p.rbuyY + 50}`], ["Grenzsteuersatz im Berufsleben", pc(p.rtax)], ["Gerechnet", "nur der Zufluss, ohne Verkauf; Miete und Kosten steigen mit der Inflation"]]);
   if (p.home) sec("Eigenes Haus", [["Restschuld heute", eur(p.debt)], ["Sollzins", pc(p.lz) + `, noch ${p.lzb} Jahre, danach ${pc(p.lz2)}`], ["Rate pro Monat", eur(p.lrate)], ["Dein Anteil an Rate und Sondertilgung", Math.round(p.lshare * 100) + " %"], ["Dein Anteil am Haus", Math.round(p.hshare * 100) + " %"], ["Sondertilgung pro Jahr", eur(p.lsond)], ["Nach Kreditende ins Depot", pc(p.fp)], ["Hauswert heute", eur(p.hv) + (p.hg ? `, ${pc(p.hg)} pro Jahr über der Inflation` : "")], tx("loan-h") && ["Kredit", tx("loan-h")],
     ...p.flows.map(f => ["Einmalzahlung mit " + f.age, f.type === "sale" ? `Hausverkauf${f.label !== "Hausverkauf" ? " (" + f.label + ")" : ""}, ${pc(p.sc)} Verkaufskosten` : `${f.type === "out" ? "Ausgabe" : "Einnahme"} ${eur(f.amt)} (${f.label})`])]);
   else sec("Eigenes Haus", [["", "nicht einbezogen"]]);
@@ -2663,7 +2660,7 @@ if ($("wiz")) {
     let h = `<h2>Beide Märkte im Vergleich</h2><div class="qk-two">` + (own ? tile("Normal", "Börse wie früher", normal) + tile("Vorsichtig", "Börse eher schwach", vors) : tile("Deine Annahmen", "aus der ausführlichen Ansicht", cur) + tile("Vorsichtig", "Börse eher schwach", oth)) + `</div>`;
     h += `<p>So oft reicht das Geld bis ${p.age1}. Ergebnis, Stellschrauben und Diagramme rechnen mit „${own ? (S.scen === "v" ? "Vorsichtig" : "Normal") : "deinen Annahmen"}“.</p>`;
     $("qk-res").innerHTML = h;
-    $("qk-ass").textContent = `Fest im Hintergrund, änderbar unter „Ausführlich“: Rente steigt ${pf0(p.pg)} pro Jahr${p.kvPriv ? `, PKV ${pf0(p.pkvg)}` : ""}, beides bei ${pf0(0.02)} Inflation; Inflation ${pf0(p.inf)}, Kosten ${pf0(p.ter)}, Planung bis ${p.age1}${p.home && p.debt > 0 ? `, Zins nach der Zinsbindung ${pf0(p.lz2)}` : ""}, Steuer ${p.ptaxAuto ? "nach Tarif" : "mit " + pf0(p.ptax) + " auf die Rente"}${p.home ? ", die Hälfte der frei werdenden Kreditrate wird gespart".replace("die Hälfte", p.fp === 0.5 ? "die Hälfte" : pf0(p.fp)) : ""}${p.rOn ? `; vermietete Immobilie mit ${pf0(p.rlz)} Zins für ${p.rlzb} Jahre, danach ${pf0(p.rlz2)}, nicht umlagefähiges Hausgeld ${eur(p.rhgm)} im Monat, Instandhaltung ${nf1.format(p.rih)} € pro m² und Jahr, Mietausfall ${pf0(p.rvac)}, Grenzsteuersatz ${pf0(p.rtax)}, Abschreibung ${pf0(p.rafa)} auf ${pf0(p.rbldg)} von ${eur(p.rbuy)} Kaufpreis (Kauf ${p.rbuyY})` : ""}. Gerechnet mit 2.000 möglichen Zukünften und deutschen Steuern wie im echten Depot. Modellrechnung, keine Prognose und keine Anlage-, Steuer- oder Rechtsberatung.`;
+    $("qk-ass").textContent = `Fest im Hintergrund, änderbar unter „Ausführlich“: Rente steigt ${pf0(p.pg)} pro Jahr${p.kvPriv ? `, PKV ${pf0(p.pkvg)}` : ""}, beides bei ${pf0(0.02)} Inflation; Inflation ${pf0(p.inf)}, Kosten ${pf0(p.ter)}, Planung bis ${p.age1}${p.home && p.debt > 0 ? `, Zins nach der Zinsbindung ${pf0(p.lz2)}` : ""}, Steuer ${p.ptaxAuto ? "nach Tarif" : "mit " + pf0(p.ptax) + " auf die Rente"}${p.home ? ", die Hälfte der frei werdenden Kreditrate wird gespart".replace("die Hälfte", p.fp === 0.5 ? "die Hälfte" : pf0(p.fp)) : ""}${p.rOn ? `; vermietete Immobilie nur als Zufluss, ohne Verkauf: ${pf0(p.rlz)} Zins für ${p.rlzb} Jahre, danach ${pf0(p.rlz2)}, eigene Kosten ${eur(p.rkost)} im Monat, Mietausfall ${pf0(p.rvac)}, Miete und Kosten steigen mit der Inflation, Abschreibung ${eur(p.rafaE)} pro Jahr, Grenzsteuersatz ${pf0(p.rtax)}` : ""}. Gerechnet mit 2.000 möglichen Zukünften und deutschen Steuern wie im echten Depot. Modellrechnung, keine Prognose und keine Anlage-, Steuer- oder Rechtsberatung.`;
   }
   hookRender = () => { if (view === "quick") syncQk(); };
   function qgo(n) { qs = Math.max(1, Math.min(QN, n)); syncQk(); schedule(); window.scrollTo({ top: 0, behavior: "smooth" }); }
