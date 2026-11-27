@@ -652,12 +652,7 @@ details.adv[open] > summary::before { content: "–"; }
       <section class="panel">
         <div class="card-head"><h3>So ist das Geld aufgeteilt</h3></div>
         <div class="chart" id="ch-a"></div>
-        <div class="legend">
-          <span><i class="sw" style="background:var(--eq)"></i>Aktien</span>
-          <span><i class="sw" style="background:var(--bd)"></i>Anleihen</span>
-          <span><i class="sw" style="background:var(--gd)"></i>Gold</span>
-          <span><i class="sw" style="background:var(--mm)"></i>Geldmarkt</span>
-        </div>
+        <div class="legend" id="ch-a-leg"></div>
         <p class="hint" id="alloc-h" style="margin-top:8px"></p>
       </section>
 
@@ -1948,6 +1943,9 @@ function drawAlloc(el, ages, Wt, opts) {
   if (opts.ret != null && opts.ret > ages[0] && opts.ret < ages[ages.length - 1]) { const x = xs(opts.ret); s += `<line x1="${x}" x2="${x}" y1="${f.T}" y2="${f.H - f.B}" stroke="var(--surface)" stroke-width="1.5" stroke-dasharray="3 4"/>`; }
   s += `<line class="cursor" x1="0" x2="0" y1="${f.T}" y2="${f.H - f.B}" visibility="hidden"/><rect x="${f.L}" y="${f.T}" width="${f.W - f.L - f.R}" height="${f.H - f.T - f.B}" fill="transparent"/></svg><div class="tip" hidden></div>`;
   el.innerHTML = s;
+  // Legende nur mit Klassen, die irgendwann tatsächlich Bestand haben
+  const leg = $(el.id + "-leg");
+  if (leg) leg.innerHTML = [[0, "--eq", "Aktien"], [1, "--bd", "Anleihen"], [3, "--gd", "Gold"], [2, "--mm", "Geldmarkt"]].filter(([i]) => Wt.some(w => w[i] > 0.0005)).map(([, c, n]) => `<span><i class="sw" style="background:var(${c})"></i>${n}</span>`).join("");
   const pc = x => Math.round(x * 100) + " %";
   hover(el, ages, f, k => `<b>Mit ${ages[k]} Jahren</b><div><span>Aktien</span><span>${pc(Wt[k][0])}</span></div><div><span>Anleihen</span><span>${pc(Wt[k][1])}</span></div><div><span>Geldmarkt</span><span>${pc(Wt[k][2])}</span></div>` + (Wt[k][3] > 0 ? `<div><span>Gold</span><span>${pc(Wt[k][3])}</span></div>` : ""));
 }
