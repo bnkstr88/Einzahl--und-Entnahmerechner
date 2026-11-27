@@ -112,8 +112,26 @@ details.adv[open] > summary::before { content: "–"; }
 .pill.good { background: var(--good-bg); color: var(--good); } .pill.warn { background: var(--warn-bg); color: var(--warn); } .pill.bad { background: var(--bad-bg); color: var(--bad); }
 .verdict h2 { font-weight: 800; font-size: clamp(1.35rem, 2.6vw, 1.9rem); line-height: 1.2; margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
 .verdict p { margin: 0; color: var(--muted); max-width: 72ch; }
-.meter { height: 12px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.meter { position: relative; height: 12px; border-radius: 999px; background: var(--surface-2); }
 .meter i { display: block; height: 100%; border-radius: 999px; transition: width 0.25s ease; }
+.meter b { position: absolute; top: 0; bottom: 0; border-radius: 999px; opacity: 0.35; transition: left 0.25s ease, width 0.25s ease; }
+.meter u { position: absolute; top: 50%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--line); transition: left 0.25s ease; }
+.meter.span i { display: none; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.fact { background: var(--surface-2); border-radius: 12px; padding: 10px 12px; display: grid; gap: 1px; min-width: 0; }
+.fact .l { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+.fact b { font-size: 1.3rem; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.25; }
+.fact .s { font-size: 0.82rem; color: var(--muted); }
+details.more > summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 0.9rem; }
+details.more > p { margin-top: 8px; }
+.rbar { position: fixed; z-index: 50; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); width: min(560px, calc(100% - 24px)); display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; box-shadow: 0 6px 24px rgba(0,0,0,0.14); }
+.rbar[hidden] { display: none; }
+.rbar .rbar-t { display: grid; flex: 1; min-width: 0; line-height: 1.2; }
+.rbar .rbar-t b { font-size: 1rem; } .rbar .rbar-t small { color: var(--muted); font-size: 0.78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rbar button { border: 0; background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 700; font-size: 0.85rem; padding: 8px 14px; border-radius: 999px; cursor: pointer; }
+body.has-rbar { padding-bottom: 76px; }
+.cmpbox[hidden] { display: none; }
+@media (max-width: 560px) { .fact { padding: 8px 12px; } .fact b { font-size: 1.15rem; } .rbar .pill { display: none; } }
 .cmpbox { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
 .verdict p.span-h { color: var(--ink); font-weight: 600; }
 .life { display: grid; gap: 8px; }
@@ -623,9 +641,10 @@ details.adv[open] > summary::before { content: "–"; }
       <section class="panel verdict">
         <span class="pill" id="pill"></span>
         <h2 id="headline"></h2>
-        <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+        <div class="meter" aria-hidden="true"><b id="meter-span" hidden></b><i id="meter"></i><u id="meter-dot" hidden></u></div>
         <p id="span-h" class="span-h"></p>
-        <p id="subline"></p>
+        <div class="facts" id="facts"></div>
+        <details class="more"><summary>Details zum Ergebnis</summary><p id="subline"></p></details>
         <div class="cmpbox" id="cmpbox"></div>
         <div class="pdfrow"><button type="button" class="pdfbtn" id="pdf-b" hidden>Als PDF speichern</button><span class="hint" id="pdf-s" aria-live="polite"></span></div>
       </section>
@@ -771,6 +790,7 @@ details.adv[open] > summary::before { content: "–"; }
       </details>
     </main>
   </div>
+  <div class="rbar" id="rbar" hidden><span class="pill" id="rbar-p"></span><span class="rbar-t"><b id="rbar-v"></b><small id="rbar-s"></small></span><button type="button" id="rbar-b">Ergebnis ↑</button></div>
   <footer class="copy"><div id="disc"><span style="white-space:nowrap">Alle Angaben ohne Gewähr</span> · <span style="white-space:nowrap">Keine Steuer- oder Anlageberatung</span></div><div id="copy">© 2026 Christopher Tremmel</div></footer>
 </div>
 <script type="text/plain" id="engine-src">
@@ -2070,7 +2090,7 @@ function startSide(p) {
   if (p.wG > 0) { const k = 1 / (1 - p.wG); cmp.gold = readParams({ wG: 0, wE: p.wE * k, wC: p.wC * k, tPeak: p.tPeak * k, tLate: p.tLate * k }); }
   if (p.rOn) { const n = rentSellNet(p), c2 = Math.max(0, p.cap + n), b2 = Math.max(0, p.cap * (1 - p.gain0) + n); cmp.noRent = readParams({ rOn: false, cap: c2, gain0: c2 > 0 ? Math.max(0, 1 - b2 / c2) : 0 }); }
   { const a = SCEN[S.scen === "v" ? "o" : "v"]; cmp.alt = readParams({ re: a.re / 100, rb: a.rb / 100, rc: a.rc / 100, rgo: a.rg / 100 }); }
-  if (Object.keys(cmp).some(k => k !== "alt" && k !== "noRent")) $("cmpbox").innerHTML = `<p class="busy">Vergleich wird berechnet …</p>`; else renderCmp();
+  if (Object.keys(cmp).some(k => k !== "alt" && k !== "noRent")) { $("cmpbox").hidden = false; $("cmpbox").innerHTML = `<p class="busy">Vergleich wird berechnet …</p>`; } else renderCmp();
   sideTimer = setTimeout(() => {
     if (sid !== sideId) return;
     const onSide = m => { if (m.id !== sideId) return; if (m.type === "cmp") { if (last && last.p === sideP) { last.cmp = m.cmp; renderCmp(); hookRender(); } } else { sideBusy = false; renderLev(m.d, sideP); } };
@@ -2150,16 +2170,42 @@ function renderRent() {
   if (on && last.cmp && last.cmp.noRent) { const n = rentSellNet(p), y0 = p.year0 || 2026; t += ` Heute verkauft, ${n >= 0 ? eur(Math.round(n / 100) * 100) + " Erlös ins Depot" : eur(Math.round(-n / 100) * 100) + " Restschuld aus dem Depot getilgt"}: ${pInt(last.cmp.noRent.success)} statt ${pInt(last.r.success)} beim Halten (nach ${Math.round(RSELL * 100)} % Verkaufskosten${y0 - p.rbuyY < 10 ? ", ohne Steuer auf den Gewinn, weil noch keine 10 Jahre" : ""}${p.rdebt > 0 && p.rlzb > 0 ? ", ohne Vorfälligkeitsentschädigung" : ""}).`; }
   h.textContent = t;
 }
+let METERCLS = "good", VERDICT_SEEN = true;
+// Leiste unten: Ergebnis bleibt sichtbar, während man in „Ausführlich“ Regler bewegt
+function updBar() {
+  const bar = $("rbar"); if (!bar) return;
+  const show = !!last && VIEWNOW === "full" && !VERDICT_SEEN;
+  bar.hidden = !show; document.body.classList.toggle("has-rbar", show);
+  if (!show) return;
+  const { r, cmp } = last, alt = cmp && cmp.alt, sc = Math.round(r.success * 100), [cls, txt] = verdictClass(sc);
+  $("rbar-p").className = "pill " + cls; $("rbar-p").textContent = txt;
+  $("rbar-v").textContent = `${succTxt(r.success).replace("etwa ", "≈ ")} bis ${last.p.age1}`;
+  if (alt) { const a = Math.round(Math.min(r.success, alt.success) * 20) * 5, b = Math.round(Math.max(r.success, alt.success) * 20) * 5; $("rbar-s").textContent = a === b ? "bei beiden Börsen-Annahmen" : `je nach Börse ${a}–${b} %`; }
+  else $("rbar-s").textContent = "Vergleich wird berechnet …";
+}
+if (typeof IntersectionObserver !== "undefined") {
+  const vd = document.querySelector(".verdict");
+  if (vd) new IntersectionObserver(es => { VERDICT_SEEN = es[es.length - 1].isIntersecting; updBar(); }, { threshold: 0.05 }).observe(vd);
+}
+document.addEventListener("click", e => { if (e.target && e.target.id === "rbar-b") document.querySelector(".verdict").scrollIntoView({ behavior: "smooth", block: "start" }); });
 // Spanne über beide Märkte: ehrlicher als eine einzelne Zahl
 function renderSpan() {
   const el = $("span-h"); if (!el || !last) return;
   const { r, cmp } = last, alt = cmp && cmp.alt;
+  const mt = document.querySelector(".verdict .meter"), band = $("meter-span"), dot = $("meter-dot");
+  if (alt && mt) {
+    const lo = Math.min(r.success, alt.success) * 100, hi = Math.max(r.success, alt.success) * 100;
+    mt.classList.add("span"); band.hidden = false; dot.hidden = false;
+    band.style.left = lo + "%"; band.style.width = Math.max(1.5, hi - lo) + "%"; band.style.background = `var(--${METERCLS})`;
+    dot.style.left = r.success * 100 + "%"; dot.style.background = `var(--${METERCLS})`;
+  } else if (mt) { mt.classList.remove("span"); band.hidden = true; dot.hidden = true; }
+  updBar();
   if (VIEWNOW === "quick" || !alt) { el.textContent = ""; el.hidden = true; return; }
   el.hidden = false;
   const bare = s => succTxt(s).replace("etwa ", "");
   if (S.scen === "o" || S.scen === "v") {
     const normal = S.scen === "o" ? r.success : alt.success, weak = S.scen === "v" ? r.success : alt.success;
-    el.textContent = bare(weak) === bare(normal) ? `Bei eher schwacher wie bei normaler Börse ${succTxt(weak)}.` : `Je nach Börse zwischen ${bare(weak)} (eher schwach) und ${bare(normal)} (wie früher). Diese Spanne sagt mehr als jede einzelne Zahl.`;
+    el.textContent = bare(weak) === bare(normal) ? `Bei eher schwacher wie bei normaler Börse ${succTxt(weak)}.` : `Je nach Börse ${bare(weak).replace("\u00a0%", "")} bis ${bare(normal)}: eher schwach bis wie früher. Die Spanne sagt mehr als jede einzelne Zahl.`;
   } else el.textContent = `Mit deinen Annahmen ${succTxt(r.success)}, bei eher schwacher Börse ${succTxt(alt.success)}. Diese Spanne sagt mehr als jede einzelne Zahl.`;
 }
 // Wie lange muss es reichen? Quote nach Alter und Wahrscheinlichkeit, so alt zu werden
@@ -2186,7 +2232,8 @@ function renderCmp() {
   renderRent();
   renderSpan(); renderLife();
   const { p, r, cmp } = last, box = $("cmpbox"), pts = x => Math.round(x * 100);
-  if (!p.tent && !p.trick && !(p.wG > 0)) { box.innerHTML = `<p class="hint">Schalte das Anleihezelt oder den Zweitdepot-Trick ein oder nimm Gold dazu, dann siehst du hier, was das in genau denselben 2.000 Zukünften ändert.</p>`; return; }
+  if (!p.tent && !p.trick && !(p.wG > 0)) { box.innerHTML = ""; box.hidden = true; return; }
+  box.hidden = false;
   if (!cmp) return;
   const pf = x => nf1.format(x) + " %";
   const diff = d => { d = Math.round(d); return (d > 0 ? "+" : d < 0 ? "−" : "±") + Math.abs(d) + " Pkt."; };
@@ -2222,7 +2269,7 @@ function render() {
   // Urteil
   const sc = Math.round(r.success * 100), [cls, txt] = verdictClass(sc);
   $("pill").className = "pill " + cls; $("pill").textContent = txt;
-  $("meter").style.width = sc + "%"; $("meter").style.background = `var(--${cls})`;
+  $("meter").style.width = sc + "%"; $("meter").style.background = `var(--${cls})`; METERCLS = cls;
   $("headline").textContent = `In ${succTxt(r.success)} der Zukünfte reicht das Geld bis ${p.age1}.`;
   let sub = RY > 0 ? `Mit ${p.retAge} hast du typischerweise ${eurR(Wv.p50[RY])} ${unit}, wenn es schlecht läuft ${eurR(Wv.p10[RY])}. ` : "";
   sub += p.wmode === "dyn" ? `Die Rate startet bei ${eur10(p.net)} und passt sich dann an.` : p.indexed ? `Die Rate von ${eur10(p.net)} behält ihre Kaufkraft.` : `Die Rate bleibt auf dem Konto bei ${eur10(p.net)}.`;
@@ -2245,7 +2292,24 @@ function render() {
   if (p.extra > 0) sub += ` Bis ${p.xAge} kommen ${eur(p.extra)} im Monat für die aktiven Jahre dazu.`;
   if (sc < 80) sub += p.wmode === "dyn" ? " Eine niedrigere Rate oder mehr Sparen macht den Plan sicherer." : " Eine niedrigere Rate, mehr Sparen oder eine flexible Rate macht den Plan sicherer.";
   $("subline").textContent = sub;
-  renderSpan(); renderLife();
+  // Drei Zahlen statt eines langen Absatzes; die Details stehen aufklappbar darunter
+  {
+    const f = [], card = (l, v, s) => `<div class="fact"><span class="l">${l}</span><b>${v}</b><span class="s">${s}</span></div>`;
+    const short = real ? "heutige Kaufkraft" : "Kontoauszug";
+    if (RY > 0) f.push(card(`Mit ${p.retAge}`, eurR(Wv.p50[RY]), `typisch · schlecht ${eurR(Wv.p10[RY])} · ${short}`));
+    else f.push(card("Heute angelegt", eurR(p.cap), short));
+    if (r.failAges.length) {
+      const fa = r.failAges.slice().sort((a, b) => a - b), fg = (r.failGaps || []).slice().sort((a, b) => a - b), g = fg.length ? fg[Math.floor(fg.length / 2)] : 0;
+      const inc = p.pOn && p.rOn ? "Rente und Miete decken" : p.pOn ? "die Rente deckt" : p.rOn ? "die Miete deckt" : "";
+      f.push(card("Wenn es nicht reicht", `ab ${fa[Math.floor(fa.length / 2)]}`, g >= 50 ? `fehlen dann etwa ${eur10(g)} im Monat (heutige Kaufkraft)` : inc ? `${inc} dann fast alles` : "typisches Alter, ab dem das Depot leer ist"));
+    } else f.push(card(`Übrig mit ${p.age1}`, eurR(Wv.p50[Y]), `typisch · ${short}`));
+    if (p.pOn && r.pension && r.pension.first) {
+      const nr = r.pension.first.net / Math.pow(1 + p.inf, r.pension.PY);
+      f.push(card(`Rente ab ${p.age0 + r.pension.PY}`, eur10(nr), nr >= p.net ? "netto, über deinem Wunsch" : `netto von ${eur10(p.net)} Wunsch, den Rest zahlt das Depot`));
+    } else f.push(card("Entnahme", eur10(p.net), p.wmode === "dyn" ? "pro Monat, passt sich an" : p.indexed ? "pro Monat, behält die Kaufkraft" : "pro Monat, fest auf dem Konto"));
+    $("facts").innerHTML = f.join("");
+  }
+  renderSpan(); renderLife(); updBar();
 
   // Kennzahlen
   $("k1-l").textContent = `Vermögen mit ${p.retAge}`;
@@ -2727,6 +2791,7 @@ if ($("wiz")) {
     if (v === "easy") { mount("#wiz"); syncWiz(); }
     if (v === "quick") { mount("#qk"); syncQk(); }
     if (last) { render(); if (v === "quick") startSide(last.p); }
+    updBar();
   }
   document.querySelectorAll("[data-view]").forEach(b => b.addEventListener("click", () => setView(b.dataset.view)));
   document.querySelectorAll("#wiz [data-yn] button").forEach(b => b.addEventListener("click", () => { $(b.closest("[data-yn]").dataset.yn).checked = b.dataset.v === "1"; syncWiz(); schedule(); }));
