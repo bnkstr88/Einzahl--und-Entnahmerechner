@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Anspar- und Entnahmerechner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+/* VOICE: ruhiges Rechenwerkzeug für Laien und Kollegen, gleiche Familie wie der Drei-Töpfe-Rechner
+   IDEA: ein Lebensplan als Zeitachse: erst ansparen, dann entnehmen
+   PICTURE: Vermögensverlauf mit Rentenbeginn und, darunter, die Aufteilung über das Alter (das Anleihezelt)
+   COLOUR and TYPE: Blau als Leitfarbe, Aktien orange, Anleihen grün, Geldmarkt blau; Figtree
+   LAYOUT: links Stellschrauben (klebend), rechts Ergebnis; auf dem Handy untereinander */
+:root {
+  color-scheme: light;
+  --bg: #f2f5f8; --surface: #ffffff; --surface-2: #e9eef4; --ink: #142030; --muted: #566577; --line: #d6dee8;
+  --accent: #1f5fa6; --accent-ink: #ffffff; --eq: #c0602a; --bd: #2c7a4d; --mm: #2f6fb0; --gd: #a8821a;
+  --good: #2c7a4d; --warn: #a86a12; --bad: #b93a2c; --good-bg: #e3f2e9; --warn-bg: #fbf0dc; --bad-bg: #fbe5e1;
+  --font: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d131a; --surface: #151e28; --surface-2: #1d2834; --ink: #e5ecf3; --muted: #94a4b6; --line: #283545;
+    --accent: #6ea9ea; --accent-ink: #0d131a; --eq: #e58b58; --bd: #5dbd85; --mm: #6ea9ea; --gd: #d9b44a;
+    --good: #5dbd85; --warn: #e2b04f; --bad: #ee7b6c; --good-bg: #17301f; --warn-bg: #33270f; --bad-bg: #3a1c18;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d131a; --surface: #151e28; --surface-2: #1d2834; --ink: #e5ecf3; --muted: #94a4b6; --line: #283545;
+  --accent: #6ea9ea; --accent-ink: #0d131a; --eq: #e58b58; --bd: #5dbd85; --mm: #6ea9ea; --gd: #d9b44a;
+  --good: #5dbd85; --warn: #e2b04f; --bad: #ee7b6c; --good-bg: #17301f; --warn-bg: #33270f; --bad-bg: #3a1c18;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; overflow-x: clip;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-top: calc(env(safe-area-inset-top, 0px) + 24px); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 48px);
+}
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+header h1 { font-weight: 800; font-size: clamp(1.7rem, 3.2vw, 2.4rem); line-height: 1.1; margin: 0 0 6px; letter-spacing: -0.01em; text-wrap: balance; }
+header p { margin: 0; color: var(--muted); max-width: 70ch; }
+.grid { display: grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; min-width: 0; }
+.controls { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); display: grid; gap: 16px; max-height: calc(100vh - 24px); overflow-y: auto; }
+@media (max-width: 860px) { .controls { position: static; max-height: none; overflow: visible; } }
+.grp { border-top: 1px solid var(--line); padding-top: 12px; }
+.grp:first-of-type { border-top: 0; padding-top: 0; }
+.grp > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; align-items: center; min-height: 36px; }
+.grp > summary::-webkit-details-marker { display: none; }
+.grp > summary .t { font-weight: 800; font-size: 1rem; }
+.grp > summary::after { content: ""; width: 9px; height: 9px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); margin: 0 4px 4px 0; grid-row: 1; grid-column: 2; transition: transform .15s ease; }
+.grp[open] > summary::after { transform: rotate(-135deg); margin: 4px 4px 0 0; }
+.grp > summary .sum { grid-column: 1 / -1; font-size: 0.84rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.grp[open] > summary .sum { display: none; }
+.grp > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.gin { display: grid; gap: 14px; margin-top: 10px; padding-bottom: 4px; }
+.controls { gap: 12px; }
+.check.incl { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; }
+.ctl { display: grid; gap: 6px; }
+.ctl-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.ctl label, .ctl .lbl { font-weight: 600; }
+.numw { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.num { width: 7.2em; font: inherit; font-size: 16px; font-weight: 700; color: var(--accent); text-align: right; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; background: var(--surface); font-variant-numeric: tabular-nums; min-height: 40px; }
+.num.s { width: 4.6em; }
+.numw .u { font-weight: 600; }
+.num:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.ctl output { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.hint { font-size: 0.82rem; color: var(--muted); margin: 0; }
+input[type="range"] { width: 100%; accent-color: var(--accent); height: 28px; margin: 0; }
+input[type="range"]:focus-visible, button:focus-visible, summary:focus-visible, input[type="checkbox"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; background: var(--surface-2); padding: 4px; border-radius: 10px; }
+.seg.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.seg button { font: inherit; font-weight: 600; font-size: 0.9rem; border: 0; background: transparent; color: var(--ink); padding: 8px 6px; border-radius: 7px; cursor: pointer; min-width: 0; overflow-wrap: anywhere; min-height: 40px; }
+.seg button small { font-weight: 500; font-size: 0.78rem; opacity: 0.85; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.check { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; align-items: start; }
+.check input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent); }
+.check label { font-weight: 600; }
+.check .hint { grid-column: 2; }
+.subctl { display: grid; gap: 14px; border-left: 3px solid var(--accent); padding-left: 12px; }
+.subctl[hidden] { display: none; }
+.mix { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: var(--surface-2); }
+.mix i { display: block; height: 100%; }
+.mixl { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.84rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.mixl b { color: var(--ink); }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; vertical-align: -1px; }
+details.adv > summary { cursor: pointer; font-weight: 600; color: var(--accent); list-style: none; display: flex; align-items: center; gap: 8px; min-height: 32px; }
+details.adv > summary::-webkit-details-marker { display: none; }
+details.adv > summary::before { content: "+"; display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 6px; background: var(--surface-2); font-weight: 700; }
+details.adv[open] > summary::before { content: "–"; }
+.advin { display: grid; gap: 14px; margin-top: 12px; }
+.reset { font: inherit; font-size: 0.88rem; background: none; border: 1px solid var(--line); color: var(--ink); padding: 8px 12px; border-radius: 8px; cursor: pointer; justify-self: start; min-height: 40px; }
+
+.results { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; min-width: 0; }
+.results > * { min-width: 0; }
+.verdict { display: grid; gap: 10px; }
+.pill { font-weight: 700; font-size: 0.82rem; padding: 4px 10px; border-radius: 999px; justify-self: start; }
+.pill.good { background: var(--good-bg); color: var(--good); } .pill.warn { background: var(--warn-bg); color: var(--warn); } .pill.bad { background: var(--bad-bg); color: var(--bad); }
+.verdict h2 { font-weight: 800; font-size: clamp(1.35rem, 2.6vw, 1.9rem); line-height: 1.2; margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
+.verdict p { margin: 0; color: var(--muted); max-width: 72ch; }
+.meter { position: relative; height: 12px; border-radius: 999px; background: var(--surface-2); }
+.meter i { display: block; height: 100%; border-radius: 999px; transition: width 0.25s ease; }
+.meter b { position: absolute; top: 0; bottom: 0; border-radius: 999px; opacity: 0.35; transition: left 0.25s ease, width 0.25s ease; }
+.meter u { position: absolute; top: 50%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--line); transition: left 0.25s ease; }
+.meter.span i { display: none; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.fact { background: var(--surface-2); border-radius: 12px; padding: 10px 12px; display: grid; gap: 1px; min-width: 0; }
+.fact .l { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+.fact b { font-size: 1.3rem; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.25; }
+.fact .s { font-size: 0.82rem; color: var(--muted); }
+details.more > summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 0.9rem; }
+details.more > p { margin-top: 8px; }
+.rbar { position: fixed; z-index: 50; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); width: min(560px, calc(100% - 24px)); display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; box-shadow: 0 6px 24px rgba(0,0,0,0.14); }
+.rbar[hidden] { display: none; }
+.rbar .rbar-t { display: grid; flex: 1; min-width: 0; line-height: 1.2; }
+.rbar .rbar-t b { font-size: 1rem; } .rbar .rbar-t small { color: var(--muted); font-size: 0.78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rbar button { border: 0; background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 700; font-size: 0.85rem; padding: 8px 14px; border-radius: 999px; cursor: pointer; }
+body.has-rbar { padding-bottom: 76px; }
+.cmpbox[hidden] { display: none; }
+@media (max-width: 560px) { .fact { padding: 8px 12px; } .fact b { font-size: 1.15rem; } .rbar .pill { display: none; } }
+.cmpbox { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.verdict p.span-h { color: var(--ink); font-weight: 600; }
+.life { display: grid; gap: 8px; }
+.life:empty { display: none; }
+.life h3 { margin: 0; font-size: 0.95rem; }
+.lt { display: grid; gap: 4px 14px; font-variant-numeric: tabular-nums; font-size: 0.92rem; align-items: baseline; }
+.lt span { text-align: right; } .lt .h { text-align: left; color: var(--muted); } .lt .c { font-weight: 700; color: var(--muted); }
+.cmpbox h3 { margin: 0; font-size: 0.95rem; }
+.cmp { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 14px; align-items: baseline; }
+.cmp .l { font-weight: 600; } .cmp .r { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cmp .h { grid-column: 1 / -1; font-size: 0.82rem; color: var(--muted); }
+.stressbar { display: none; background: var(--warn-bg); color: var(--warn); font-weight: 600; font-size: 0.88rem; padding: 8px 12px; border-radius: 9px; }
+.stressbar.on { display: block; }
+.card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; }
+.card-head h3 { margin: 0; font-size: 1.05rem; }
+.toggle { display: inline-grid; grid-template-columns: 1fr 1fr; gap: 3px; background: var(--surface-2); padding: 3px; border-radius: 9px; }
+.toggle button { font: inherit; font-size: 0.82rem; font-weight: 600; border: 0; background: transparent; color: var(--ink); padding: 6px 10px; border-radius: 6px; cursor: pointer; white-space: nowrap; min-height: 34px; }
+.toggle button[aria-pressed="true"] { background: var(--surface); color: var(--accent); box-shadow: 0 1px 2px rgba(0,0,0,0.12); }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1060px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.kpi .k { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+.kpi .v { font-size: clamp(1.15rem, 2.2vw, 1.45rem); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.15; white-space: nowrap; }
+.kpi .s { font-size: 0.82rem; color: var(--muted); }
+.chart { position: relative; width: 100%; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; touch-action: pan-y; }
+.chart .gridline { stroke: var(--line); stroke-width: 1; }
+.chart .axis { fill: var(--muted); font-size: 11px; font-family: var(--font); font-variant-numeric: tabular-nums; }
+.chart .band { fill: var(--accent); fill-opacity: 0.16; }
+.chart .mid { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+.chart .low { fill: none; stroke: var(--bad); stroke-width: 1.6; stroke-dasharray: 5 4; }
+.chart .high { fill: none; stroke: var(--good); stroke-width: 1.6; stroke-dasharray: 2 3; }
+.chart .ref { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 4; }
+.chart .reflabel { fill: var(--muted); font-size: 11px; font-family: var(--font); }
+.chart .cursor { stroke: var(--ink); stroke-opacity: 0.35; stroke-width: 1; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 0.82rem; box-shadow: 0 4px 14px rgba(0,0,0,0.12); min-width: 180px; font-variant-numeric: tabular-nums; z-index: 2; }
+.tip b { display: block; margin-bottom: 2px; }
+.tip div { display: flex; justify-content: space-between; gap: 18px; }
+.tip div span { white-space: nowrap; }
+.tip div span:last-child { font-variant-numeric: tabular-nums; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.82rem; color: var(--muted); margin-top: 8px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 18px; height: 10px; border-radius: 3px; display: inline-block; }
+.sw.line { height: 3px; border-radius: 2px; }
+.sw.dash { height: 0; border-top: 2px dashed var(--bad); border-radius: 0; }
+.sw.dot2 { height: 0; border-top: 2px dotted var(--good); border-radius: 0; }
+.stress-l { margin: 6px 0 0; font-size: 0.92rem; }
+.seg.stress { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 760px) { .seg.stress { grid-template-columns: 1fr 1fr; } .seg.stress button:first-child { grid-column: 1 / -1; } }
+.notes { font-size: 0.86rem; color: var(--muted); }
+.notes > summary { cursor: pointer; font-weight: 600; color: var(--accent); min-height: 32px; }
+.notes p { margin: 0; max-width: 90ch; }
+.notes strong { color: var(--ink); }
+.notes a { color: var(--accent); }
+.busy { font-size: 0.82rem; color: var(--muted); }
+.fazit .fz { margin-top: 10px; color: var(--ink); }
+.fazit ol { margin: 0; padding-left: 20px; display: grid; gap: 8px; max-width: 90ch; font-size: 0.92rem; }
+.fazit li::marker { color: var(--accent); font-weight: 700; }
+.fazit ul.sub { margin: 6px 0 2px; padding-left: 18px; display: grid; gap: 4px; }
+.fazit ul.sub li::marker { color: var(--muted); font-weight: 400; }
+.fazit ul.sub ul.sub { margin-top: 4px; list-style: "– "; }
+
+.flow { display: grid; grid-template-columns: minmax(0, 1.1fr) auto auto; gap: 6px 8px; align-items: center; }
+.flow select, .flow .lab { font: inherit; font-size: 16px; min-height: 40px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; background: var(--surface); color: var(--ink); width: 100%; min-width: 0; }
+.flow .lab { grid-column: 1 / -1; }
+.flow .hint { grid-column: 1 / -1; }
+.flow .hint:empty { display: none; }
+.flow .num { width: 6.6em; }
+.flow .num:disabled { opacity: 0.7; }
+@media (max-width: 400px) { .flow { grid-template-columns: minmax(0, 1fr) auto; } .flow .numw:last-of-type { grid-column: 1 / -1; justify-self: end; } }
+.loanbox { margin: 0; font-size: 0.86rem; background: var(--surface-2); border-radius: 9px; padding: 9px 12px; }
+.loanbox:empty { display: none; }
+.chart .parea { fill: var(--muted); fill-opacity: 0.16; stroke: none; }
+.chart .tot { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-dasharray: 7 4; }
+.chart .mark { stroke-width: 1.5; stroke-dasharray: 2 3; }
+.pdfrow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+.pdfrow:has(.pdfbtn[hidden]) { display: none; }
+.pdfbtn { font: inherit; font-weight: 700; font-size: 0.9rem; padding: 9px 16px; min-height: 40px; border-radius: 9px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; }
+.pdfbtn:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.pdfbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pdfrow .hint { margin: 0; }
+.copy { color: var(--muted); font-size: 0.84rem; text-align: center; padding-top: 4px; }
+.ctl-eur { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 8px; font-size: 0.92rem; }
+@media (prefers-reduced-motion: reduce) { .meter i, .wz-dots i { transition: none; } }
+/* Klickstrecke */
+.viewsw { margin-top: 14px; }
+.viewsw button { font-size: 0.9rem; padding: 7px 16px; }
+#wiz, #qk { width: 100%; max-width: 760px; margin: 0; display: grid; gap: 16px; }
+.wz-prog { display: grid; gap: 6px; font-size: 0.86rem; color: var(--muted); font-weight: 600; }
+.wz-dots { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); position: relative; }
+.wz-dots::before { content: ""; position: absolute; left: 6%; right: 6%; top: 15px; height: 2px; background: var(--line); }
+.wz-dots button { position: relative; font: inherit; background: none; border: 0; padding: 0; display: grid; justify-items: center; align-content: start; gap: 4px; cursor: pointer; color: var(--muted); min-height: 44px; }
+.wz-dots i { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 700; font-size: 0.85rem; background: var(--surface); border: 2px solid var(--line); color: var(--muted); transition: background .2s, border-color .2s; }
+.wz-dots button.done i { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.wz-dots button[aria-current="step"] i { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+.wz-dots span { font-size: 0.74rem; font-weight: 600; }
+.wz-dots button[aria-current="step"] span { color: var(--ink); }
+.wz-dots button:focus-visible i { outline: 2px solid var(--accent); outline-offset: 2px; }
+#wz-n, #qk-n { display: none; }
+.viewsw.three { grid-template-columns: repeat(3, 1fr); }
+.qk-dots { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.qk-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.qk-t { display: grid; gap: 2px; padding: 14px 16px; border-radius: 12px; background: var(--surface-2); border-left: 5px solid var(--line); }
+.qk-t.good { border-left-color: var(--good); } .qk-t.warn { border-left-color: var(--warn); } .qk-t.bad { border-left-color: var(--bad); }
+.qk-t .l { font-weight: 700; font-size: 0.95rem; } .qk-t b { font-size: 2rem; font-weight: 800; line-height: 1.1; } .qk-t .s { font-size: 0.82rem; color: var(--muted); }
+#qk-res { display: grid; gap: 12px; } #qk-res h2 { margin: 0; font-size: 1.3rem; font-weight: 800; } #qk-res p { margin: 0; color: var(--muted); }
+@media (max-width: 560px) { .wz-dots span { display: none; } #wz-n, #qk-n { display: block; } }
+#wiz #net-h, #qk #net-h { display: none; }
+.wz-sub { display: grid; gap: 12px; padding: 12px 14px; border-left: 3px solid var(--accent); background: var(--surface-2); border-radius: 0 9px 9px 0; }
+.wz-step { display: grid; gap: 16px; }
+.wz-step > h2 { margin: 0; font-size: 1.35rem; font-weight: 800; line-height: 1.2; text-wrap: balance; }
+.wz-step > .lead { margin: -8px 0 0; color: var(--muted); }
+.wz-body { display: grid; gap: 16px; }
+.wz-nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.btn { font: inherit; font-weight: 700; padding: 11px 20px; min-height: 44px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.btn.pri { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); margin-left: auto; }
+.btn:focus-visible, .pick button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.pick button { font: inherit; text-align: left; display: grid; align-content: start; gap: 2px; padding: 14px 16px; min-height: 56px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.pick button strong { font-size: 1rem; }
+#wz-prof, #qk-prof { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 600px) { #wz-prof, #qk-prof { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.pick button span { font-size: 0.84rem; color: var(--muted); }
+.pick button[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, var(--surface)); box-shadow: inset 0 0 0 1px var(--accent); }
+.wz-res { display: grid; gap: 16px; }
+.wz-res .cmpbox { display: none; }
+.wz-pre { display: grid; gap: 16px; }
+.wz-pre [aria-labelledby="wniv-l"] { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.wz-pre .seg button { padding-left: 4px; padding-right: 4px; }
+.wz-pre .seg small { font-size: 0.78rem; overflow-wrap: normal; word-break: keep-all; }
+.wz-scen h3 { margin: 0 0 8px; }
+.wz-scen #scen-l { display: none; }
+#wiz [data-scen="e"], #qk [data-scen="e"] { display: none; }
+#wiz [aria-labelledby="scen-l"], #qk [aria-labelledby="scen-l"] { grid-template-columns: 1fr 1fr; }
+#wiz .kpis .kpi:nth-child(3), #qk .kpis .kpi:nth-child(3) { display: none; }
+#wiz .kpis, #qk .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 560px) { #wiz .kpis, #qk .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } #wiz .kpis .kpi:nth-child(4), #qk .kpis .kpi:nth-child(4) { grid-column: 1 / -1; } }
+.wz-res .card-head { flex-wrap: wrap; gap: 8px; }
+.lev { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; transition: opacity .2s; }
+.lev.busy { opacity: .45; }
+.lev li { display: block; }
+.levbtn { width: 100%; font: inherit; color: inherit; text-align: left; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; align-items: baseline; padding: 10px 12px; min-height: 44px; background: var(--surface-2); border: 1.5px solid transparent; border-radius: 9px; cursor: pointer; transition: border-color .15s, background .15s; }
+.levbtn:hover { border-color: var(--accent); }
+.levbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.levbtn::after { content: "Übernehmen ›"; grid-column: 1 / -1; font-size: 0.78rem; font-weight: 600; color: var(--accent); }
+.lev-undo { margin: 8px 0 0; font-size: 0.88rem; color: var(--muted); }
+.linkbtn { font: inherit; font-weight: 700; color: var(--accent); background: none; border: 0; padding: 4px 2px; cursor: pointer; text-decoration: underline; }
+.lev li b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.lev li b.up { color: var(--good); } .lev li b.dn { color: var(--bad); }
+#lev-t { margin: 0 0 10px; }
+.wz-res h3 { margin: 0 0 10px; }
+
+h1, h2, h3, summary .t, label, .fact .l { text-wrap: balance; }
+p, .hint, li, .fact .s { text-wrap: pretty; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Anspar- und Entnahmerechner</h1>
+    <p>Reicht dein Geld bis ins hohe Alter? Der Rechner spart dein Depot bis zur Rente an und entnimmt danach jeden Monat deinen Wunschbetrag, mit gesetzlicher Rente, Steuern und Kosten, Jahr für Jahr in 2.000 möglichen Zukünften. Auf Wunsch mit eigenem Haus und vermieteter Wohnung.</p>
+    <div class="toggle viewsw three" role="group" aria-label="Ansicht">
+      <button type="button" data-view="quick" aria-pressed="true">Schnell</button>
+      <button type="button" data-view="easy" aria-pressed="false">Einfach</button>
+      <button type="button" data-view="full" aria-pressed="false">Ausführlich</button>
+    </div>
+  </header>
+
+  <div id="qk" hidden>
+    <div class="wz-prog"><nav class="wz-dots qk-dots" aria-label="Schritte"><button type="button" data-qgo="1" aria-label="Schritt 1: Heute"><i>1</i><span>Heute</span></button><button type="button" data-qgo="2" aria-label="Schritt 2: Rente"><i>2</i><span>Rente</span></button><button type="button" data-qgo="3" aria-label="Schritt 3: Haus"><i>3</i><span>Haus</span></button><button type="button" data-qgo="4" aria-label="Schritt 4: Plan"><i>4</i><span>Plan</span></button><button type="button" data-qgo="5" aria-label="Ergebnis"><i>✓</i><span>Ergebnis</span></button></nav><span id="qk-n"></span></div>
+    <section class="panel wz-step qk-step" data-qstep="1"><h2>Wo stehst du heute?</h2><p class="lead">Vier Zahlen reichen für den Schnellcheck.</p><div class="wz-body" data-els="age0,inc0,cap,contrib"></div></section>
+    <section class="panel wz-step qk-step" data-qstep="2"><h2>Bekommst du eine gesetzliche Rente?</h2><p class="lead">Den Betrag findest du in deiner Renteninformation.</p>
+      <div class="pick" data-yn="pOn"><button type="button" data-v="1"><strong>Ja</strong><span>Rente einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>nur das Depot rechnen</span></button></div>
+      <div class="wz-body" data-qif="pOn">
+        <div class="wz-body" data-els="pens"></div>
+        <div class="ctl"><span class="lbl" id="qniv-l">Rentenniveau bei deinem Rentenbeginn</span><div class="seg" role="group" aria-labelledby="qniv-l"><button type="button" data-qniv="48">48&nbsp;%<br><small>wie heute</small></button><button type="button" data-qniv="44">44&nbsp;%<br><small>Mitte</small></button><button type="button" data-qniv="40">40&nbsp;%<br><small>vorsichtig</small></button></div><p class="hint" id="qniv-h"></p></div>
+        <div class="wz-body" data-els="#kvm-c"></div>
+        <div class="wz-body" data-qkv="1" data-els="ppkv0,ktg"></div>
+        <div class="wz-body" data-els="#pens-h"></div>
+      </div></section>
+    <section class="panel wz-step qk-step" data-qstep="3"><h2>Hast du ein Haus mit Kredit?</h2><p class="lead">Wichtig ist, wann der Kredit abbezahlt ist und was das bis dahin kostet.</p>
+      <div class="pick" data-yn="home"><button type="button" data-v="1"><strong>Ja</strong><span>Kredit einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>ohne Kredit</span></button></div>
+      <div class="wz-body" data-qif="home" data-els="debt,lz,lzb,lrate,lshare,lsond,#loan-h"></div>
+      <h3 style="margin:8px 0 0">Hast du eine vermietete Immobilie?</h3>
+      <div class="pick" data-yn="rOn"><button type="button" data-v="1"><strong>Ja</strong><span>Miete und Kredit einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>ohne</span></button></div>
+      <div class="wz-body" data-qif="rOn" data-els="rv,rdebt,rrate,rrent,#rent-h"></div></section>
+    <section class="panel wz-step qk-step" data-qstep="4"><h2>Dein Plan</h2><p class="lead">Ab wann, wie viel und wie du anlegst.</p>
+      <div class="wz-body" data-els="retAge"></div><p class="hint" id="qra-h" style="margin-top:-10px"></p>
+      <div class="ctl"><span class="lbl" id="qgap-l">Wie viel vom heutigen Lebensstandard brauchst du im Alter?</span><div class="seg" role="group" aria-labelledby="qgap-l"><button type="button" data-qgap="100">100&nbsp;%</button><button type="button" data-qgap="120">120&nbsp;%</button><button type="button" data-qgap="150">150&nbsp;%</button></div><p class="hint" id="qgap-h"></p></div>
+      <div class="ctl"><span class="lbl" id="qwm-l">Kannst du in schlechten Börsenjahren etwas weniger ausgeben?</span><div class="seg two" role="group" aria-labelledby="qwm-l"><button type="button" data-qwm="dyn">Ja, flexibel</button><button type="button" data-qwm="fix">Nein, fest</button></div><p class="hint" id="qwm-h"></p></div>
+      <div class="wz-body" data-els="@scen"></div>
+      <div class="ctl"><span class="lbl">Wie legst du an?</span><div class="pick" id="qk-prof"><button type="button" data-qp="30"><strong>Vorsichtig</strong><span>30 % Aktien</span></button><button type="button" data-qp="60"><strong>Ausgewogen</strong><span>60 % Aktien</span></button><button type="button" data-qp="90"><strong>Mutig</strong><span>90 % Aktien</span></button></div><p class="hint" id="qp-h"></p></div>
+    </section>
+    <section class="wz-step qk-step" data-qstep="5">
+      <div class="wz-res" data-els="§verdict,%kpihead,%kpis"></div>
+      <section class="panel" id="qk-res"></section>
+      <div class="wz-res" data-els="#lev-p"></div>
+      <div class="wz-res" data-els="§ch-w,#rate-p,§fazit,§notes"></div>
+      <p class="hint" id="qk-ass"></p>
+    </section>
+    <div class="wz-nav"><button type="button" class="btn" id="qk-back">Zurück</button><button type="button" class="btn" id="qk-full" hidden>Alle Einstellungen</button><button type="button" class="btn pri" id="qk-next">Weiter</button></div>
+  </div>
+
+  <div id="wiz" hidden>
+    <div class="wz-prog"><nav class="wz-dots" aria-label="Schritte"><button type="button" data-go="1" aria-label="Schritt 1: Heute"><i>1</i><span>Heute</span></button><button type="button" data-go="2" aria-label="Schritt 2: Entnahme"><i>2</i><span>Entnahme</span></button><button type="button" data-go="3" aria-label="Schritt 3: Rente"><i>3</i><span>Rente</span></button><button type="button" data-go="4" aria-label="Schritt 4: Einkommen"><i>4</i><span>Einkommen</span></button><button type="button" data-go="5" aria-label="Schritt 5: Haus"><i>5</i><span>Haus</span></button><button type="button" data-go="6" aria-label="Schritt 6: Anlage"><i>6</i><span>Anlage</span></button><button type="button" data-go="7" aria-label="Schritt 7: Härtetest"><i>7</i><span>Härtetest</span></button><button type="button" data-go="8" aria-label="Ergebnis"><i>✓</i><span>Ergebnis</span></button></nav><span id="wz-n"></span></div>
+    <section class="panel wz-step" data-step="1"><h2>Wo stehst du heute?</h2><p class="lead">Ein paar Zahlen reichen für den Anfang.</p><div class="wz-body" data-els="age0,inc0,cap,contrib,cg"></div></section>
+    <section class="panel wz-step" data-step="2"><h2>Wann soll die Entnahme beginnen?</h2><p class="lead">Ab diesem Alter lebst du vom Depot, bis zum zweiten Alter soll es reichen. Lieber großzügig planen: Viele werden älter als gedacht.</p><div class="wz-body" data-els="retAge,age1"></div></section>
+    <div id="wz-pre" class="wz-pre">
+      <div class="ctl"><span class="lbl" id="wpg-l">Rentensteigerung pro Jahr</span>
+        <div class="seg" role="group" aria-labelledby="wpg-l"><button type="button" data-wpg="0">0 %<br><small>keine Erhöhung</small></button><button type="button" data-wpg="2">2 %<br><small>wie die Inflation</small></button><button type="button" data-wpg="3">3 %<br><small>etwa wie die Löhne</small></button></div>
+        <p class="hint" id="wpg-h"></p></div>
+      <div class="ctl"><span class="lbl" id="wniv-l">Rentenniveau bei Rentenbeginn</span>
+        <div class="seg" role="group" aria-labelledby="wniv-l"><button type="button" data-wniv="48">48 %<br><small>heute</small></button><button type="button" data-wniv="46">46 %<br><small>2040</small></button><button type="button" data-wniv="44">44 %<br><small>Mitte</small></button><button type="button" data-wniv="43">43 %<br><small>Vorsicht</small></button><button type="button" data-wniv="40">40 %<br><small>Härte</small></button></div>
+        <p class="hint" id="wniv-h"></p></div>
+    </div>
+    <section class="panel wz-step" data-step="3"><h2>Rechnest du mit einer gesetzlichen Rente?</h2><p class="lead">Den Betrag findest du in der jährlichen Renteninformation.</p>
+      <div class="pick" data-yn="pOn"><button type="button" data-v="1"><strong>Ja</strong><span>Rente einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>nur das Depot rechnen</span></button></div>
+      <div class="wz-body" data-if="pOn">
+        <div class="wz-body" data-els="pens,#wz-pre,@ptm,tg,ptax,#kvm-c,pkv"></div>
+        <div class="wz-sub" id="wz-pkv">
+          <div class="wz-body" data-els="ppkv0,ktg"></div>
+          <div class="ctl"><span class="lbl" id="wpk-l">PKV-Beitrag steigt pro Jahr</span>
+            <div class="seg" role="group" aria-labelledby="wpk-l"><button type="button" data-wpkvg="2.5">2,5 %<br><small>günstig</small></button><button type="button" data-wpkvg="3.5">3,5 %<br><small>Branche</small></button><button type="button" data-wpkvg="4.5">4,5 %<br><small>vorsichtig</small></button></div>
+            <p class="hint" id="wpk-h"></p></div>
+          <div data-els="#pkv-h"></div>
+        </div>
+        <div class="wz-body" data-els="#pens-h,#gapOn-c,#gap-c"></div>
+      </div>
+      <p class="hint" data-if="pOn" id="wz-pa-h"></p></section>
+    <section class="panel wz-step" data-step="4"><h2 id="wz-net-t">Wie viel möchtest du im Monat haben?</h2><p class="lead" id="wz-net-l"></p><div class="wz-body" data-els="net,xtra,xAge,@wmode"></div><div class="wz-sub" id="wz-dyn"><p class="hint" style="margin:0"><strong>Mindestrate:</strong> In schlechten Börsenjahren sinkt die Rate, aber nie unter diesen Anteil der Startrate.</p><div class="wz-body" data-els="dfloor"></div></div></section>
+    <section class="panel wz-step" data-step="5"><h2>Hast du ein eigenes Haus mit Kredit?</h2><p class="lead">Dann zählt, wann der Kredit abbezahlt ist und wie viel der frei werdenden Rate danach ins Depot geht.</p>
+      <div class="pick" data-yn="home"><button type="button" data-v="1"><strong>Ja</strong><span>Haus und Kredit einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>ohne Haus rechnen</span></button></div>
+      <div class="wz-body" data-els="debt,lz,lzb,lz2,lrate,lshare,lsond,#loan-h,hv,hshare" data-if="home"></div>
+      <h3 style="margin:8px 0 0">Hast du eine vermietete Immobilie?</h3>
+      <div class="pick" data-yn="rOn"><button type="button" data-v="1"><strong>Ja</strong><span>Miete, Kredit und Steuer einrechnen</span></button><button type="button" data-v="0"><strong>Nein</strong><span>ohne vermietete Immobilie</span></button></div>
+      <div class="wz-body" data-els="rv,rdebt,rlz,rlzb,rrate,rrent,rkost,rtax,#rent-h" data-if="rOn"></div></section>
+    <section class="panel wz-step" data-step="6"><h2>Wie viel Schwankung hältst du aus?</h2><p class="lead">Mehr Aktien wachsen im Schnitt stärker, fallen in Krisen aber tiefer. Der Rest liegt in Anleihen und 5 % auf Tagesgeld oder Geldmarkt.</p>
+      <div class="pick" id="wz-prof"><button type="button" data-p="30"><strong>Vorsichtig</strong><span>30 % Aktien: schwankt weniger, wächst langsamer</span></button><button type="button" data-p="60"><strong>Ausgewogen</strong><span>60 % Aktien: der Mittelweg</span></button><button type="button" data-p="90"><strong>Mutig</strong><span>90 % Aktien: wächst im Schnitt mehr, fällt tiefer</span></button></div>
+      <p class="hint" id="wz-prof-h"></p></section>
+    <section class="wz-step" data-step="7"><h2>Was, wenn es an der Börse schlecht läuft?</h2><p class="lead">Probier aus, wie sich dein Ergebnis mit vorsichtigeren Annahmen oder einer echten Krise verändert. Für den Anfang reichen „Wie früher“ und „Kein Test“.</p>
+      <section class="panel wz-scen"><h3>Wie gut läuft die Börse?</h3><div data-els="@scen,ter"></div></section>
+      <div class="wz-res" data-els="#stress-p"></div>
+    </section>
+    <section class="wz-step" data-step="8">
+      <div class="wz-res" data-els="§verdict,%kpihead,%kpis,#lev-p"></div>
+      <div class="wz-res" data-els="§ch-w,#rate-p,§fazit,§notes"></div>
+      <p class="hint" id="wz-ass"></p>
+    </section>
+    <div class="wz-nav"><button type="button" class="btn" id="wz-back">Zurück</button><button type="button" class="btn" id="wz-full" hidden>Alle Einstellungen</button><button type="button" class="btn pri" id="wz-next">Weiter</button></div>
+  </div>
+
+  <div class="grid">
+    <aside class="panel controls" aria-label="Einstellungen">
+      <details class="grp" id="sec-ansparen" open>
+        <summary><span class="t">Ansparen</span><span class="sum" id="sum-ansparen"></span></summary>
+        <div class="gin">
+        <div class="ctl"><div class="ctl-head"><label for="age0">Dein Alter heute</label><output id="age0-o" for="age0"></output></div><input type="range" id="age0" min="18" max="80" step="1" value="36"></div>
+        <div class="ctl"><div class="ctl-head"><label for="inc0">Dein Netto heute</label><output id="inc0-o" for="inc0"></output></div><input type="range" id="inc0" min="0" max="15000" step="50" value="3500"><p class="hint">Pro Monat, was heute auf dem Konto ankommt. Wird nur für „Rentenlücke schließen“ unter „Gesetzliche Rente“ gebraucht.</p></div>
+        <div class="ctl"><div class="ctl-head"><label for="cap">Schon angelegt</label><output id="cap-o" for="cap"></output></div><input type="range" id="cap" min="0" max="2000000" step="5000" value="180000"></div>
+        <div class="ctl" id="gain0-c"><div class="ctl-head"><label for="gain0">Davon bisheriger Gewinn</label><output id="gain0-o" for="gain0"></output></div><input type="range" id="gain0" min="0" max="80" step="5" value="30"><p class="hint">Wichtig für die Steuer beim späteren Verkauf.</p></div>
+        <div class="ctl"><div class="ctl-head"><label for="contrib">Sparrate pro Monat</label><output id="contrib-o" for="contrib"></output></div><input type="range" id="contrib" min="0" max="5000" step="25" value="500"><p class="hint">Bleibt in Euro gleich. Mit 2 % Steigerung hält sie etwa ihre Kaufkraft.</p></div>
+        <div class="ctl"><div class="ctl-head"><label for="cg">Sparrate steigt pro Jahr um</label><output id="cg-o" for="cg"></output></div><input type="range" id="cg" min="0" max="5" step="0.5" value="0"><p class="hint">Bei 2 % Inflation. 0 %: Die Rate bleibt in Euro gleich und verliert an Kaufkraft. Ist die Inflation höher, steigen Gehalt und Rate entsprechend mit.</p></div>
+      </div>
+      </details>
+
+      <details class="grp" id="sec-entnehmen" open>
+        <summary><span class="t">Entnehmen</span><span class="sum" id="sum-entnehmen"></span></summary>
+        <div class="gin">
+        <div class="ctl"><div class="ctl-head"><label for="retAge">Entnahme ab</label><output id="retAge-o" for="retAge"></output></div><input type="range" id="retAge" min="18" max="85" step="1" value="67"></div>
+        <div class="ctl"><div class="ctl-head"><label for="age1">Das Geld soll reichen bis</label><output id="age1-o" for="age1"></output></div><input type="range" id="age1" min="20" max="100" step="1" value="95"></div>
+        <div class="ctl"><div class="ctl-head"><label for="net" id="net-l">Entnahme pro Monat</label><output id="net-o" for="net"></output></div><input type="range" id="net" min="100" max="8000" step="50" value="1200"><p class="hint" id="net-h">Nach Steuern, zusätzlich zur gesetzlichen Rente, in heutiger Kaufkraft.</p></div>
+        <div class="ctl"><div class="ctl-head"><label for="xtra">Zusätzlich in den aktiven Jahren</label><output id="xtra-o" for="xtra"></output></div><input type="range" id="xtra" min="0" max="3000" step="50" value="0"><p class="hint">Pro Monat, etwa für Reisen und Hobbys, in heutiger Kaufkraft. Kommt bis zum Alter darunter zum Einkommen dazu.</p></div>
+        <div class="ctl" id="xAge-c"><div class="ctl-head"><label for="xAge">Zusätzlich bis</label><output id="xAge-o" for="xAge"></output></div><input type="range" id="xAge" min="50" max="100" step="1" value="75"></div>
+        <div class="ctl">
+          <span class="lbl" id="wm-l">Soll sich die Rate anpassen dürfen?</span>
+          <div class="seg two" role="group" aria-labelledby="wm-l">
+            <button type="button" data-wmode="fix">Nein, fest</button>
+            <button type="button" data-wmode="dyn">Ja, flexibel</button>
+          </div>
+          <p class="hint" id="wm-h"></p>
+        </div>
+        <div class="subctl" id="dyn-c" hidden>
+          <div class="ctl">
+            <span class="lbl" id="sw-l">Wie stark darf sie sich pro Jahr ändern?</span>
+            <div class="seg" role="group" aria-labelledby="sw-l">
+              <button type="button" data-swing="5">wenig<br><small>±5 %</small></button>
+              <button type="button" data-swing="10">mittel<br><small>±10 %</small></button>
+              <button type="button" data-swing="15">stark<br><small>±15 %</small></button>
+            </div>
+          </div>
+          <div class="ctl"><div class="ctl-head"><label for="dfloor">Aber nie weniger als</label><output id="dfloor-o" for="dfloor"></output></div><input type="range" id="dfloor" min="40" max="100" step="5" value="75"></div>
+        </div>
+        <div class="check"><input type="checkbox" id="idx" checked><label for="idx">Rate jedes Jahr um die Inflation erhöhen</label></div>
+      </div>
+      </details>
+
+
+      <details class="grp" id="sec-rente">
+        <summary><span class="t">Gesetzliche Rente</span><span class="sum" id="sum-rente"></span></summary>
+        <div class="gin">
+          <div class="ctl"><div class="ctl-head"><label for="pens">Rente laut Renteninformation</label><output id="pens-o" for="pens"></output></div><input type="range" id="pens" min="0" max="5000" step="25" value="2000"><p class="hint">Brutto pro Monat, in heutigen Werten ohne künftige Erhöhungen, so wie in der Renteninformation.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="pAge">Rente ab</label><output id="pAge-o" for="pAge"></output></div><input type="range" id="pAge" min="60" max="75" step="1" value="67"><p class="hint">Liegt der Rentenbeginn nach dem Start der Entnahme, überbrückt das Depot die Zeit dazwischen allein.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="pg">Rentensteigerung pro Jahr</label><output id="pg-o" for="pg"></output></div><input type="range" id="pg" min="0" max="4" step="0.25" value="2"><p class="hint">Gilt ab heute bis zum Rentenbeginn und danach, bei 2 % Inflation. Ist die Inflation höher, steigt die Rente mit einem Jahr Verzögerung entsprechend mehr. 2 % heißt: Die Rente behält ihre Kaufkraft.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="pniv">Rentenniveau bei Rentenbeginn</label><output id="pniv-o" for="pniv"></output></div><input type="range" id="pniv" min="40" max="50" step="0.5" value="48"><p class="hint">Heute 48 %, festgeschrieben bis 2031. Die Rentenversicherung erwartet danach bis 2040 etwa 46,4 %. Weniger heißt: Deine Rente fällt im Verhältnis niedriger aus als in der Renteninformation.</p></div>
+          <div class="ctl" id="ptm-c">
+            <span class="lbl" id="ptm-l">Steuer auf die Rente</span>
+            <div class="seg two" role="group" aria-labelledby="ptm-l">
+              <button type="button" data-ptm="auto">Nach Steuertarif</button>
+              <button type="button" data-ptm="fix">Eigener Satz</button>
+            </div>
+            <p class="hint" id="ptm-h"></p>
+          </div>
+          <div class="ctl" id="tg-c"><div class="ctl-head"><label for="tg">Steuertarif steigt pro Jahr um</label><output id="tg-o" for="tg"></output></div><input type="range" id="tg" min="0" max="4" step="0.25" value="2"><p class="hint">So stark wachsen Grundfreibetrag und Tarifgrenzen bei 2 % Inflation; bei mehr Inflation entsprechend mehr. Steigt die Rente schneller, wird ein größerer Teil besteuert.</p></div>
+          <div class="ctl" id="ptax-c"><div class="ctl-head"><label for="ptax">Steuersatz im Alter</label><output id="ptax-o" for="ptax"></output></div><input type="range" id="ptax" min="0" max="45" step="1" value="20"><p class="hint">Durchschnittlicher Satz auf den steuerpflichtigen Teil. Wie viel davon steuerpflichtig ist, rechnet der Rechner nach dem Jahr des Rentenbeginns aus.</p></div>
+          <div class="ctl" id="kvm-c"><span class="lbl" id="kvm-l">Krankenversicherung im Alter</span>
+            <div class="seg two" role="group" aria-labelledby="kvm-l"><button type="button" data-kvm="gkv">Gesetzlich</button><button type="button" data-kvm="pkv">Privat</button></div></div>
+          <div class="ctl" id="pkv-c"><div class="ctl-head"><label for="pkv">Kranken- und Pflegeversicherung</label><output id="pkv-o" for="pkv"></output></div><input type="range" id="pkv" min="0" max="25" step="0.05" value="12.35"><div class="ctl-eur"><label for="pkvE">Das sind heute im Monat</label><span class="numw"><input class="num" id="pkvE" type="text" inputmode="numeric" autocomplete="off"><span class="u">€</span></span></div><p class="hint" id="pkv-h">Pflichtversichert 2026: 7,3 % plus halber Zusatzbeitrag (im Schnitt 1,45 %) plus Pflege 3,6 %, kinderlos 4,2 %. Der Euro-Betrag ergibt sich aus der Rente; du kannst ihn auch selbst eintragen, etwa bei freiwilliger Versicherung.</p></div>
+          <div class="subctl" id="pkv-priv" hidden>
+            <div class="ctl"><div class="ctl-head"><label for="ppkv0">PKV-Beitrag heute</label><output id="ppkv0-o" for="ppkv0"></output></div><input type="range" id="ppkv0" min="0" max="2000" step="10" value="700"><p class="hint">Pro Monat gesamt, wie er heute an die PKV geht, mit Pflege und mit dem Anteil deines Arbeitgebers. Den gesetzlichen 10-%-Zuschlag rechnet der Rechner selbst heraus.</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="ktg">davon fällt mit der Rente weg</label><output id="ktg-o" for="ktg"></output></div><input type="range" id="ktg" min="0" max="500" step="5" value="0"><p class="hint">Krankentagegeld, Beiträge für Kinder und der Beitrag für einen Beitragsentlastungstarif. Steht in deiner Beitragsübersicht.</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="bel">Beitragsentlastung ab Rente</label><output id="bel-o" for="bel"></output></div><input type="range" id="bel" min="0" max="500" step="5" value="0"><p class="hint">Falls du einen Beitragsentlastungstarif hast: der Betrag, um den er den Beitrag im Alter senkt.</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="pkvg">PKV-Beitrag steigt pro Jahr</label><output id="pkvg-o" for="pkvg"></output></div><input type="range" id="pkvg" min="0" max="6" step="0.25" value="3.5"><p class="hint">Laut PKV-Verband stiegen die Beiträge je Versicherten von 2006 bis 2026 im Schnitt um 3,4 % pro Jahr. Gilt bei 2 % Inflation; bei mehr Inflation steigt der Beitrag entsprechend mehr.</p></div>
+            <p class="loanbox" id="pkv-h"></p>
+          </div>
+          <p class="loanbox" id="pens-h"></p>
+          <div class="check" id="gapOn-c"><input type="checkbox" id="gapOn"><label for="gapOn">Rentenlücke schließen</label><p class="hint">Das Wunscheinkommen im Alter ergibt sich dann aus deinem heutigen Netto. Das Depot soll die Lücke zur Rente füllen.</p></div>
+          <div class="subctl" id="gap-c" hidden>
+            <div class="ctl"><div class="ctl-head"><label for="gapPct">Anteil, den du im Alter brauchst</label><output id="gapPct-o" for="gapPct"></output></div><input type="range" id="gapPct" min="50" max="300" step="5" value="100"><p class="hint">Bezogen auf dein Netto ohne Sparrate, und ohne Kreditrate, wenn der Kredit vor der Entnahme abbezahlt ist. Über 100 %, wenn du im Alter mehr ausgeben willst.</p></div>
+            <p class="loanbox" id="gap-h"></p>
+          </div>
+          <div class="check incl"><input type="checkbox" id="pOn"><label for="pOn">Mit einbeziehen</label><p class="hint">Dann wird „Entnahme pro Monat“ zum gewünschten Netto-Einkommen aus Rente und Depot zusammen. Das Depot deckt nur noch die Lücke.</p></div>
+        </div>
+      </details>
+
+      <details class="grp" id="sec-aufteilung" open>
+        <summary><span class="t">Aufteilung</span><span class="sum" id="sum-aufteilung"></span></summary>
+        <div class="gin">
+        <div class="ctl"><div class="ctl-head"><label for="wE">Aktien</label><output id="wE-o" for="wE"></output></div><input type="range" id="wE" min="0" max="100" step="5" value="60"></div>
+        <div class="ctl"><div class="ctl-head"><label for="wC">Geldmarkt</label><output id="wC-o" for="wC"></output></div><input type="range" id="wC" min="0" max="100" step="5" value="5"></div>
+        <div class="mix" aria-hidden="true"><i id="mx-c" style="background:var(--mm)"></i><i id="mx-b" style="background:var(--bd)"></i><i id="mx-g" style="background:var(--gd)"></i><i id="mx-e" style="background:var(--eq)"></i></div>
+        <div class="mixl" id="mixl"></div>
+      </div>
+      </details>
+      <details class="grp" id="sec-fein">
+        <summary><span class="t">Feinschrauben</span><span class="sum" id="sum-fein"></span></summary>
+        <div class="gin">
+        <p class="hint">Gold, Anleihezelt, Zweitdepot-Trick und die Regel zum Umschichten verändern das Ergebnis meist nur um 1 bis 3 Punkte. Die Annahmen zum Markt bewegen es um 20 und mehr. Was ein Schalter bringt, steht oben unter „Was bringen deine Schalter?“.</p>
+        <div class="ctl"><div class="ctl-head"><label for="wG">Gold</label><output id="wG-o" for="wG"></output></div><input type="range" id="wG" min="0" max="100" step="5" value="0"><p class="hint">Wie Xetra-Gold: keine Vorabpauschale, nach einem Jahr steuerfrei.</p></div>
+        <div class="ctl">
+          <span class="lbl" id="band-l">Wann umschichten?</span>
+          <div class="seg" role="group" aria-labelledby="band-l">
+            <button type="button" data-band="0">jedes Jahr</button>
+            <button type="button" data-band="5">ab ±5 Pkt.</button>
+            <button type="button" data-band="10">ab ±10 Pkt.</button>
+          </div>
+          <p class="hint">Sparraten und Entnahmen gleichen zuerst aus. Verkauft wird erst bei größerer Abweichung; das kostet Steuern.</p>
+        </div>
+        <div class="check"><input type="checkbox" id="tent"><label for="tent">Anleihezelt</label><p class="hint">Um den Rentenbeginn mehr Anleihen. Versicherung gegen einen Crash genau dann; kostet sonst Rendite und Steuern. In der Forschung umstritten.</p></div>
+        <div class="subctl" id="tent-c" hidden>
+          <div class="ctl"><div class="ctl-head"><label for="tUp">Aufbau beginnt</label><output id="tUp-o" for="tUp"></output></div><input type="range" id="tUp" min="0" max="20" step="1" value="10"></div>
+          <div class="ctl"><div class="ctl-head"><label for="tPeak">Aktien zum Rentenbeginn</label><output id="tPeak-o" for="tPeak"></output></div><input type="range" id="tPeak" min="0" max="100" step="5" value="40"></div>
+          <div class="ctl"><div class="ctl-head"><label for="tDown">Abbau über</label><output id="tDown-o" for="tDown"></output></div><input type="range" id="tDown" min="0" max="25" step="1" value="10"></div>
+          <div class="ctl"><div class="ctl-head"><label for="tLate">Aktien danach</label><output id="tLate-o" for="tLate"></output></div><input type="range" id="tLate" min="0" max="100" step="5" value="60"></div>
+          <p class="hint">Verschiebt nur zwischen Aktien und Anleihen.</p>
+        </div>
+        <div class="ctl">
+          <span class="lbl" id="sell-l">Welche Anteile werden verkauft?</span>
+          <div class="seg two" role="group" aria-labelledby="sell-l">
+            <button type="button" data-sell="fifo">die ältesten<br><small>gesetzlich (FIFO)</small></button>
+            <button type="button" data-sell="trick">die jüngsten<br><small>Zweitdepot-Trick</small></button>
+          </div>
+          <p class="hint" id="sell-h"></p>
+        </div>
+        </div>
+      </details>
+      <details class="grp" id="sec-haus">
+        <summary><span class="t">Eigenes Haus</span><span class="sum" id="sum-haus"></span></summary>
+        <div class="gin">
+        <div id="home-c" style="display:grid;gap:14px">
+          <div class="ctl"><div class="ctl-head"><label for="debt">Restschuld heute</label><output id="debt-o" for="debt"></output></div><input type="range" id="debt" min="0" max="1000000" step="5000" value="460000"></div>
+          <div class="ctl"><div class="ctl-head"><label for="lz">Sollzins</label><output id="lz-o" for="lz"></output></div><input type="range" id="lz" min="0" max="8" step="0.01" value="2.99"></div>
+          <div class="ctl"><div class="ctl-head"><label for="lzb">Zinsbindung noch</label><output id="lzb-o" for="lzb"></output></div><input type="range" id="lzb" min="0" max="30" step="1" value="10"></div>
+          <div class="ctl"><div class="ctl-head"><label for="lz2">Zins danach</label><output id="lz2-o" for="lz2"></output></div><input type="range" id="lz2" min="0" max="10" step="0.1" value="4.5"><p class="hint">Anschlusszins nach der Zinsbindung, im Durchschnitt bei 2 % Inflation; ist sie höher, steigt er entsprechend. Im realistischen Modell gilt alle 10 Jahre der Zins der jeweiligen Zukunft. Die Rate bleibt gleich, solange sie für Zins und 1 % Tilgung reicht.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="lrate">Rate pro Monat</label><output id="lrate-o" for="lrate"></output></div><input type="range" id="lrate" min="0" max="6000" step="25" value="1725"><p class="hint">Wie im Kreditvertrag; bleibt in Euro gleich.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="lshare">Dein Anteil an Rate und Sondertilgung</label><output id="lshare-o" for="lshare"></output></div><input type="range" id="lshare" min="0" max="100" step="5" value="50"><p class="hint">Zahlen zwei Personen den Kredit, trägst du nur diesen Teil der Rate und der Sondertilgung. Derselbe Anteil gilt für die frei werdende Rate nach dem Kreditende. Wem wie viel vom Haus gehört, stellst du beim Hauswert ein.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="lsond">Sondertilgung pro Jahr</label><output id="lsond-o" for="lsond"></output></div><input type="range" id="lsond" min="0" max="50000" step="500" value="5000"></div>
+          <div class="ctl"><div class="ctl-head"><label for="fp">Nach dem Kreditende ins Depot</label><output id="fp-o" for="fp"></output></div><input type="range" id="fp" min="0" max="100" step="5" value="50"><p class="hint">Anteil von Rate und Sondertilgung, der nach dem Kreditende zusätzlich gespart wird.</p></div>
+          <p class="loanbox" id="loan-h"></p>
+          <div class="ctl"><div class="ctl-head"><label for="hv">Hauswert heute</label><output id="hv-o" for="hv"></output></div><input type="range" id="hv" min="0" max="3000000" step="10000" value="640000"></div>
+          <div class="ctl"><div class="ctl-head"><label for="hshare">Dein Anteil am Haus</label><output id="hshare-o" for="hshare"></output></div><input type="range" id="hshare" min="0" max="100" step="5" value="50"><p class="hint">Wie viel vom Haus dir gehört, etwa laut Grundbuch. Zählt für Hauswert und Restschuld im Gesamtvermögen und für den Erlös bei einem Verkauf. Unabhängig davon, wer wie viel der Rate zahlt.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="hg">Wertsteigerung über der Inflation</label><output id="hg-o" for="hg"></output></div><input type="range" id="hg" min="-2" max="3" step="0.25" value="0"><p class="hint">0 %: Das Haus behält seine Kaufkraft.</p></div>
+          <p class="hint">Mietfreies Wohnen senkt die nötige Entnahme.</p>
+          <div class="check"><input type="checkbox" id="flowsOn"><label for="flowsOn">Einmalige Zahlungen</label><p class="hint">Dach, Heizung, Erbe oder Hausverkauf.</p></div>
+          <div class="subctl" id="flows-c" hidden>
+            <div class="ctl"><div class="ctl-head"><label for="sc">Verkaufskosten bei Hausverkauf</label><output id="sc-o" for="sc"></output></div><input type="range" id="sc" min="0" max="10" step="0.5" value="5"><p class="hint">Makler, Notar und Ähnliches; gilt nur für „Hausverkauf“.</p></div>
+            <p class="hint">In heutiger Kaufkraft. Ausgaben kommen aus dem Depot (Steuer eingerechnet), Einnahmen fließen hinein.</p>
+            <div class="flow" id="f1">
+              <select id="f1-t" aria-label="Art der Zahlung 1"><option value="">–</option><option value="out">Ausgabe</option><option value="in">Einnahme</option><option value="sale">Hausverkauf</option></select>
+              <span class="numw"><span class="u">mit</span><input class="num s" id="f1-a" type="text" inputmode="numeric" autocomplete="off" aria-label="Alter bei Zahlung 1"></span>
+              <span class="numw"><input class="num" id="f1-v" type="text" inputmode="numeric" autocomplete="off" aria-label="Betrag Zahlung 1 in Euro"><span class="u">€</span></span>
+              <input class="lab" id="f1-l" type="text" maxlength="24" autocomplete="off" placeholder="Bezeichnung, z. B. Dach" aria-label="Bezeichnung Zahlung 1">
+              <p class="hint" id="f1-h"></p>
+            </div>
+            <div class="flow" id="f2">
+              <select id="f2-t" aria-label="Art der Zahlung 2"><option value="">–</option><option value="out">Ausgabe</option><option value="in">Einnahme</option><option value="sale">Hausverkauf</option></select>
+              <span class="numw"><span class="u">mit</span><input class="num s" id="f2-a" type="text" inputmode="numeric" autocomplete="off" aria-label="Alter bei Zahlung 2"></span>
+              <span class="numw"><input class="num" id="f2-v" type="text" inputmode="numeric" autocomplete="off" aria-label="Betrag Zahlung 2 in Euro"><span class="u">€</span></span>
+              <input class="lab" id="f2-l" type="text" maxlength="24" autocomplete="off" placeholder="Bezeichnung, z. B. Dach" aria-label="Bezeichnung Zahlung 2">
+              <p class="hint" id="f2-h"></p>
+            </div>
+            <div class="flow" id="f3">
+              <select id="f3-t" aria-label="Art der Zahlung 3"><option value="">–</option><option value="out">Ausgabe</option><option value="in">Einnahme</option><option value="sale">Hausverkauf</option></select>
+              <span class="numw"><span class="u">mit</span><input class="num s" id="f3-a" type="text" inputmode="numeric" autocomplete="off" aria-label="Alter bei Zahlung 3"></span>
+              <span class="numw"><input class="num" id="f3-v" type="text" inputmode="numeric" autocomplete="off" aria-label="Betrag Zahlung 3 in Euro"><span class="u">€</span></span>
+              <input class="lab" id="f3-l" type="text" maxlength="24" autocomplete="off" placeholder="Bezeichnung, z. B. Dach" aria-label="Bezeichnung Zahlung 3">
+              <p class="hint" id="f3-h"></p>
+            </div>
+                </div>
+        </div>
+        <div class="check incl"><input type="checkbox" id="home"><label for="home">Mit einbeziehen</label><p class="hint">Kredit, frei werdende Rate und Hauswert fließen in die Rechnung ein. Die Erfolgsquote zählt weiter nur das Depot.</p></div>
+        </div>
+      </details>
+
+      <details class="grp" id="sec-miete">
+        <summary><span class="t">Vermietete Immobilie</span><span class="sum" id="sum-miete"></span></summary>
+        <div class="gin">
+        <div style="display:grid;gap:14px">
+          <div class="ctl"><div class="ctl-head"><label for="rv">Marktwert heute</label><output id="rv-o" for="rv"></output></div><input type="range" id="rv" min="0" max="2000000" step="5000" value="300000"><p class="hint">Dein Anteil, wenn dir die Wohnung nicht allein gehört; ebenso bei Restschuld, Rate, Miete und Kosten. Zählt nur fürs Nettovermögen und den Vergleich mit einem Verkauf heute, ohne Schwankung.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rdebt">Restschuld heute</label><output id="rdebt-o" for="rdebt"></output></div><input type="range" id="rdebt" min="0" max="2000000" step="5000" value="200000"></div>
+          <div class="ctl"><div class="ctl-head"><label for="rlz">Sollzins</label><output id="rlz-o" for="rlz"></output></div><input type="range" id="rlz" min="0" max="8" step="0.01" value="3.5"></div>
+          <div class="ctl"><div class="ctl-head"><label for="rlzb">Zinsbindung noch</label><output id="rlzb-o" for="rlzb"></output></div><input type="range" id="rlzb" min="0" max="30" step="1" value="10"></div>
+          <div class="ctl"><div class="ctl-head"><label for="rrate">Rate pro Monat</label><output id="rrate-o" for="rrate"></output></div><input type="range" id="rrate" min="0" max="10000" step="25" value="1000"><p class="hint">Nach der Zinsbindung gilt der Zins danach aus „Eigenes Haus“, im realistischen Modell schwankend mit dem Zinsniveau der jeweiligen Zukunft.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rrent">Kaltmiete pro Monat</label><output id="rrent-o" for="rrent"></output></div><input type="range" id="rrent" min="0" max="10000" step="25" value="1100"><p class="hint">Steigt mit der Inflation. Für Leerstand und Mietausfall zieht der Rechner 4 % ab.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rkost">Eigene Kosten pro Monat</label><output id="rkost-o" for="rkost"></output></div><input type="range" id="rkost" min="0" max="2000" step="5" value="190"><p class="hint">Was der Mieter nicht zahlt: Hausgeld ohne Umlagen, Instandhaltung, Verwaltung. Faustwert 15 bis 20 % der Kaltmiete. Steigt mit der Inflation.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rafaE">Abschreibung pro Jahr</label><output id="rafaE-o" for="rafaE"></output></div><input type="range" id="rafaE" min="0" max="50000" step="100" value="4200"><p class="hint">Steht als AfA in der Anlage V deiner Steuererklärung.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rbuyY">Kaufjahr</label><output id="rbuyY-o" for="rbuyY"></output></div><input type="range" id="rbuyY" min="1980" max="2026" step="1" value="2020"><p class="hint">Die Abschreibung endet 50 Jahre nach dem Kauf.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rtax">Grenzsteuersatz im Berufsleben</label><output id="rtax-o" for="rtax"></output></div><input type="range" id="rtax" min="0" max="50" step="1" value="35"><p class="hint">Mit Soli und Kirchensteuer. Ein Verlust aus der Vermietung senkt deine Lohnsteuer. Ab der Entnahme rechnet der Rechner mit dem Tarif, zusammen mit der gesetzlichen Rente.</p></div>
+          <p class="hint" id="rent-h"></p>
+        </div>
+        <div class="check incl"><input type="checkbox" id="rOn"><label for="rOn">Mit einbeziehen</label><p class="hint">Gerechnet wird nur der Zufluss: Miete minus Kosten, Rate und Steuer. Netto heute und Sparrate ohne die Immobilie eingeben. Ein Überschuss fließt ins Depot, eine Zuzahlung kommt aus dem Depot; ab der Entnahme zählt der Überschuss wie eine zweite Rente. Ein Verkauf wird nicht gerechnet.</p></div>
+        </div>
+      </details>
+
+      <details class="grp" id="sec-markt">
+        <summary><span class="t">Markt</span><span class="sum" id="sum-markt"></span></summary>
+        <div class="gin">
+        <div class="ctl">
+          <span class="lbl" id="scen-l">Wie gut läuft die Börse?</span>
+          <div class="seg" role="group" aria-labelledby="scen-l">
+            <button type="button" data-scen="v">Eher schwach</button>
+            <button type="button" data-scen="o">Wie früher</button>
+            <button type="button" data-scen="e">Individuell</button>
+          </div>
+          <p class="hint" id="scen-h"></p>
+        </div>
+        <div class="ctl"><div class="ctl-head"><label for="ter">Kosten pro Jahr</label><output id="ter-o" for="ter"></output></div><input type="range" id="ter" min="0" max="1.5" step="0.05" value="0.3"><p class="hint">Alles zusammen: Fondskosten (TER), Handel im Fonds, Depot und Kaufgebühren. Geht jedes Jahr von der Rendite ab. Breite ETFs beim Neobroker liegen bei etwa 0,2–0,3 %.</p></div>
+        <details class="adv" id="adv-d">
+          <summary>Renditen, Schwankung, Inflation</summary>
+          <div class="advin">
+            <div class="ctl"><div class="ctl-head"><label for="re">Aktien pro Jahr</label><output id="re-o" for="re"></output></div><input type="range" id="re" min="2" max="10" step="0.25" value="7"></div>
+            <div class="ctl"><div class="ctl-head"><label for="rb">Anleihen pro Jahr</label><output id="rb-o" for="rb"></output></div><input type="range" id="rb" min="0" max="6" step="0.25" value="3.75"><p class="hint">Kurze Laufzeiten bringen meist weniger, lange mehr (Zinsstrukturkurve).</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="rc">Geldmarkt pro Jahr</label><output id="rc-o" for="rc"></output></div><input type="range" id="rc" min="0" max="5" step="0.25" value="2"></div>
+            <div class="ctl"><div class="ctl-head"><label for="rg">Gold pro Jahr</label><output id="rg-o" for="rg"></output></div><input type="range" id="rg" min="0" max="8" step="0.25" value="3.5"><p class="hint">Langfristig real etwa 0 %; 1971–2025 in Euro 7,5 % im Jahr (ab Ende der Goldbindung).</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="ve">Schwankung Aktien</label><output id="ve-o" for="ve"></output></div><input type="range" id="ve" min="5" max="40" step="1" value="16"><p class="hint">Weltweite Aktien schwankten früher um etwa 16 % im Jahr.</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="vb">Schwankung Anleihen</label><output id="vb-o" for="vb"></output></div><input type="range" id="vb" min="1" max="12" step="0.5" value="4"><p class="hint">Kurz etwa 2 %, gemischt 4–5 %, lang 8 % und mehr.</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="vg">Schwankung Gold</label><output id="vg-o" for="vg"></output></div><input type="range" id="vg" min="5" max="30" step="1" value="15"><p class="hint">Gerechnet unabhängig von Aktien; das macht Gold eher zu gut.</p></div>
+            <div class="ctl"><div class="ctl-head"><label for="inf">Inflation im Durchschnitt</label><output id="inf-o" for="inf"></output></div><input type="range" id="inf" min="0" max="5" step="0.25" value="2"><p class="hint">Alle Renditen und Steigerungen gelten bei 2 % Inflation. Ist sie höher, steigen Zinsen, Geldmarkt, Gold, Rente, PKV und Sparrate mit, Aktien zu drei Vierteln. Was bleibt: Steuer auf Scheingewinne, fester Sparerpauschbetrag, Kreditrate wird real leichter.</p></div>
+            <div class="ctl">
+              <span class="lbl">Rechenmodell</span>
+              <div class="seg two" role="group" aria-label="Rechenmodell">
+                <button type="button" data-model="r">Realistisch</button>
+                <button type="button" data-model="s">Einfach</button>
+              </div>
+              <p class="hint" id="model-h"></p>
+            </div>
+          </div>
+        </details>
+      </div>
+      </details>
+      <details class="grp" id="sec-steuern">
+        <summary><span class="t">Steuern</span><span class="sum" id="sum-steuern"></span></summary>
+        <div class="gin">
+        <div class="ctl">
+          <span class="lbl" id="fb-l">Sparerpauschbetrag</span>
+          <div class="seg two" role="group" aria-labelledby="fb-l">
+            <button type="button" data-fb="1000">1.000 €<br><small>allein</small></button>
+            <button type="button" data-fb="2000">2.000 €<br><small>Ehepaar</small></button>
+          </div>
+        </div>
+        <div class="ctl">
+          <span class="lbl" id="ks-l">Kirchensteuer</span>
+          <div class="seg" role="group" aria-labelledby="ks-l">
+            <button type="button" data-ks="0">keine</button>
+            <button type="button" data-ks="8">8 %<br><small>BY, BW</small></button>
+            <button type="button" data-ks="9">9 %<br><small>übrige</small></button>
+          </div>
+        </div>
+        <div class="ctl"><div class="ctl-head"><label for="bz">Basiszins für die Vorabpauschale</label><output id="bz-o" for="bz"></output></div><input type="range" id="bz" min="0" max="5" step="0.1" value="3.2"><p class="hint">2026: 3,20 %. Durchschnitt bei 2 % Inflation, bei mehr Inflation entsprechend höher. Im realistischen Modell schwankt er mit dem Zinsniveau der jeweiligen Zukunft.</p></div>
+      </div>
+      </details>
+      <button type="button" class="reset" id="reset">Alles zurücksetzen</button>
+
+    </aside>
+
+    <main class="results" aria-live="polite">
+      <div class="stressbar" id="stressbar"></div>
+      <section class="panel verdict">
+        <span class="pill" id="pill"></span>
+        <h2 id="headline"></h2>
+        <div class="meter" aria-hidden="true"><b id="meter-span" hidden></b><i id="meter"></i><u id="meter-dot" hidden></u></div>
+        <p id="span-h" class="span-h"></p>
+        <div class="facts" id="facts"></div>
+        <details class="more"><summary>Details zum Ergebnis</summary><p id="subline"></p></details>
+        <div class="cmpbox" id="cmpbox"></div>
+        <div class="pdfrow"><button type="button" class="pdfbtn" id="pdf-b" hidden>Als PDF speichern</button><span class="hint" id="pdf-s" aria-live="polite"></span></div>
+      </section>
+
+      <div class="card-head" style="margin-bottom:-8px">
+        <h3>Die wichtigsten Zahlen</h3>
+        <div class="toggle" role="group" aria-label="Beträge anzeigen">
+          <button type="button" id="m-real" aria-pressed="true">In heutiger Kaufkraft</button>
+          <button type="button" id="m-nom" aria-pressed="false">Auf dem Kontoauszug</button>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><span class="k" id="k1-l"></span><span class="v" id="k1"></span><span class="s" id="k1-s"></span></div>
+        <div class="kpi"><span class="k">Brutto aus dem Depot</span><span class="v" id="k2"></span><span class="s" id="k2-s"></span></div>
+        <div class="kpi"><span class="k">Steuern während der Entnahme</span><span class="v" id="k3"></span><span class="s" id="k3-s"></span></div>
+        <div class="kpi"><span class="k" id="k4-l"></span><span class="v" id="k4"></span><span class="s">typischer Fall</span></div>
+      </div>
+
+      <section class="panel" id="lev-p">
+        <h3 id="lev-t">Was dein Ergebnis am meisten verändert</h3>
+        <ul class="lev" id="lev"></ul>
+        <p class="hint" id="lev-h" style="margin-top:8px"></p>
+        <p class="lev-undo" id="lev-u" hidden><span id="lev-ut"></span> <button type="button" class="linkbtn" id="lev-ub">Rückgängig</button></p>
+      </section>
+
+      <section class="panel">
+        <div class="card-head"><h3>So entwickelt sich dein Vermögen</h3></div>
+        <div class="chart" id="ch-w"></div>
+        <div class="legend">
+          <span><i class="sw" style="background:var(--accent);opacity:.35"></i>hier liegen 50 % aller Zukünfte</span>
+          <span><i class="sw line" style="background:var(--accent)"></i>typisch</span>
+          <span><i class="sw dash"></i>wenn es schlecht läuft (nur 10 % der Zukünfte sind schlechter)</span>
+          <span id="leg-net" hidden><i class="sw" style="height:0;border-top:2px dashed var(--ink);border-radius:0"></i>Gesamtvermögen inkl. deines Hausanteils, abzüglich deines Anteils an der Restschuld (typisch)</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="card-head"><h3>So ist das Geld aufgeteilt</h3></div>
+        <div class="chart" id="ch-a"></div>
+        <div class="legend" id="ch-a-leg"></div>
+        <p class="hint" id="alloc-h" style="margin-top:8px"></p>
+      </section>
+
+      <section class="panel" id="rate-p">
+        <div class="card-head"><h3 id="rate-t">So entwickelt sich deine Monatsrate</h3></div>
+        <div class="chart" id="ch-r"></div>
+        <div class="legend">
+          <span><i class="sw line" style="background:var(--accent)"></i>typisch</span>
+          <span><i class="sw dash"></i>wenn es schlecht läuft</span>
+          <span><i class="sw dot2"></i>wenn es gut läuft</span>
+          <span id="leg-pen" hidden><i class="sw" style="background:var(--muted);opacity:.22"></i>davon gesetzliche Rente (netto, typisch)</span>
+        </div>
+        <p class="hint" id="rate-h" style="margin-top:8px"></p>
+      </section>
+
+      <section class="panel">
+        <div class="card-head"><h3>So viel Steuer zahlst du pro Jahr</h3></div>
+        <div class="chart" id="ch-t"></div>
+        <div class="legend">
+          <span><i class="sw line" style="background:var(--accent)"></i>typisch</span>
+          <span><i class="sw dot2"></i>hoch (nur 10 % der Zukünfte zahlen mehr)</span>
+        </div>
+        <p class="hint" id="tax-h" style="margin-top:8px"></p>
+      </section>
+
+      <section class="panel" id="stress-p">
+        <div class="card-head"><h3>Härtetest: Was, wenn eine echte Krise kommt?</h3></div>
+        <p class="hint" style="margin-top:-4px">Für ein paar Jahre laufen die Märkte wie in einer Krise aus der Vergangenheit, danach wieder zufällig.</p>
+        <div class="ctl" style="margin-top:10px">
+          <span class="lbl" id="when-l">Wann trifft die Krise?</span>
+          <div class="seg" role="group" aria-labelledby="when-l">
+            <button type="button" data-when="start">gleich<br><small>zu Beginn</small></button>
+            <button type="button" data-when="pre5">5 Jahre<br><small>vor der Rente</small></button>
+            <button type="button" data-when="ret">zum Start<br><small>der Entnahme</small></button>
+          </div>
+        </div>
+        <div class="seg" role="group" aria-label="Kein Härtetest" style="grid-template-columns:1fr;margin-top:12px">
+          <button type="button" data-stress="none">Kein Test</button>
+        </div>
+        <h4 class="stress-l">Ein großer Crash</h4>
+        <div class="seg stress" role="group" aria-label="Crash">
+          <button type="button" data-stress="c87">Schwarzer Montag<br><small>1987 · −24 %</small></button>
+          <button type="button" data-stress="cdot">Dotcom-Blase<br><small>2000 · −51 %</small></button>
+          <button type="button" data-stress="cgfc">Finanzkrise<br><small>2007 · −59 %</small></button>
+          <button type="button" data-stress="ccov">Corona<br><small>2020 · −34 %</small></button>
+          <button type="button" data-stress="c22">Zinsanstieg<br><small>2022 · −27 %</small></button>
+        </div>
+        <h4 class="stress-l">Lange schwierige Phasen</h4>
+        <div class="seg" role="group" aria-label="Lange Phasen">
+          <button type="button" data-stress="lost">Börsenflaute<br><small>2000–2012</small></button>
+          <button type="button" data-stress="infl">Inflation<br><small>1973–1982</small></button>
+          <button type="button" data-stress="gfall">Goldabsturz<br><small>1981–1985</small></button>
+        </div>
+        <p class="hint" id="stress-h" style="margin-top:10px"></p>
+      </section>
+
+      <details class="panel notes fazit">
+        <summary>Fazit: Was die Rechnungen zeigen</summary>
+        <div class="fz">
+        <ol>
+          <li><strong>Am meisten bewirken Sparrate, Zeit und Aktienanteil.</strong> Wer mehr spart, früher anfängt und genug in Aktien anlegt, verbessert das Ergebnis viel stärker als mit Feinheiten wie Anleihezelt, Gold oder der Reihenfolge beim Verkauf.</li>
+          <li><strong>Eine anpassbare Rate macht den Plan sicherer.</strong> Wer in schlechten Börsenjahren etwas weniger entnimmt, schont das Depot genau dann, wenn es am meisten zählt. Dafür schwankt die monatliche Rate. In einer Testrechnung stieg die Erfolgsquote dadurch von rund 91 auf 97 %.</li>
+          <li><strong>Das Anleihezelt ist eine Versicherung.</strong> Es hilft, wenn die Börse genau zum Rentenbeginn einbricht; in einem Test brachte das rund 8 Prozentpunkte. Bleibt der Crash aus, bringt es kaum etwas, und der Umbau kostet Steuern, weil dafür Aktien verkauft werden. Allein über die Sparrate lässt es sich kaum aufbauen. Ob es sich lohnt, ist auch in der Forschung umstritten.</li>
+          <li><strong>Steuern lassen sich vor allem verschieben, kaum vermeiden.</strong> Die Vorabpauschale ist eine Steuer im Voraus, die beim späteren Verkauf angerechnet wird. Teuer wird es vor allem beim Umschichten und beim Verkauf in der Rente. Der Zweitdepot-Trick senkt die Steuer in den ersten Rentenjahren deutlich, macht den Plan aber kaum sicherer.</li>
+          <li><strong>Gold spart Steuern, bringt aber wenig Rendite.</strong> Gold-Wertpapiere mit Lieferanspruch sind nach einem Jahr steuerfrei. Langfristig hat Gold nach Abzug der Inflation aber kaum etwas verdient. Weil der Rechner Gold unabhängig von Aktien rechnet, sieht es hier eher zu gut aus. Wenn überhaupt, dann als kleine Beimischung.</li>
+          <li><strong>Das eigene Haus sichert das Wohnen, das Depot sichert die Rente.</strong> Ist das Haus vor der Rente abbezahlt, braucht man im Alter weniger und kann die frühere Rate sparen; große Reparaturen wie Dach oder Heizung sollte man trotzdem einplanen. Läuft der Kredit bis in die Rente, muss das Depot die Rate mittragen.
+            <ul class="sub">
+              <li><strong>Als Geldanlage schwach:</strong> In Deutschland stiegen die Hauspreise nach Inflation von 1970 bis 2024 im Schnitt nur um 0,1 % pro Jahr; der Ertrag kommt fast nur aus der gesparten Miete. Ein einzelnes, mit Kredit bezahltes Haus ist zudem schlecht gestreut und teuer zu kaufen und zu verkaufen. Ein breites Depot daneben ist deshalb wichtig.</li>
+              <li><strong>Schutz und Steuer:</strong> Wer selbst wohnt, ist vor Mieterhöhungen geschützt, solange ein Kredit läuft aber nur bis zum Ende der Zinsbindung. Die gesparte Miete ist steuerfrei, ein Verkauf ebenfalls, wenn man im Verkaufsjahr und den zwei Jahren davor selbst darin gewohnt hat.</li>
+              <li><strong>Sondertilgung oder Depot:</strong> Tilgen bringt sicher und steuerfrei den Kreditzins, das Depot im Schnitt mehr, aber mit Schwankung und Steuer. Je höher der Zins nach der Zinsbindung, desto eher lohnt das Tilgen.</li>
+              <li><strong>Nötig ist es nicht:</strong> Eigentümer sind im Alter meist reicher, vor allem aber, weil sie mehr verdienen, mehr sparen und öfter erben. Wer mietet und den Unterschied konsequent anlegt, hatte in Deutschland seit 1970 meist mehr Vermögen (Berechnungen von Gerd Kommer, dessen Firma ETF-Verwaltung verkauft). Als Mieter braucht man dafür im Alter aber ein größeres Depot, weil die Miete weiterläuft und mit der Inflation steigt; im Rechner heißt das eine höhere Entnahme. Ob Kaufen sich rechnet, zeigt vor allem das Verhältnis von Kaufpreis zu Jahresmiete: Je höher es ist, desto eher spricht es fürs Mieten. Gute Gründe fürs Haus sind eher sicheres Wohnen, Gestaltungsfreiheit und das Zwangssparen.</li>
+            </ul>
+          </li>
+          <li><strong>Die gesetzliche Rente ist der sichere Boden.</strong> Sie läuft lebenslang und steigt mit den Löhnen, egal wie die Börse läuft. Das Depot muss nur die Lücke füllen; ist es aufgebraucht, bleibt die Rente. Wer eine solide Rente hat, kann im Depot deshalb eher mehr Aktien halten, weil die Rente schon wie ein großer, sicherer Anleihenanteil wirkt.
+            <ul class="sub">
+              <li><strong>Kein Versprechen:</strong> Der Wert in der Renteninformation setzt voraus, dass man bis zur Rente so weiter einzahlt wie im Schnitt der letzten fünf Jahre, und er ist brutto. Teilzeit oder Lücken senken ihn; nach Kranken- und Pflegeversicherung, Steuer und Inflation bleibt deutlich weniger.</li>
+              <li><strong>Die Regeln können sich ändern:</strong> Das Rentenniveau ist bis 2031 bei 48 % festgeschrieben. Für die Zeit danach schlägt die Rentenkommission vor, die Erhöhungen wieder stärker zu bremsen, wenn es mehr Rentner pro Beitragszahler gibt, und das Rentenalter an die Lebenserwartung zu koppeln. Die Regierung will das umsetzen, beschlossen ist es noch nicht. Vorsichtig gerechnet heißt das: Rentensteigerung leicht unter der Inflation und Rentenbeginn eher ein bis zwei Jahre später. Mit 0 % Steigerung sieht man, wie stark der Plan an der Rente hängt.</li>
+              <li><strong>Zwei weitere Risiken:</strong> Die Beiträge zur Kranken- und Pflegeversicherung steigen seit Jahren (Zusatzbeitrag 2021 im Schnitt 1,3 %, 2026 schon 2,9 %); vorsichtig gerechnet stellt man den Regler etwas höher. Und die Rente folgt den Löhnen, nicht den Preisen: Bei hoher Inflation hinkt sie hinterher, 2004 bis 2006 gab es gar keine Erhöhung. Gekürzt wird sie nicht, sie hängt aber ganz an Deutschland; ein weltweit gestreutes Depot ergänzt sie deshalb gut.</li>
+              <li><strong>Früher aufhören kostet doppelt:</strong> Das Depot zahlt die Jahre bis zur Rente allein, und wer die Rente vorzeitig nimmt, bekommt dauerhaft 0,3 % weniger Rente für jeden Monat, den sie früher beginnt. Nicht eingerechnet sind Witwenrente, Betriebsrente und die geplante Pflicht-Kapitalrente.</li>
+            </ul>
+          </li>
+          <li><strong>Lieber vorsichtig rechnen.</strong> „Wie früher“ ist die freundliche Annahme. Ein guter Plan trägt auch mit „Eher schwach“ und in den Härtetests. Ohne eingerechnete Rente ist die Entnahme nur das, was das Depot zusätzlich liefern muss. Das Ganze ist eine Modellrechnung, keine Prognose und keine Anlageberatung.</li>
+        </ol>
+        </div>
+      </details>
+      <details class="panel notes">
+        <summary>Wie wird gerechnet?</summary>
+        <div style="display:grid;gap:8px;margin-top:10px">
+          <p><strong>Ablauf pro Jahr:</strong> Im Januar wird die Steuer auf die Vorabpauschale des Vorjahres fällig. In der Ansparphase kommt danach die Sparrate ins Depot, und zwar zuerst in die Anlageklassen, die unter ihrer Zielquote liegen; die Steuer wird von der Sparrate abgezogen. In der Entnahmephase wird so viel verkauft, dass nach Steuern deine Rate ankommt, zuerst aus den übergewichteten Klassen. Weicht die Aktienquote danach noch stärker ab als erlaubt, wird umgeschichtet. Dann entwickeln sich die Märkte über das Jahr.</p>
+          <p><strong>Steuern:</strong> 25 % Abgeltungsteuer plus Solidaritätszuschlag, auf Wunsch Kirchensteuer. Bei Aktien-ETFs sind 30 % der Erträge steuerfrei (Teilfreistellung), bei Anleihe- und Geldmarkt-ETFs nichts. Der Sparerpauschbetrag bleibt über alle Jahre gleich hoch und ist dadurch real immer weniger wert. Verluste werden vorgetragen. Jede Sparrate wird als eigener Kauf geführt, damit beim Verkauf der richtige Einstand zählt.</p>
+          <p><strong>Vorabpauschale:</strong> Wert zum Jahresanfang × Basiszins × 0,7, höchstens so viel, wie der ETF im Jahr gewonnen hat. Der versteuerte Betrag erhöht den Einstand und mindert so die Steuer beim späteren Verkauf. Nicht berücksichtigt ist die Kürzung im Kaufjahr (ein Zwölftel pro vollem Monat vor dem Kauf). Alle ETFs sind thesaurierend.</p>
+          <p><strong>Zweitdepot-Trick:</strong> Im selben Depot gelten immer die ältesten Anteile als zuerst verkauft (§ 20 Abs. 4 Satz 7 EStG). Wer vor dem Verkauf die älteren Anteile in ein zweites Depot überträgt, verkauft im ersten die jüngeren mit weniger Gewinn. Der Übertrag selbst löst keine Steuer aus. Das kostet jedes Jahr etwas Aufwand. Eine Alternative ist, alle paar Jahre einen neuen, gleichwertigen ETF zu besparen.</p>
+          <p><strong>Eigenes Haus:</strong> Der Kredit wird Monat für Monat getilgt, Sondertilgungen am Jahresende. Ist er in der Ansparphase abbezahlt, fließen Rate und Sondertilgung ab dann zusätzlich in den Sparplan. Läuft er in die Entnahme, wird die Rate bis zum Ende zusätzlich aus dem Depot genommen. Beim Hausverkauf fließt der Hauswert abzüglich Restschuld ins Depot; der Verkauf ist steuerfrei, wenn man im Verkaufsjahr und den zwei Jahren davor selbst darin gewohnt hat. Danach fällt Miete an, die in die Entnahme gehört. Der Hauswert entwickelt sich ohne Zufall; er zählt nur ins Gesamtvermögen, nicht in die Erfolgsquote.</p>
+          <p><strong>Gold:</strong> Gerechnet wie ein Gold-Wertpapier mit Lieferanspruch (etwa Xetra-Gold). Der Bundesfinanzhof behandelt es wie physisches Gold: Gewinne sind nach mindestens einem Jahr steuerfrei, Verluste zählen dann aber auch nicht. Es ist kein Fonds, also fällt keine Vorabpauschale an. Der Rechner unterstellt, dass Gold immer erst nach über einem Jahr verkauft wird. In den Härtetests laufen die echten Jahresrenditen von Gold in Euro mit (LBMA-Jahresschlusskurse, vor 1999 aus der D-Mark umgerechnet; die Inflationsphase der 1970er in US-Dollar wie die übrigen Werte dort). Achtung: Die meisten Krisen dieser Auswahl waren gute Goldjahre. Der Gegentest „Goldabsturz“ zeigt die andere Seite; die Aktien laufen dort zufällig.</p>
+          <p><strong>Anleihezelt, Forschungsstand:</strong> Pfau und Kitces fanden mit US-Daten, dass ein in der Rente steigender Aktienanteil das Risiko senken kann, das Geld zu früh aufzubrauchen. Estrada kam mit Daten aus 19 Ländern über 110 Jahre eher zu festen Quoten; Blanchett fand keinen Verlauf, der für alle am besten ist. Nach Early Retirement Now hilft ein Zelt vor allem, wenn die Börse zum Start teuer bewertet ist; das bildet dieser Rechner nicht ab. Anarkulova, Cederburg und O’Doherty stellen grundsätzlich infrage, dass man mit dem Alter mehr Anleihen halten sollte. Die Studien rechnen meist ohne Steuer; in einem deutschen Depot kostet der Aufbau des Zelts Steuer auf die verkauften Aktiengewinne.</p>
+          <p><strong>Modell:</strong> Börsenjahre mit häufigeren Extremjahren, schwankende Inflation und ein Zinsniveau, das mit der halben Inflationsabweichung und eigenen Realzins-Schocks schwankt (etwa ±2 Punkte). Anleihen erhalten den Zins des Vorjahrs und verlieren bei steigendem Zins Kurs, umso mehr, je höher ihre Schwankung ist; Geldmarkt folgt dem Zins, Aktien geben bei steigendem Realzins etwas nach. Basiszins der Vorabpauschale und Anschlusszins der Kredite (alle 10 Jahre neu) folgen demselben Zinsniveau. Rente, PKV-Beitrag, Steuertarif und Sparrate folgen der Inflation des jeweiligen Verlaufs mit einem Jahr Verzögerung. Alle eingestellten Renditen, Zinsen und Steigerungen gelten bei 2 % Inflation; bei höherer Durchschnittsinflation steigen Zinsen, Geldmarkt und Gold voll mit, Aktien zu drei Vierteln.  Die eingestellten Renditen gelten vor Kosten; die Kosten gehen jedes Jahr von allen Anlagen ab. Der Härtetest ersetzt einige Jahre durch echte Werte aus der Vergangenheit (Aktien: MSCI World, Anleihen: deutsche Staatsanleihen bzw. 2022 der breite Euro-Anleihenindex).</p>
+          <p><strong>Gesetzliche Rente:</strong> Die Rente aus der Renteninformation steigt jedes Jahr um die eingestellte Rate. Davon gehen Kranken- und Pflegeversicherung ab und die Steuer auf den steuerpflichtigen Teil. Dieser Besteuerungsanteil hängt vom Jahr des Rentenbeginns ab: 2026 sind es 84 %, jedes Jahr 0,5 Punkte mehr, ab 2058 100 %. Der steuerfreie Rest bleibt als fester Euro-Betrag, Erhöhungen sind voll steuerpflichtig. Mit eingerechneter Rente zählt als Netto-Einkommen Rente plus Depot; liegt die Netto-Rente über dem Wunsch, ist die ganze Rente das Einkommen und das Depot zahlt nichts. Mit „Rentenlücke schließen“ ist das Wunscheinkommen das heutige Netto ohne Sparrate (und ohne Kreditrate, wenn der Kredit vor der Entnahme abbezahlt ist), mal dem gewählten Anteil, in heutiger Kaufkraft. Ein Extra für die aktiven Jahre kommt bis zum gewählten Alter dazu. Beginnt die Entnahme nach dem gewählten Rentenalter, startet die Rente mit der Entnahme, ohne Zuschläge für den späteren Beginn. Beginnt sie vorher, zahlt das Depot die Jahre bis zur Rente allein; bei flexibler Rate bleibt die Rate in diesen Jahren fest, die flexible Regel beginnt mit der Rente und bezieht sich auf den Teil, den das Depot dann noch zahlt. Das Rentenniveau bei Rentenbeginn skaliert die Rente aus der Renteninformation (die mit heute 48 % rechnet) im Verhältnis, 46 % ergeben also 46/48 der Rente. Privat Versicherte geben ihren heutigen Gesamtbeitrag ein: Ohne Krankentagegeld und ohne den gesetzlichen 10-%-Zuschlag (fällt ab 60 weg) wächst er um die eingestellte Rate, abzüglich einer Beitragsentlastung; die Rentenversicherung zahlt einen Zuschuss von 8,75 % der Bruttorente, höchstens die Hälfte des Beitrags. Vereinfacht: Der Zuschlag wird auch auf den Pflegeanteil herausgerechnet. Die Einkommensteuer rechnet der Rechner nach dem Tarif 2026 (Grundtarif, Einzelveranlagung), dessen Grenzen bis zum jeweiligen Jahr um die eingestellte Rate wachsen; abgezogen werden Kranken- und Pflegeversicherung und die Pauschalen von 138 €, dazu kommt gegebenenfalls Kirchensteuer. Wahlweise gilt ein eigener fester Satz. Nicht enthalten: weitere Einkünfte im Alter, Splitting mit einer Partnerrente, Hinterbliebenenrente, keine Abschläge bei früherem Rentenbeginn; die stehen in der Renteninformation.</p>
+          <p><strong>Ergebnis:</strong> Die Erfolgsquote ist auf 5 Punkte gerundet, weil Annahmen zum Markt sie um 20 Punkte und mehr verschieben; die Spanne zeigt beide Annahmen zum Markt. Die Tabelle „Wie lange muss es reichen?“ nutzt die Sterbetafel 2020/2022 des Statistischen Bundesamts, deren Sterblichkeit um 1 % pro Jahr sinkt (steigende Lebenserwartung); das Risiko zu Lebzeiten gewichtet jede Zukunft, in der das Depot leer wird, mit der Wahrscheinlichkeit, dieses Alter zu erleben.</p>
+          <div class="life" id="life"></div>
+          <p><strong>Nicht enthalten:</strong> ausschüttende ETFs, Günstigerprüfung, Steueränderungen in der Zukunft. Modellrechnung, keine Prognose und keine Anlageberatung.</p>
+          <p>Quellen: <a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Rente/Rentenreform" target="_blank" rel="noopener">Vorschläge der Rentenkommission (DRV)</a> · <a href="https://www.deutsche-rentenversicherung.de/SharedDocs/FAQ/Gesetzesaenderungen/Rentenanpassung/FAQ-Rentenanpassung-2026/Rentenanpassung-2026.html" target="_blank" rel="noopener">Haltelinie und Rentenanpassung 2026 (DRV)</a> · <a href="https://www.haufe.de/id/beitrag/private-kapitaleinkuenfte-in-der-anlagekap-inv-fuer-den-v-g-darstellung-in-der-anlagekap-inv-2025-HI17221637.html" target="_blank" rel="noopener">FIFO nach § 20 EStG (Haufe)</a> · <a href="https://www.finanztip.de/daily/etf-steuern-sparen-beim-verkauf/" target="_blank" rel="noopener">Zweitdepot-Trick (Finanztip)</a> · <a href="https://www.otto-schmidt.de/news/steuerrecht/basiszins-zur-berechnung-der-vorabpauschale-gem-18-absatz-4-invstg-basiszins-zum-2-1-2026-2026-01-15.html" target="_blank" rel="noopener">Basiszins 2026 (BMF)</a> · <a href="https://financialplanningassociation.org/article/journal/JAN14-reducing-retirement-risk-rising-equity-glide-path" target="_blank" rel="noopener">Pfau und Kitces</a> · <a href="https://blog.iese.edu/jestrada/files/2015/09/CFA-IRP-G2.pdf" target="_blank" rel="noopener">Estrada</a> · <a href="https://financialplanningassociation.org/article/journal/FEB15-revisiting-optimal-distribution-glide-path" target="_blank" rel="noopener">Blanchett</a> · <a href="https://earlyretirementnow.com/swr20" target="_blank" rel="noopener">Early Retirement Now</a> · <a href="https://www.aeaweb.org/conference/2025/program/paper/EFddaa8b" target="_blank" rel="noopener">Anarkulova u. a.</a> · <a href="https://www.test.de/Xetra-Gold-Steuerlich-wie-Barren-4910289-0/" target="_blank" rel="noopener">Xetra-Gold steuerlich (Stiftung Warentest)</a> · <a href="https://www.kettner-edelmetalle.de/wissen/goldpreisentwicklung-pro-jahr-tabelle-seit-1971" target="_blank" rel="noopener">Goldpreis pro Jahr seit 1971</a> · <a href="https://www.nber.org/papers/w18706" target="_blank" rel="noopener">Erb und Harvey</a> · <a href="https://www.kreditwesen.de/sites/default/files/content/articledownloads/2015/09/lak_11_17_571-573.pdf" target="_blank" rel="noopener">Hauspreise real 1970–2010</a> · <a href="https://epflicht-hessen.hebis.de/ubffm/download/pdf/8422827" target="_blank" rel="noopener">Renditedreieck Wohnimmobilien 1970–2022</a> · <a href="https://www.destatis.de/DE/Presse/Pressemitteilungen/2026/09/PD26_336_61262.html" target="_blank" rel="noopener">Häuserpreisindex 2. Quartal 2026 (Destatis)</a> · <a href="https://www.newyorkfed.org/medialibrary/media/research/staff_reports/sr999.pdf" target="_blank" rel="noopener">Renditen in Großstädten</a> · <a href="https://www.nber.org/papers/w24112" target="_blank" rel="noopener">Jordà u. a.: Rate of Return on Everything</a> · <a href="https://www.nber.org/papers/w9462" target="_blank" rel="noopener">Sinai und Souleles: Wohneigentum als Schutz vor Mietrisiko</a> · <a href="https://www.bundesbank.de/de/bundesbank/forschung/studie-zur-wirtschaftlichen-lage-privater-haushalte-phf/ergebnisse" target="_blank" rel="noopener">Vermögensbefragung der Bundesbank (PHF)</a> · <a href="https://gerd-kommer.de/blog/mythen-eigenheimbesitz/" target="_blank" rel="noopener">Kommer: Eigenheimbesitzer im Alter vermögender?</a> · <a href="https://gerd-kommer.de/blog/kredithebel-immobilien/" target="_blank" rel="noopener">Kommer: Kredithebel bei Immobilien</a></p>
+        </div>
+      </details>
+    </main>
+  </div>
+  <div class="rbar" id="rbar" hidden><span class="pill" id="rbar-p"></span><span class="rbar-t"><b id="rbar-v"></b><small id="rbar-s"></small></span><button type="button" id="rbar-b">Ergebnis ↑</button></div>
+  <footer class="copy"><div id="disc"><span style="white-space:nowrap">Alle Angaben ohne Gewähr</span> · <span style="white-space:nowrap">Keine Steuer- oder Anlageberatung</span></div><div id="copy">© 2026 Christopher Tremmel</div></footer>
+</div>
+<script>
+{
