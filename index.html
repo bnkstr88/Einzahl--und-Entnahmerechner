@@ -115,6 +115,12 @@ details.adv[open] > summary::before { content: "–"; }
 .meter { height: 12px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
 .meter i { display: block; height: 100%; border-radius: 999px; transition: width 0.25s ease; }
 .cmpbox { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.verdict p.span-h { color: var(--ink); font-weight: 600; }
+.life { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.life:empty { display: none; }
+.life h3 { margin: 0; font-size: 0.95rem; }
+.lt { display: grid; gap: 4px 14px; font-variant-numeric: tabular-nums; font-size: 0.92rem; align-items: baseline; }
+.lt span { text-align: right; } .lt .h { text-align: left; color: var(--muted); } .lt .c { font-weight: 700; color: var(--muted); }
 .cmpbox h3 { margin: 0; font-size: 0.95rem; }
 .cmp { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 14px; align-items: baseline; }
 .cmp .l { font-weight: 600; } .cmp .r { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -447,9 +453,15 @@ details.adv[open] > summary::before { content: "–"; }
         <div class="gin">
         <div class="ctl"><div class="ctl-head"><label for="wE">Aktien</label><output id="wE-o" for="wE"></output></div><input type="range" id="wE" min="0" max="100" step="5" value="60"></div>
         <div class="ctl"><div class="ctl-head"><label for="wC">Geldmarkt</label><output id="wC-o" for="wC"></output></div><input type="range" id="wC" min="0" max="100" step="5" value="5"></div>
-        <div class="ctl"><div class="ctl-head"><label for="wG">Gold</label><output id="wG-o" for="wG"></output></div><input type="range" id="wG" min="0" max="100" step="5" value="0"><p class="hint">Wie Xetra-Gold: keine Vorabpauschale, nach einem Jahr steuerfrei.</p></div>
         <div class="mix" aria-hidden="true"><i id="mx-c" style="background:var(--mm)"></i><i id="mx-b" style="background:var(--bd)"></i><i id="mx-g" style="background:var(--gd)"></i><i id="mx-e" style="background:var(--eq)"></i></div>
         <div class="mixl" id="mixl"></div>
+      </div>
+      </details>
+      <details class="grp" id="sec-fein">
+        <summary><span class="t">Feinschrauben</span><span class="sum" id="sum-fein"></span></summary>
+        <div class="gin">
+        <p class="hint">Gold, Anleihezelt, Zweitdepot-Trick und die Regel zum Umschichten verändern das Ergebnis meist nur um 1 bis 3 Punkte. Die Annahmen zum Markt bewegen es um 20 und mehr. Was ein Schalter bringt, steht oben unter „Was bringen deine Schalter?“.</p>
+        <div class="ctl"><div class="ctl-head"><label for="wG">Gold</label><output id="wG-o" for="wG"></output></div><input type="range" id="wG" min="0" max="100" step="5" value="0"><p class="hint">Wie Xetra-Gold: keine Vorabpauschale, nach einem Jahr steuerfrei.</p></div>
         <div class="ctl">
           <span class="lbl" id="band-l">Wann umschichten?</span>
           <div class="seg" role="group" aria-labelledby="band-l">
@@ -467,7 +479,15 @@ details.adv[open] > summary::before { content: "–"; }
           <div class="ctl"><div class="ctl-head"><label for="tLate">Aktien danach</label><output id="tLate-o" for="tLate"></output></div><input type="range" id="tLate" min="0" max="100" step="5" value="60"></div>
           <p class="hint">Verschiebt nur zwischen Aktien und Anleihen.</p>
         </div>
-      </div>
+        <div class="ctl">
+          <span class="lbl" id="sell-l">Welche Anteile werden verkauft?</span>
+          <div class="seg two" role="group" aria-labelledby="sell-l">
+            <button type="button" data-sell="fifo">die ältesten<br><small>gesetzlich (FIFO)</small></button>
+            <button type="button" data-sell="trick">die jüngsten<br><small>Zweitdepot-Trick</small></button>
+          </div>
+          <p class="hint" id="sell-h"></p>
+        </div>
+        </div>
       </details>
       <details class="grp" id="sec-haus">
         <summary><span class="t">Eigenes Haus</span><span class="sum" id="sum-haus"></span></summary>
@@ -476,7 +496,7 @@ details.adv[open] > summary::before { content: "–"; }
           <div class="ctl"><div class="ctl-head"><label for="debt">Restschuld heute</label><output id="debt-o" for="debt"></output></div><input type="range" id="debt" min="0" max="1000000" step="5000" value="285000"></div>
           <div class="ctl"><div class="ctl-head"><label for="lz">Sollzins</label><output id="lz-o" for="lz"></output></div><input type="range" id="lz" min="0" max="8" step="0.01" value="3.4"></div>
           <div class="ctl"><div class="ctl-head"><label for="lzb">Zinsbindung noch</label><output id="lzb-o" for="lzb"></output></div><input type="range" id="lzb" min="0" max="30" step="1" value="10"></div>
-          <div class="ctl"><div class="ctl-head"><label for="lz2">Zins danach</label><output id="lz2-o" for="lz2"></output></div><input type="range" id="lz2" min="0" max="10" step="0.1" value="4.5"><p class="hint">Anschlusszins nach der Zinsbindung, bei 2 % Inflation; ist sie höher, steigt er entsprechend. Die Rate bleibt gleich, solange sie für Zins und 1 % Tilgung reicht.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="lz2">Zins danach</label><output id="lz2-o" for="lz2"></output></div><input type="range" id="lz2" min="0" max="10" step="0.1" value="4.5"><p class="hint">Anschlusszins nach der Zinsbindung, im Durchschnitt bei 2 % Inflation; ist sie höher, steigt er entsprechend. Im realistischen Modell gilt alle 10 Jahre der Zins der jeweiligen Zukunft. Die Rate bleibt gleich, solange sie für Zins und 1 % Tilgung reicht.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="lrate">Rate pro Monat</label><output id="lrate-o" for="lrate"></output></div><input type="range" id="lrate" min="0" max="6000" step="25" value="1350"><p class="hint">Wie im Kreditvertrag; bleibt in Euro gleich.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="lshare">Dein Anteil an Rate und Sondertilgung</label><output id="lshare-o" for="lshare"></output></div><input type="range" id="lshare" min="0" max="100" step="5" value="50"><p class="hint">Zahlen zwei Personen den Kredit, trägst du nur diesen Teil der Rate und der Sondertilgung. Derselbe Anteil gilt für die frei werdende Rate nach dem Kreditende. Wem wie viel vom Haus gehört, stellst du beim Hauswert ein.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="lsond">Sondertilgung pro Jahr</label><output id="lsond-o" for="lsond"></output></div><input type="range" id="lsond" min="0" max="50000" step="500" value="2000"></div>
@@ -525,7 +545,7 @@ details.adv[open] > summary::before { content: "–"; }
           <div class="ctl"><div class="ctl-head"><label for="rdebt">Restschuld heute</label><output id="rdebt-o" for="rdebt"></output></div><input type="range" id="rdebt" min="0" max="2000000" step="5000" value="200000"></div>
           <div class="ctl"><div class="ctl-head"><label for="rlz">Sollzins</label><output id="rlz-o" for="rlz"></output></div><input type="range" id="rlz" min="0" max="8" step="0.01" value="3.5"></div>
           <div class="ctl"><div class="ctl-head"><label for="rlzb">Zinsbindung noch</label><output id="rlzb-o" for="rlzb"></output></div><input type="range" id="rlzb" min="0" max="30" step="1" value="10"></div>
-          <div class="ctl"><div class="ctl-head"><label for="rrate">Rate pro Monat</label><output id="rrate-o" for="rrate"></output></div><input type="range" id="rrate" min="0" max="10000" step="25" value="1000"><p class="hint">Nach der Zinsbindung gilt der Zins danach aus „Eigenes Haus“, bei höherer Inflation entsprechend mehr.</p></div>
+          <div class="ctl"><div class="ctl-head"><label for="rrate">Rate pro Monat</label><output id="rrate-o" for="rrate"></output></div><input type="range" id="rrate" min="0" max="10000" step="25" value="1000"><p class="hint">Nach der Zinsbindung gilt der Zins danach aus „Eigenes Haus“, im realistischen Modell schwankend mit dem Zinsniveau der jeweiligen Zukunft.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="rrent">Kaltmiete pro Monat</label><output id="rrent-o" for="rrent"></output></div><input type="range" id="rrent" min="0" max="10000" step="25" value="1100"><p class="hint">Steigt mit der Inflation. Für Leerstand und Mietausfall zieht der Rechner 4 % ab.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="rkost">Eigene Kosten pro Monat</label><output id="rkost-o" for="rkost"></output></div><input type="range" id="rkost" min="0" max="2000" step="5" value="190"><p class="hint">Was der Mieter nicht zahlt: Hausgeld ohne Umlagen, Instandhaltung, Verwaltung. Faustwert 15 bis 20 % der Kaltmiete. Steigt mit der Inflation.</p></div>
           <div class="ctl"><div class="ctl-head"><label for="rafaE">Abschreibung pro Jahr</label><output id="rafaE-o" for="rafaE"></output></div><input type="range" id="rafaE" min="0" max="50000" step="100" value="4200"><p class="hint">Steht als AfA in der Anlage V deiner Steuererklärung.</p></div>
@@ -591,15 +611,7 @@ details.adv[open] > summary::before { content: "–"; }
             <button type="button" data-ks="9">9 %<br><small>übrige</small></button>
           </div>
         </div>
-        <div class="ctl">
-          <span class="lbl" id="sell-l">Welche Anteile werden verkauft?</span>
-          <div class="seg two" role="group" aria-labelledby="sell-l">
-            <button type="button" data-sell="fifo">die ältesten<br><small>gesetzlich (FIFO)</small></button>
-            <button type="button" data-sell="trick">die jüngsten<br><small>Zweitdepot-Trick</small></button>
-          </div>
-          <p class="hint" id="sell-h"></p>
-        </div>
-        <div class="ctl"><div class="ctl-head"><label for="bz">Basiszins für die Vorabpauschale</label><output id="bz-o" for="bz"></output></div><input type="range" id="bz" min="0" max="5" step="0.1" value="3.2"><p class="hint">2026: 3,20 %. Gilt für alle Jahre, bei 2 % Inflation; bei mehr Inflation entsprechend höher.</p></div>
+        <div class="ctl"><div class="ctl-head"><label for="bz">Basiszins für die Vorabpauschale</label><output id="bz-o" for="bz"></output></div><input type="range" id="bz" min="0" max="5" step="0.1" value="3.2"><p class="hint">2026: 3,20 %. Durchschnitt bei 2 % Inflation, bei mehr Inflation entsprechend höher. Im realistischen Modell schwankt er mit dem Zinsniveau der jeweiligen Zukunft.</p></div>
       </div>
       </details>
       <button type="button" class="reset" id="reset">Alles zurücksetzen</button>
@@ -612,7 +624,9 @@ details.adv[open] > summary::before { content: "–"; }
         <span class="pill" id="pill"></span>
         <h2 id="headline"></h2>
         <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+        <p id="span-h" class="span-h"></p>
         <p id="subline"></p>
+        <div class="life" id="life"></div>
         <div class="cmpbox" id="cmpbox"></div>
         <div class="pdfrow"><button type="button" class="pdfbtn" id="pdf-b" hidden>Als PDF speichern</button><span class="hint" id="pdf-s" aria-live="polite"></span></div>
       </section>
@@ -748,8 +762,9 @@ details.adv[open] > summary::before { content: "–"; }
           <p><strong>Eigenes Haus:</strong> Der Kredit wird Monat für Monat getilgt, Sondertilgungen am Jahresende. Ist er in der Ansparphase abbezahlt, fließen Rate und Sondertilgung ab dann zusätzlich in den Sparplan. Läuft er in die Entnahme, wird die Rate bis zum Ende zusätzlich aus dem Depot genommen. Beim Hausverkauf fließt der Hauswert abzüglich Restschuld ins Depot; der Verkauf ist steuerfrei, wenn man im Verkaufsjahr und den zwei Jahren davor selbst darin gewohnt hat. Danach fällt Miete an, die in die Entnahme gehört. Der Hauswert entwickelt sich ohne Zufall; er zählt nur ins Gesamtvermögen, nicht in die Erfolgsquote.</p>
           <p><strong>Gold:</strong> Gerechnet wie ein Gold-Wertpapier mit Lieferanspruch (etwa Xetra-Gold). Der Bundesfinanzhof behandelt es wie physisches Gold: Gewinne sind nach mindestens einem Jahr steuerfrei, Verluste zählen dann aber auch nicht. Es ist kein Fonds, also fällt keine Vorabpauschale an. Der Rechner unterstellt, dass Gold immer erst nach über einem Jahr verkauft wird. In den Härtetests laufen die echten Jahresrenditen von Gold in Euro mit (LBMA-Jahresschlusskurse, vor 1999 aus der D-Mark umgerechnet; die Inflationsphase der 1970er in US-Dollar wie die übrigen Werte dort). Achtung: Die meisten Krisen dieser Auswahl waren gute Goldjahre. Der Gegentest „Goldabsturz“ zeigt die andere Seite; die Aktien laufen dort zufällig.</p>
           <p><strong>Anleihezelt, Forschungsstand:</strong> Pfau und Kitces fanden mit US-Daten, dass ein in der Rente steigender Aktienanteil das Risiko senken kann, das Geld zu früh aufzubrauchen. Estrada kam mit Daten aus 19 Ländern über 110 Jahre eher zu festen Quoten; Blanchett fand keinen Verlauf, der für alle am besten ist. Nach Early Retirement Now hilft ein Zelt vor allem, wenn die Börse zum Start teuer bewertet ist; das bildet dieser Rechner nicht ab. Anarkulova, Cederburg und O’Doherty stellen grundsätzlich infrage, dass man mit dem Alter mehr Anleihen halten sollte. Die Studien rechnen meist ohne Steuer; in einem deutschen Depot kostet der Aufbau des Zelts Steuer auf die verkauften Aktiengewinne.</p>
-          <p><strong>Modell:</strong> Börsenjahre mit häufigeren Extremjahren, schwankende Inflation; Anleihen und Geldmarkt reagieren auf die Inflation, Anleihen umso stärker, je höher ihre Schwankung ist. Rente, PKV-Beitrag, Steuertarif und Sparrate folgen der Inflation des jeweiligen Verlaufs mit einem Jahr Verzögerung. Alle eingestellten Renditen, Zinsen und Steigerungen gelten bei 2 % Inflation; bei höherer Durchschnittsinflation steigen Zinsen, Geldmarkt und Gold voll mit, Aktien zu drei Vierteln. Der Kredit wechselt nach der Zinsbindung auf den Anschlusszins. Die eingestellten Renditen gelten vor Kosten; die Kosten gehen jedes Jahr von allen Anlagen ab. Der Härtetest ersetzt einige Jahre durch echte Werte aus der Vergangenheit (Aktien: MSCI World, Anleihen: deutsche Staatsanleihen bzw. 2022 der breite Euro-Anleihenindex).</p>
+          <p><strong>Modell:</strong> Börsenjahre mit häufigeren Extremjahren, schwankende Inflation und ein Zinsniveau, das mit der halben Inflationsabweichung und eigenen Realzins-Schocks schwankt (etwa ±2 Punkte). Anleihen erhalten den Zins des Vorjahrs und verlieren bei steigendem Zins Kurs, umso mehr, je höher ihre Schwankung ist; Geldmarkt folgt dem Zins, Aktien geben bei steigendem Realzins etwas nach. Basiszins der Vorabpauschale und Anschlusszins der Kredite (alle 10 Jahre neu) folgen demselben Zinsniveau. Rente, PKV-Beitrag, Steuertarif und Sparrate folgen der Inflation des jeweiligen Verlaufs mit einem Jahr Verzögerung. Alle eingestellten Renditen, Zinsen und Steigerungen gelten bei 2 % Inflation; bei höherer Durchschnittsinflation steigen Zinsen, Geldmarkt und Gold voll mit, Aktien zu drei Vierteln.  Die eingestellten Renditen gelten vor Kosten; die Kosten gehen jedes Jahr von allen Anlagen ab. Der Härtetest ersetzt einige Jahre durch echte Werte aus der Vergangenheit (Aktien: MSCI World, Anleihen: deutsche Staatsanleihen bzw. 2022 der breite Euro-Anleihenindex).</p>
           <p><strong>Gesetzliche Rente:</strong> Die Rente aus der Renteninformation steigt jedes Jahr um die eingestellte Rate. Davon gehen Kranken- und Pflegeversicherung ab und die Steuer auf den steuerpflichtigen Teil. Dieser Besteuerungsanteil hängt vom Jahr des Rentenbeginns ab: 2026 sind es 84 %, jedes Jahr 0,5 Punkte mehr, ab 2058 100 %. Der steuerfreie Rest bleibt als fester Euro-Betrag, Erhöhungen sind voll steuerpflichtig. Mit eingerechneter Rente zählt als Netto-Einkommen Rente plus Depot; liegt die Netto-Rente über dem Wunsch, ist die ganze Rente das Einkommen und das Depot zahlt nichts. Mit „Rentenlücke schließen“ ist das Wunscheinkommen das heutige Netto ohne Sparrate (und ohne Kreditrate, wenn der Kredit vor der Entnahme abbezahlt ist), mal dem gewählten Anteil, in heutiger Kaufkraft. Ein Extra für die aktiven Jahre kommt bis zum gewählten Alter dazu. Beginnt die Entnahme nach dem gewählten Rentenalter, startet die Rente mit der Entnahme, ohne Zuschläge für den späteren Beginn. Beginnt sie vorher, zahlt das Depot die Jahre bis zur Rente allein; bei flexibler Rate bleibt die Rate in diesen Jahren fest, die flexible Regel beginnt mit der Rente und bezieht sich auf den Teil, den das Depot dann noch zahlt. Das Rentenniveau bei Rentenbeginn skaliert die Rente aus der Renteninformation (die mit heute 48 % rechnet) im Verhältnis, 46 % ergeben also 46/48 der Rente. Privat Versicherte geben ihren heutigen Gesamtbeitrag ein: Ohne Krankentagegeld und ohne den gesetzlichen 10-%-Zuschlag (fällt ab 60 weg) wächst er um die eingestellte Rate, abzüglich einer Beitragsentlastung; die Rentenversicherung zahlt einen Zuschuss von 8,75 % der Bruttorente, höchstens die Hälfte des Beitrags. Vereinfacht: Der Zuschlag wird auch auf den Pflegeanteil herausgerechnet. Die Einkommensteuer rechnet der Rechner nach dem Tarif 2026 (Grundtarif, Einzelveranlagung), dessen Grenzen bis zum jeweiligen Jahr um die eingestellte Rate wachsen; abgezogen werden Kranken- und Pflegeversicherung und die Pauschalen von 138 €, dazu kommt gegebenenfalls Kirchensteuer. Wahlweise gilt ein eigener fester Satz. Nicht enthalten: weitere Einkünfte im Alter, Splitting mit einer Partnerrente, Hinterbliebenenrente, keine Abschläge bei früherem Rentenbeginn; die stehen in der Renteninformation.</p>
+          <p><strong>Ergebnis:</strong> Die Erfolgsquote ist auf 5 Punkte gerundet, weil Annahmen zum Markt sie um 20 Punkte und mehr verschieben; die Spanne zeigt beide Annahmen zum Markt. Die Tabelle „Wie lange muss es reichen?“ nutzt die Sterbetafel 2020/2022 des Statistischen Bundesamts, deren Sterblichkeit um 1 % pro Jahr sinkt (steigende Lebenserwartung); das Risiko zu Lebzeiten gewichtet jede Zukunft, in der das Depot leer wird, mit der Wahrscheinlichkeit, dieses Alter zu erleben.</p>
           <p><strong>Nicht enthalten:</strong> ausschüttende ETFs, Günstigerprüfung, Steueränderungen in der Zukunft. Modellrechnung, keine Prognose und keine Anlageberatung.</p>
           <p>Quellen: <a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Rente/Rentenreform" target="_blank" rel="noopener">Vorschläge der Rentenkommission (DRV)</a> · <a href="https://www.deutsche-rentenversicherung.de/SharedDocs/FAQ/Gesetzesaenderungen/Rentenanpassung/FAQ-Rentenanpassung-2026/Rentenanpassung-2026.html" target="_blank" rel="noopener">Haltelinie und Rentenanpassung 2026 (DRV)</a> · <a href="https://www.haufe.de/id/beitrag/private-kapitaleinkuenfte-in-der-anlagekap-inv-fuer-den-v-g-darstellung-in-der-anlagekap-inv-2025-HI17221637.html" target="_blank" rel="noopener">FIFO nach § 20 EStG (Haufe)</a> · <a href="https://www.finanztip.de/daily/etf-steuern-sparen-beim-verkauf/" target="_blank" rel="noopener">Zweitdepot-Trick (Finanztip)</a> · <a href="https://www.otto-schmidt.de/news/steuerrecht/basiszins-zur-berechnung-der-vorabpauschale-gem-18-absatz-4-invstg-basiszins-zum-2-1-2026-2026-01-15.html" target="_blank" rel="noopener">Basiszins 2026 (BMF)</a> · <a href="https://financialplanningassociation.org/article/journal/JAN14-reducing-retirement-risk-rising-equity-glide-path" target="_blank" rel="noopener">Pfau und Kitces</a> · <a href="https://blog.iese.edu/jestrada/files/2015/09/CFA-IRP-G2.pdf" target="_blank" rel="noopener">Estrada</a> · <a href="https://financialplanningassociation.org/article/journal/FEB15-revisiting-optimal-distribution-glide-path" target="_blank" rel="noopener">Blanchett</a> · <a href="https://earlyretirementnow.com/swr20" target="_blank" rel="noopener">Early Retirement Now</a> · <a href="https://www.aeaweb.org/conference/2025/program/paper/EFddaa8b" target="_blank" rel="noopener">Anarkulova u. a.</a> · <a href="https://www.test.de/Xetra-Gold-Steuerlich-wie-Barren-4910289-0/" target="_blank" rel="noopener">Xetra-Gold steuerlich (Stiftung Warentest)</a> · <a href="https://www.kettner-edelmetalle.de/wissen/goldpreisentwicklung-pro-jahr-tabelle-seit-1971" target="_blank" rel="noopener">Goldpreis pro Jahr seit 1971</a> · <a href="https://www.nber.org/papers/w18706" target="_blank" rel="noopener">Erb und Harvey</a> · <a href="https://www.kreditwesen.de/sites/default/files/content/articledownloads/2015/09/lak_11_17_571-573.pdf" target="_blank" rel="noopener">Hauspreise real 1970–2010</a> · <a href="https://epflicht-hessen.hebis.de/ubffm/download/pdf/8422827" target="_blank" rel="noopener">Renditedreieck Wohnimmobilien 1970–2022</a> · <a href="https://www.destatis.de/DE/Presse/Pressemitteilungen/2026/09/PD26_336_61262.html" target="_blank" rel="noopener">Häuserpreisindex 2. Quartal 2026 (Destatis)</a> · <a href="https://www.newyorkfed.org/medialibrary/media/research/staff_reports/sr999.pdf" target="_blank" rel="noopener">Renditen in Großstädten</a> · <a href="https://www.nber.org/papers/w24112" target="_blank" rel="noopener">Jordà u. a.: Rate of Return on Everything</a> · <a href="https://www.nber.org/papers/w9462" target="_blank" rel="noopener">Sinai und Souleles: Wohneigentum als Schutz vor Mietrisiko</a> · <a href="https://www.bundesbank.de/de/bundesbank/forschung/studie-zur-wirtschaftlichen-lage-privater-haushalte-phf/ergebnisse" target="_blank" rel="noopener">Vermögensbefragung der Bundesbank (PHF)</a> · <a href="https://gerd-kommer.de/blog/mythen-eigenheimbesitz/" target="_blank" rel="noopener">Kommer: Eigenheimbesitzer im Alter vermögender?</a> · <a href="https://gerd-kommer.de/blog/kredithebel-immobilien/" target="_blank" rel="noopener">Kommer: Kredithebel bei Immobilien</a></p>
         </div>
@@ -773,7 +788,7 @@ function normals(seed, n) {
   return out;
 }
 const M = NMAX * YMAX;
-const ZE = normals(20261126, M), ZB = normals(777, M), ZI = normals(4242, M), ZG = normals(31337, M);
+const ZE = normals(20261126, M), ZB = normals(777, M), ZI = normals(4242, M), ZG = normals(31337, M), ZR = normals(5151, M);
 // Student-t mit 5 Freiheitsgraden, auf Varianz 1 skaliert (häufigere Extremjahre)
 const TE = (() => {
   const chi = normals(99, M * 5), out = new Float64Array(M), sc = Math.sqrt(3 / 5);
@@ -798,10 +813,17 @@ const STRESS = {
 
 const IDX = new Float64Array(YMAX + 1), CX = new Float64Array(YMAX + 1), PXT = new Float64Array(YMAX + 1);
 const RE = new Float64Array(YMAX), RB = new Float64Array(YMAX), RC = new Float64Array(YMAX), RG = new Float64Array(YMAX), IN = new Float64Array(YMAX);
+// Zinspfad: Abweichung des langfristigen Zinses vom Durchschnitt am Ende jedes Jahres (DEV) und Basiszins des Jahres (BZY)
+const DEV = new Float64Array(YMAX), BZY = new Float64Array(YMAX);
+const RHO_R = 0.85, SIG_R = 0.005;   // Realzins-Schocks: bleiben einige Jahre, Schwankung etwa 1 Prozentpunkt
 function genPath(p, i, Y) {
   const off = p.off || 0, m = p.inf, st = STRESS[p.stress];
   const dur = Math.min(6, Math.max(0.5, 2.5 * p.vb / 0.04)); // Zinsempfindlichkeit wächst mit der Schwankung (Laufzeit)
-  let prev = m;
+  // Langfristiger Zins = Durchschnitt + halbe Inflationsabweichung + Realzins-Schock u. Anleihen: Kupon aus dem Zins des Vorjahrs,
+  // Kurs fällt mit Laufzeit × Zinsanstieg; für die Inflation entspricht das genau der bisherigen Rechnung (2 × dur × 0,5)
+  const linkedAll = p.model === "r", Du = 2 * dur, bzE = Math.max(0, p.bz + m - 0.02);
+  const sdDu = SIG_R * Math.sqrt(2 / (1 + RHO_R)), resid = linkedAll ? Math.sqrt(Math.max(0, Math.pow(0.85 * p.vb, 2) - Math.pow(Du * sdDu, 2) - SIG_R * SIG_R / (1 - RHO_R * RHO_R))) : p.vb;
+  let prev = m, u = 0, devPrev = 0;
   for (let y = 0; y < Y; y++) {
     const k = i * YMAX + y, ys = y - off;
     const expInf = m + 0.7 * (prev - m);
@@ -815,8 +837,13 @@ function genPath(p, i, Y) {
     else if (p.model === "r") re = p.re + p.ve * p.ve / 2 + p.ve * TE[k] - 1.5 * surprise;
     else re = p.re + p.ve * p.ve / 2 + p.ve * ZE[k];
     const linked = p.model === "r" || (st && st.inf);
-    RB[y] = p.rb + (linked ? 0.5 * (prev - m) - dur * (inf - prev) : 0) + (p.model === "r" ? 0.85 : 1) * p.vb * ZB[k];
-    RC[y] = Math.max(-0.005, p.rc + (linked ? 0.8 * (prev - m) : 0));
+    const uPrev = u; if (linkedAll) u = RHO_R * u + SIG_R * ZR[k];
+    let dev = (linked ? 0.5 * (inf - m) : 0) + u;
+    if (bzE + dev < -0.005) { u += -0.005 - bzE - dev; dev = -0.005 - bzE; }   // Zins nicht unter −0,5 %
+    BZY[y] = Math.max(0, bzE + devPrev); DEV[y] = dev;
+    RB[y] = p.rb + (linked ? devPrev - Du * (dev - devPrev) : 0) + resid * ZB[k];
+    RC[y] = Math.max(-0.005, p.rc + (linked ? 0.8 * (prev - m) + uPrev : 0));
+    re -= linkedAll ? 2 * (u - uPrev) : 0;   // steigende Realzinsen drücken auch Aktien etwas
     RE[y] = Math.max(-0.95, re);
     const eqShock = RE[y] - (p.re + p.ve * p.ve / 2);
     RB[y] += 0.4 * (p.model === "r" || st ? 0.15 * eqShock : 0);
@@ -832,7 +859,7 @@ function genPath(p, i, Y) {
     RC[y] += sh;
     if (!(st && st.gd && ys >= 0 && ys < st.gd.length)) RG[y] += sh;
     const tc = p.ter || 0; RE[y] -= tc; RB[y] -= tc; RC[y] -= tc; RG[y] -= tc; // laufende Kosten
-    IN[y] = inf; prev = inf;
+    IN[y] = inf; prev = inf; devPrev = dev;
   }
 }
 
@@ -855,17 +882,18 @@ const LU = [0, 1, 2, 3].map(() => new Float64Array(LMAX));
 const LB = [0, 1, 2, 3].map(() => new Float64Array(LMAX));
 
 // Tilgungsplan: monatliche Rate, Sondertilgung am Jahresende; liefert Zahlungen je Jahr und Restschuld zu Jahresbeginn (nominal)
-function loanPlan(p, Y, saleY) {
+// DV (optional): Zinsabweichung des Pfads; dann gilt bei jeder Anschlussfinanzierung (alle 10 Jahre nach der Zinsbindung) der Zins des Pfads
+function loanPlan(p, Y, saleY, DV) {
   const LP = new Float64Array(Y), DEBT = new Float64Array(Y + 1), XP = new Float64Array(Y);
   let d = p.home || p.loanOnly ? p.debt : 0, payoff = d > 0 ? null : 0; DEBT[0] = d;
   // Nach der Zinsbindung gilt der Anschlusszins (bei 2 % Inflation; bei mehr Inflation entsprechend höher). Die Rate bleibt gleich,
   // reicht sie nicht für Zins plus 1 % Tilgung, steigt sie darauf
   const zb = p.lzb == null ? Infinity : p.lzb, z2 = p.lz2 == null ? p.lz : Math.max(0, p.lz2 + (p.inf == null ? 0.02 : p.inf) - 0.02);
-  let rate = p.lrate;
+  let rate = p.lrate, zc = z2;
   for (let y = 0; y < Y; y++) {
     if (y >= saleY) { d = 0; DEBT[y + 1] = 0; continue; }
-    if (y === zb && d > 0) rate = Math.max(p.lrate, d * (z2 + 0.01) / 12);
-    const zi = y < zb ? p.lz : z2;
+    if (y >= zb && (y - zb) % 10 === 0 && d > 0) { zc = DV ? Math.max(0.005, z2 + (y > 0 ? DV[y - 1] : 0)) : z2; rate = Math.max(p.lrate, d * (zc + 0.01) / 12); }
+    const zi = y < zb ? p.lz : zc;
     let paid = 0;
     for (let mo = 0; mo < 12 && d > 1e-6; mo++) {
       const pm = Math.min(d * (1 + zi / 12), rate); d = d * (1 + zi / 12) - pm; paid += pm; XP[y] += Math.max(0, pm - p.lrate);
@@ -929,8 +957,8 @@ function pensionPlan(p, Y, IN, out) {
 
 // ---------- Vermietete Immobilie ----------
 // Kredit wie beim eigenen Haus (Zinsbindung, Anschlusszins), ohne Sondertilgung
-function rentalLoan(p, Y, rsY) {
-  return loanPlan({ loanOnly: true, home: false, debt: p.rdebt || 0, lz: p.rlz || 0, lzb: p.rlzb, lz2: p.rlz2, lrate: p.rrate || 0, lsond: 0, inf: p.inf }, Y, rsY);
+function rentalLoan(p, Y, rsY, DV) {
+  return loanPlan({ loanOnly: true, home: false, debt: p.rdebt || 0, lz: p.rlz || 0, lzb: p.rlzb, lz2: p.rlz2, lrate: p.rrate || 0, lsond: 0, inf: p.inf }, Y, rsY, DV);
 }
 // Netto-Zufluss pro Jahr (nominal) nach Kosten, Rate und Steuer; im Verkaufsjahr inkl. Erlös.
 // X: Index der Inflation (1 bei 2 %), D: Deflator des Pfads, XT: zu versteuerndes Renteneinkommen, RY: Beginn der Entnahme
@@ -978,23 +1006,31 @@ function simulate(p, lite) {
   const penR = lite ? null : new Float64Array(Y * N), rateR = lite ? null : new Float64Array(Y * N), rateN = lite ? null : new Float64Array(Y * N);
   const taxY = lite ? null : new Float64Array(Y * N);
   const taxAcc = new Float64Array(N), taxRet = new Float64Array(N), taxRet10 = new Float64Array(N), endR = new Float64Array(N), atRet = new Float64Array(N), gross1 = new Float64Array(N), gross1N = new Float64Array(N), tax1N = new Float64Array(N), taxAccN = new Float64Array(N), taxRetN = new Float64Array(N), taxRet10N = new Float64Array(N);
-  let fails = 0; const failAges = [];
+  let fails = 0; const failAges = [], failGaps = [];   // Alter, in dem das Depot leer ist, und dann fehlender Betrag pro Monat (heutige Kaufkraft)
   // Eigenes Haus und einmalige Zahlungen (Beträge in heutiger Kaufkraft, Kredit nominal)
   const FIN = new Float64Array(Y), FOUT = new Float64Array(Y); let saleY = Infinity;
   (p.flows || []).forEach(f => { if (f.y < 0 || f.y >= Y) return; if (f.type === "sale") { if (p.home && f.y < saleY) saleY = f.y; } else if (f.type === "in") FIN[f.y] += f.amt; else FOUT[f.y] += f.amt; });
-  const LN = loanPlan(p, Y, saleY), LP = LN.LP, DEBT = LN.DEBT;
   // Eigene Anteile: sh an Rate und Sondertilgung (Zahlungen), ho am Haus (Hauswert, Restschuld im Vermögen, Verkaufserlös)
   const sh = p.home ? (p.lshare == null ? 1 : p.lshare) : 1, ho = p.home ? (p.hshare == null ? 1 : p.hshare) : 1;
-  for (let y = 0; y < LP.length; y++) LP[y] *= sh;
-  for (let y = 0; y < DEBT.length; y++) DEBT[y] *= ho;
   const payAll = p.home && p.debt > 0 ? (p.lrate * 12 + p.lsond) * sh : 0;
-  const FREED = new Float64Array(Y); for (let y = 0; y < Y; y++) FREED[y] = y < saleY ? Math.max(0, payAll - LP[y]) * (p.fp == null ? 1 : p.fp) : 0;
+  const LN0 = loanPlan(p, Y, saleY);   // Plan bei durchschnittlichen Zinsen (für Anzeigen)
+  // Kredit je Pfad: ändert sich nur, wenn eine Anschlussfinanzierung in den Zeitraum fällt
+  const pathLoan = p.model === "r" && p.home && p.debt > 0 && (p.lzb == null ? Infinity : p.lzb) < Y;
+  let LN, LP, DEBT; const FREED = new Float64Array(Y);
+  const setLoan = L => {
+    LN = L; LP = L.LP; DEBT = L.DEBT;
+    for (let y = 0; y < LP.length; y++) LP[y] *= sh;
+    for (let y = 0; y < DEBT.length; y++) DEBT[y] *= ho;
+    for (let y = 0; y < Y; y++) FREED[y] = y < saleY ? Math.max(0, payAll - LP[y]) * (p.fp == null ? 1 : p.fp) : 0;
+  };
+  setLoan(LN0);
   const HR = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) HR[y] = p.home && y <= saleY ? p.hv * ho * Math.pow(1 + p.hg, y) : 0;
   // Vermietete Immobilie: Kredit, Wert (heutige Kaufkraft) und Verkauf
   const rsY = p.rOn && p.rSaleAge > 0 && p.rSaleAge - p.age0 < Y ? Math.max(0, p.rSaleAge - p.age0) : Infinity;
-  const RL = rentalLoan(p, Y, rsY), RCF = new Float64Array(Y), RDF = new Float64Array(Y + 1);
+  let RL = rentalLoan(p, Y, rsY); const RCF = new Float64Array(Y), RDF = new Float64Array(Y + 1);
+  const pathRL = p.model === "r" && p.rOn && p.rdebt > 0 && (p.rlzb == null ? Infinity : p.rlzb) < Y;
   const RVr = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) RVr[y] = p.rOn && y < rsY ? (p.rv || 0) * Math.pow(1 + (p.rhg || 0), y) : 0;
-  const RDEBT = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) RDEBT[y] = p.rOn && y < rsY ? RL.DEBT[y] : 0;
+  const RDEBT = new Float64Array(Y + 1); const setRDebt = () => { for (let y = 0; y <= Y; y++) RDEBT[y] = p.rOn && y < rsY ? RL.DEBT[y] : 0; }; setRDebt();
   const withHome = (p.home && (p.hv > 0 || p.debt > 0)) || (p.rOn && (p.rv > 0 || p.rdebt > 0));
   const netR = lite || !withHome ? null : new Float64Array((Y + 1) * N), netN = lite || !withHome ? null : new Float64Array((Y + 1) * N);
   const infM = p.inf == null ? 0.02 : p.inf, bzE = Math.max(0, p.bz + infM - 0.02);
@@ -1042,6 +1078,8 @@ function simulate(p, lite) {
 
   for (let i = 0; i < N; i++) {
     genPath(p, i, Y);
+    if (pathLoan) setLoan(loanPlan(p, Y, saleY, DEV));
+    if (pathRL) { RL = rentalLoan(p, Y, rsY, DEV); setRDebt(); }
     if (pathPN) PN = pensionPlan(p, Y, IN, PNP).PN;
     CX[0] = 1; for (let y = 1; y < Y; y++) CX[y] = CX[y - 1] * (1 + (y >= 2 ? IN[y - 2] : infM)) / 1.02; // Sparrate folgt den Löhnen
     if (p.rOn) { RDF[0] = 1; for (let y = 0; y < Y; y++) RDF[y + 1] = RDF[y] * (1 + IN[y]); rentalFlows(p, Y, RL, rsY, CX, RDF, PXT, RY, RCF); }
@@ -1072,7 +1110,7 @@ function simulate(p, lite) {
         for (let it = 0; it < 6; it++) { const G2 = cashNeed - cashIn + taxOf(vpPend + gainsFor(G, w, true)); const dG = Math.abs(G2 - G); G = G2; if (dG < 0.05) break; }
         const tv = total();
         if (G > tv + 1e-6) {
-          dead = true; fails++; failAges.push(age);
+          dead = true; fails++; failAges.push(age); failGaps.push(Math.max(0, st.base + EXn - PI[y]) / defl);
           if (!lite) { const part = Math.max(PI[y], Math.min(st.base + EXn, PI[y] + Math.max(0, tv + cashIn - tax) / 12)); rateN[y * N + i] = part; rateR[y * N + i] = part / defl; penR[y * N + i] = PN[y] / defl; }
           let dd = defl;
           for (let yy = y; yy < Y && !lite; yy++) {
@@ -1110,7 +1148,7 @@ function simulate(p, lite) {
       for (let c = 0; c < NC; c++) {
         const v0 = val(c); P[c] *= 1 + (c === 0 ? RE[y] : c === 1 ? RB[y] : c === 2 ? RC[y] : RG[y]); const v1 = val(c);
         if (TF[c] >= 1) continue;
-        const vp = Math.max(0, Math.min(v0 * bzE * 0.7, v1 - v0));
+        const vp = Math.max(0, Math.min(v0 * BZY[y] * 0.7, v1 - v0));
         if (vp > 0) { addBasis(c, vp); vpNext += vp * (1 - TF[c]); }
       }
       vpPend = vpNext;
@@ -1139,7 +1177,7 @@ function simulate(p, lite) {
   }
   const med = a => { const s = Float64Array.from(a).sort(); return s[Math.floor(N / 2)]; };
   const q = (a, x) => { const s = Float64Array.from(a).sort(); return s[Math.floor((N - 1) * x)]; };
-  return { Y, RY, W, totR, totN, netR, netN, pension: PL, payoff: LN.payoff, saleY, tax1: med(tax1), loan1, rateR, rateN, penR, taxY, success: 1 - fails / N, failAges,
+  return { Y, RY, W, totR, totN, netR, netN, pension: PL, payoff: LN0.payoff, saleY, tax1: med(tax1), loan1, rateR, rateN, penR, taxY, success: 1 - fails / N, failAges, failGaps,
     taxAcc: med(taxAcc), taxRet: med(taxRet), taxRet10: med(taxRet10), endMed: med(endR), retMed: q(atRet, 0.5), retLow: q(atRet, 0.1), gross1: med(gross1), gross1N: med(gross1N), tax1N: med(tax1N), taxAccN: med(taxAccN), taxRetN: med(taxRetN), taxRet10N: med(taxRet10N) };
 }
 
@@ -1215,7 +1253,7 @@ function normals(seed, n) {
   return out;
 }
 const M = NMAX * YMAX;
-const ZE = normals(20261126, M), ZB = normals(777, M), ZI = normals(4242, M), ZG = normals(31337, M);
+const ZE = normals(20261126, M), ZB = normals(777, M), ZI = normals(4242, M), ZG = normals(31337, M), ZR = normals(5151, M);
 // Student-t mit 5 Freiheitsgraden, auf Varianz 1 skaliert (häufigere Extremjahre)
 const TE = (() => {
   const chi = normals(99, M * 5), out = new Float64Array(M), sc = Math.sqrt(3 / 5);
@@ -1240,10 +1278,17 @@ const STRESS = {
 
 const IDX = new Float64Array(YMAX + 1), CX = new Float64Array(YMAX + 1), PXT = new Float64Array(YMAX + 1);
 const RE = new Float64Array(YMAX), RB = new Float64Array(YMAX), RC = new Float64Array(YMAX), RG = new Float64Array(YMAX), IN = new Float64Array(YMAX);
+// Zinspfad: Abweichung des langfristigen Zinses vom Durchschnitt am Ende jedes Jahres (DEV) und Basiszins des Jahres (BZY)
+const DEV = new Float64Array(YMAX), BZY = new Float64Array(YMAX);
+const RHO_R = 0.85, SIG_R = 0.005;   // Realzins-Schocks: bleiben einige Jahre, Schwankung etwa 1 Prozentpunkt
 function genPath(p, i, Y) {
   const off = p.off || 0, m = p.inf, st = STRESS[p.stress];
   const dur = Math.min(6, Math.max(0.5, 2.5 * p.vb / 0.04)); // Zinsempfindlichkeit wächst mit der Schwankung (Laufzeit)
-  let prev = m;
+  // Langfristiger Zins = Durchschnitt + halbe Inflationsabweichung + Realzins-Schock u. Anleihen: Kupon aus dem Zins des Vorjahrs,
+  // Kurs fällt mit Laufzeit × Zinsanstieg; für die Inflation entspricht das genau der bisherigen Rechnung (2 × dur × 0,5)
+  const linkedAll = p.model === "r", Du = 2 * dur, bzE = Math.max(0, p.bz + m - 0.02);
+  const sdDu = SIG_R * Math.sqrt(2 / (1 + RHO_R)), resid = linkedAll ? Math.sqrt(Math.max(0, Math.pow(0.85 * p.vb, 2) - Math.pow(Du * sdDu, 2) - SIG_R * SIG_R / (1 - RHO_R * RHO_R))) : p.vb;
+  let prev = m, u = 0, devPrev = 0;
   for (let y = 0; y < Y; y++) {
     const k = i * YMAX + y, ys = y - off;
     const expInf = m + 0.7 * (prev - m);
@@ -1257,8 +1302,13 @@ function genPath(p, i, Y) {
     else if (p.model === "r") re = p.re + p.ve * p.ve / 2 + p.ve * TE[k] - 1.5 * surprise;
     else re = p.re + p.ve * p.ve / 2 + p.ve * ZE[k];
     const linked = p.model === "r" || (st && st.inf);
-    RB[y] = p.rb + (linked ? 0.5 * (prev - m) - dur * (inf - prev) : 0) + (p.model === "r" ? 0.85 : 1) * p.vb * ZB[k];
-    RC[y] = Math.max(-0.005, p.rc + (linked ? 0.8 * (prev - m) : 0));
+    const uPrev = u; if (linkedAll) u = RHO_R * u + SIG_R * ZR[k];
+    let dev = (linked ? 0.5 * (inf - m) : 0) + u;
+    if (bzE + dev < -0.005) { u += -0.005 - bzE - dev; dev = -0.005 - bzE; }   // Zins nicht unter −0,5 %
+    BZY[y] = Math.max(0, bzE + devPrev); DEV[y] = dev;
+    RB[y] = p.rb + (linked ? devPrev - Du * (dev - devPrev) : 0) + resid * ZB[k];
+    RC[y] = Math.max(-0.005, p.rc + (linked ? 0.8 * (prev - m) + uPrev : 0));
+    re -= linkedAll ? 2 * (u - uPrev) : 0;   // steigende Realzinsen drücken auch Aktien etwas
     RE[y] = Math.max(-0.95, re);
     const eqShock = RE[y] - (p.re + p.ve * p.ve / 2);
     RB[y] += 0.4 * (p.model === "r" || st ? 0.15 * eqShock : 0);
@@ -1274,7 +1324,7 @@ function genPath(p, i, Y) {
     RC[y] += sh;
     if (!(st && st.gd && ys >= 0 && ys < st.gd.length)) RG[y] += sh;
     const tc = p.ter || 0; RE[y] -= tc; RB[y] -= tc; RC[y] -= tc; RG[y] -= tc; // laufende Kosten
-    IN[y] = inf; prev = inf;
+    IN[y] = inf; prev = inf; devPrev = dev;
   }
 }
 
@@ -1297,17 +1347,18 @@ const LU = [0, 1, 2, 3].map(() => new Float64Array(LMAX));
 const LB = [0, 1, 2, 3].map(() => new Float64Array(LMAX));
 
 // Tilgungsplan: monatliche Rate, Sondertilgung am Jahresende; liefert Zahlungen je Jahr und Restschuld zu Jahresbeginn (nominal)
-function loanPlan(p, Y, saleY) {
+// DV (optional): Zinsabweichung des Pfads; dann gilt bei jeder Anschlussfinanzierung (alle 10 Jahre nach der Zinsbindung) der Zins des Pfads
+function loanPlan(p, Y, saleY, DV) {
   const LP = new Float64Array(Y), DEBT = new Float64Array(Y + 1), XP = new Float64Array(Y);
   let d = p.home || p.loanOnly ? p.debt : 0, payoff = d > 0 ? null : 0; DEBT[0] = d;
   // Nach der Zinsbindung gilt der Anschlusszins (bei 2 % Inflation; bei mehr Inflation entsprechend höher). Die Rate bleibt gleich,
   // reicht sie nicht für Zins plus 1 % Tilgung, steigt sie darauf
   const zb = p.lzb == null ? Infinity : p.lzb, z2 = p.lz2 == null ? p.lz : Math.max(0, p.lz2 + (p.inf == null ? 0.02 : p.inf) - 0.02);
-  let rate = p.lrate;
+  let rate = p.lrate, zc = z2;
   for (let y = 0; y < Y; y++) {
     if (y >= saleY) { d = 0; DEBT[y + 1] = 0; continue; }
-    if (y === zb && d > 0) rate = Math.max(p.lrate, d * (z2 + 0.01) / 12);
-    const zi = y < zb ? p.lz : z2;
+    if (y >= zb && (y - zb) % 10 === 0 && d > 0) { zc = DV ? Math.max(0.005, z2 + (y > 0 ? DV[y - 1] : 0)) : z2; rate = Math.max(p.lrate, d * (zc + 0.01) / 12); }
+    const zi = y < zb ? p.lz : zc;
     let paid = 0;
     for (let mo = 0; mo < 12 && d > 1e-6; mo++) {
       const pm = Math.min(d * (1 + zi / 12), rate); d = d * (1 + zi / 12) - pm; paid += pm; XP[y] += Math.max(0, pm - p.lrate);
@@ -1371,8 +1422,8 @@ function pensionPlan(p, Y, IN, out) {
 
 // ---------- Vermietete Immobilie ----------
 // Kredit wie beim eigenen Haus (Zinsbindung, Anschlusszins), ohne Sondertilgung
-function rentalLoan(p, Y, rsY) {
-  return loanPlan({ loanOnly: true, home: false, debt: p.rdebt || 0, lz: p.rlz || 0, lzb: p.rlzb, lz2: p.rlz2, lrate: p.rrate || 0, lsond: 0, inf: p.inf }, Y, rsY);
+function rentalLoan(p, Y, rsY, DV) {
+  return loanPlan({ loanOnly: true, home: false, debt: p.rdebt || 0, lz: p.rlz || 0, lzb: p.rlzb, lz2: p.rlz2, lrate: p.rrate || 0, lsond: 0, inf: p.inf }, Y, rsY, DV);
 }
 // Netto-Zufluss pro Jahr (nominal) nach Kosten, Rate und Steuer; im Verkaufsjahr inkl. Erlös.
 // X: Index der Inflation (1 bei 2 %), D: Deflator des Pfads, XT: zu versteuerndes Renteneinkommen, RY: Beginn der Entnahme
@@ -1420,23 +1471,31 @@ function simulate(p, lite) {
   const penR = lite ? null : new Float64Array(Y * N), rateR = lite ? null : new Float64Array(Y * N), rateN = lite ? null : new Float64Array(Y * N);
   const taxY = lite ? null : new Float64Array(Y * N);
   const taxAcc = new Float64Array(N), taxRet = new Float64Array(N), taxRet10 = new Float64Array(N), endR = new Float64Array(N), atRet = new Float64Array(N), gross1 = new Float64Array(N), gross1N = new Float64Array(N), tax1N = new Float64Array(N), taxAccN = new Float64Array(N), taxRetN = new Float64Array(N), taxRet10N = new Float64Array(N);
-  let fails = 0; const failAges = [];
+  let fails = 0; const failAges = [], failGaps = [];   // Alter, in dem das Depot leer ist, und dann fehlender Betrag pro Monat (heutige Kaufkraft)
   // Eigenes Haus und einmalige Zahlungen (Beträge in heutiger Kaufkraft, Kredit nominal)
   const FIN = new Float64Array(Y), FOUT = new Float64Array(Y); let saleY = Infinity;
   (p.flows || []).forEach(f => { if (f.y < 0 || f.y >= Y) return; if (f.type === "sale") { if (p.home && f.y < saleY) saleY = f.y; } else if (f.type === "in") FIN[f.y] += f.amt; else FOUT[f.y] += f.amt; });
-  const LN = loanPlan(p, Y, saleY), LP = LN.LP, DEBT = LN.DEBT;
   // Eigene Anteile: sh an Rate und Sondertilgung (Zahlungen), ho am Haus (Hauswert, Restschuld im Vermögen, Verkaufserlös)
   const sh = p.home ? (p.lshare == null ? 1 : p.lshare) : 1, ho = p.home ? (p.hshare == null ? 1 : p.hshare) : 1;
-  for (let y = 0; y < LP.length; y++) LP[y] *= sh;
-  for (let y = 0; y < DEBT.length; y++) DEBT[y] *= ho;
   const payAll = p.home && p.debt > 0 ? (p.lrate * 12 + p.lsond) * sh : 0;
-  const FREED = new Float64Array(Y); for (let y = 0; y < Y; y++) FREED[y] = y < saleY ? Math.max(0, payAll - LP[y]) * (p.fp == null ? 1 : p.fp) : 0;
+  const LN0 = loanPlan(p, Y, saleY);   // Plan bei durchschnittlichen Zinsen (für Anzeigen)
+  // Kredit je Pfad: ändert sich nur, wenn eine Anschlussfinanzierung in den Zeitraum fällt
+  const pathLoan = p.model === "r" && p.home && p.debt > 0 && (p.lzb == null ? Infinity : p.lzb) < Y;
+  let LN, LP, DEBT; const FREED = new Float64Array(Y);
+  const setLoan = L => {
+    LN = L; LP = L.LP; DEBT = L.DEBT;
+    for (let y = 0; y < LP.length; y++) LP[y] *= sh;
+    for (let y = 0; y < DEBT.length; y++) DEBT[y] *= ho;
+    for (let y = 0; y < Y; y++) FREED[y] = y < saleY ? Math.max(0, payAll - LP[y]) * (p.fp == null ? 1 : p.fp) : 0;
+  };
+  setLoan(LN0);
   const HR = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) HR[y] = p.home && y <= saleY ? p.hv * ho * Math.pow(1 + p.hg, y) : 0;
   // Vermietete Immobilie: Kredit, Wert (heutige Kaufkraft) und Verkauf
   const rsY = p.rOn && p.rSaleAge > 0 && p.rSaleAge - p.age0 < Y ? Math.max(0, p.rSaleAge - p.age0) : Infinity;
-  const RL = rentalLoan(p, Y, rsY), RCF = new Float64Array(Y), RDF = new Float64Array(Y + 1);
+  let RL = rentalLoan(p, Y, rsY); const RCF = new Float64Array(Y), RDF = new Float64Array(Y + 1);
+  const pathRL = p.model === "r" && p.rOn && p.rdebt > 0 && (p.rlzb == null ? Infinity : p.rlzb) < Y;
   const RVr = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) RVr[y] = p.rOn && y < rsY ? (p.rv || 0) * Math.pow(1 + (p.rhg || 0), y) : 0;
-  const RDEBT = new Float64Array(Y + 1); for (let y = 0; y <= Y; y++) RDEBT[y] = p.rOn && y < rsY ? RL.DEBT[y] : 0;
+  const RDEBT = new Float64Array(Y + 1); const setRDebt = () => { for (let y = 0; y <= Y; y++) RDEBT[y] = p.rOn && y < rsY ? RL.DEBT[y] : 0; }; setRDebt();
   const withHome = (p.home && (p.hv > 0 || p.debt > 0)) || (p.rOn && (p.rv > 0 || p.rdebt > 0));
   const netR = lite || !withHome ? null : new Float64Array((Y + 1) * N), netN = lite || !withHome ? null : new Float64Array((Y + 1) * N);
   const infM = p.inf == null ? 0.02 : p.inf, bzE = Math.max(0, p.bz + infM - 0.02);
@@ -1484,6 +1543,8 @@ function simulate(p, lite) {
 
   for (let i = 0; i < N; i++) {
     genPath(p, i, Y);
+    if (pathLoan) setLoan(loanPlan(p, Y, saleY, DEV));
+    if (pathRL) { RL = rentalLoan(p, Y, rsY, DEV); setRDebt(); }
     if (pathPN) PN = pensionPlan(p, Y, IN, PNP).PN;
     CX[0] = 1; for (let y = 1; y < Y; y++) CX[y] = CX[y - 1] * (1 + (y >= 2 ? IN[y - 2] : infM)) / 1.02; // Sparrate folgt den Löhnen
     if (p.rOn) { RDF[0] = 1; for (let y = 0; y < Y; y++) RDF[y + 1] = RDF[y] * (1 + IN[y]); rentalFlows(p, Y, RL, rsY, CX, RDF, PXT, RY, RCF); }
@@ -1514,7 +1575,7 @@ function simulate(p, lite) {
         for (let it = 0; it < 6; it++) { const G2 = cashNeed - cashIn + taxOf(vpPend + gainsFor(G, w, true)); const dG = Math.abs(G2 - G); G = G2; if (dG < 0.05) break; }
         const tv = total();
         if (G > tv + 1e-6) {
-          dead = true; fails++; failAges.push(age);
+          dead = true; fails++; failAges.push(age); failGaps.push(Math.max(0, st.base + EXn - PI[y]) / defl);
           if (!lite) { const part = Math.max(PI[y], Math.min(st.base + EXn, PI[y] + Math.max(0, tv + cashIn - tax) / 12)); rateN[y * N + i] = part; rateR[y * N + i] = part / defl; penR[y * N + i] = PN[y] / defl; }
           let dd = defl;
           for (let yy = y; yy < Y && !lite; yy++) {
@@ -1552,7 +1613,7 @@ function simulate(p, lite) {
       for (let c = 0; c < NC; c++) {
         const v0 = val(c); P[c] *= 1 + (c === 0 ? RE[y] : c === 1 ? RB[y] : c === 2 ? RC[y] : RG[y]); const v1 = val(c);
         if (TF[c] >= 1) continue;
-        const vp = Math.max(0, Math.min(v0 * bzE * 0.7, v1 - v0));
+        const vp = Math.max(0, Math.min(v0 * BZY[y] * 0.7, v1 - v0));
         if (vp > 0) { addBasis(c, vp); vpNext += vp * (1 - TF[c]); }
       }
       vpPend = vpNext;
@@ -1581,7 +1642,7 @@ function simulate(p, lite) {
   }
   const med = a => { const s = Float64Array.from(a).sort(); return s[Math.floor(N / 2)]; };
   const q = (a, x) => { const s = Float64Array.from(a).sort(); return s[Math.floor((N - 1) * x)]; };
-  return { Y, RY, W, totR, totN, netR, netN, pension: PL, payoff: LN.payoff, saleY, tax1: med(tax1), loan1, rateR, rateN, penR, taxY, success: 1 - fails / N, failAges,
+  return { Y, RY, W, totR, totN, netR, netN, pension: PL, payoff: LN0.payoff, saleY, tax1: med(tax1), loan1, rateR, rateN, penR, taxY, success: 1 - fails / N, failAges, failGaps,
     taxAcc: med(taxAcc), taxRet: med(taxRet), taxRet10: med(taxRet10), endMed: med(endR), retMed: q(atRet, 0.5), retLow: q(atRet, 0.1), gross1: med(gross1), gross1N: med(gross1N), tax1N: med(tax1N), taxAccN: med(taxAccN), taxRetN: med(taxRetN), taxRet10N: med(taxRet10N) };
 }
 
@@ -1678,6 +1739,15 @@ const STRESS_H = {
   infl: "Zehn Jahre mit Inflation bis 13 %. Die Rate steigt kräftig mit, während Aktien und Anleihen real kaum zulegen. Gold stieg damals stark, 1979 allein um 127 % in US-Dollar.",
   gfall: "Gold verliert in fünf Jahren über ein Drittel, wie 1981–1985 in Euro. Aktien und Anleihen laufen zufällig weiter. Ohne Gold im Depot ändert dieser Test nichts.",
 };
+// Erfolgsquote ehrlich runden: das Modell ist nicht auf den Prozentpunkt genau
+const succTxt = s => s >= 0.975 ? "über 95\u00a0%" : s <= 0.025 ? "unter 5\u00a0%" : "etwa " + Math.round(s * 20) * 5 + "\u00a0%";
+const pInt = s => Math.round(s * 100) + "\u00a0%", p5 = s => s >= 0.975 ? "über 95\u00a0%" : s <= 0.025 ? "unter 5\u00a0%" : Math.round(s * 20) * 5 + "\u00a0%";
+// Sterbetafel 2020/2022 (Destatis), Überlebende lx im Alter 30 bis 100; Sterblichkeit sinkt um 1 % pro Jahr ab 2021
+const LXM = [98950,98896,98840,98780,98717,98642,98562,98472,98367,98258,98141,98012,97875,97725,97556,97374,97183,96974,96742,96483,96188,95861,95503,95108,94681,94206,93664,93068,92416,91688,90889,90001,89023,87959,86802,85543,84178,82711,81143,79469,77695,75842,73869,71820,69620,67348,64909,62408,59741,56951,54070,50964,47721,44325,40784,37110,33288,29406,25480,21710,18044,14635,11575,8834,6559,4697,3247,2143,1381,871,529];
+const LXF = [99327,99301,99271,99239,99203,99162,99117,99072,99020,98961,98897,98832,98755,98674,98581,98482,98377,98258,98131,97976,97810,97628,97430,97217,96979,96709,96415,96093,95736,95341,94901,94407,93876,93296,92654,91951,91183,90352,89471,88503,87447,86312,85081,83748,82293,80745,79035,77208,75198,73021,70683,68088,65270,62157,58742,55015,50908,46504,41808,37035,32165,27294,22621,18249,14325,10899,8028,5672,3896,2565,1645];
+const qOf = (L, x) => { if (x < 30) x = 30; if (x < 100) return 1 - L[x - 29] / L[x - 30]; const q99 = 1 - L[70] / L[69]; return Math.min(0.7, q99 * Math.pow(1.1, x - 99)); };
+// Wahrscheinlichkeit, vom Alter a0 (im Jahr y0) das Alter A zu erleben
+function survive(L, a0, A, y0) { let s = 1; for (let x = a0; x < A; x++) s *= 1 - qOf(L, x) * Math.pow(0.99, Math.max(0, y0 + (x - a0) - 2021)); return s; }
 // Vermietung: fester Mietausfall; Verkauf heute: Kosten des Verkaufs
 const RVAC = 0.04, RSELL = 0.05;
 // Netto-Erlös, wenn die Wohnung heute verkauft wird (vor Steuer und Vorfälligkeitsentschädigung)
@@ -1807,6 +1877,7 @@ function updSums() {
   set("miete", $("rOn").checked ? `Wert ${eurR(g("rv"))} · Restschuld ${eurR(g("rdebt"))} · Miete ${eur(g("rrent"))} · Rate ${eur(g("rrate"))}` : "nicht einbezogen");
   set("haus", isHome() ? `Restschuld ${eurR(g("debt"))} · ${eur(g("lrate"))} Rate · Anteil Rate ${g("lshare")} % · Hauswert ${eurR(g("hv"))}, dir gehören ${g("hshare")} %` + ($("flowsOn").checked ? " · mit Einmalzahlungen" : "") : "nicht einbezogen");
   set("aufteilung", `Aktien ${nf1.format(e)} % · Anleihen ${nf1.format(b)} % · Geldmarkt ${nf1.format(c)} %` + (gd > 0 ? ` · Gold ${nf1.format(gd)} %` : "") + ($("tent").checked ? " · Anleihezelt" : ""));
+  set("fein", [gd > 0 && `Gold ${nf1.format(gd)} %`, $("tent").checked && "Anleihezelt", S.sell === "trick" && "Zweitdepot-Trick", `umschichten ${S.band ? "ab ±" + S.band + " Pkt." : "jedes Jahr"}`].filter(Boolean).join(" · "));
   set("markt", `${SCEN_NAME[S.scen]} · Aktien ${nf2.format(g("re"))} % · Kosten ${nf2.format(g("ter"))} % · Inflation ${nf2.format(g("inf"))} %` + (S.model === "s" ? " · einfaches Modell" : ""));
   set("steuern", `${S.fb === 2000 ? "2.000" : "1.000"} € Freibetrag · ${S.ks ? S.ks + " % Kirchensteuer" : "ohne Kirchensteuer"} · ${S.sell === "trick" ? "Zweitdepot-Trick" : "FIFO"} · Basiszins ${nf2.format(g("bz"))} %`);
 }
@@ -1998,7 +2069,7 @@ function startSide(p) {
   if (p.trick) cmp.trick = readParams({ trick: false });
   if (p.wG > 0) { const k = 1 / (1 - p.wG); cmp.gold = readParams({ wG: 0, wE: p.wE * k, wC: p.wC * k, tPeak: p.tPeak * k, tLate: p.tLate * k }); }
   if (p.rOn) { const n = rentSellNet(p), c2 = Math.max(0, p.cap + n), b2 = Math.max(0, p.cap * (1 - p.gain0) + n); cmp.noRent = readParams({ rOn: false, cap: c2, gain0: c2 > 0 ? Math.max(0, 1 - b2 / c2) : 0 }); }
-  if (VIEWNOW === "quick") { const a = SCEN[S.scen === "v" ? "o" : "v"]; cmp.alt = readParams({ re: a.re / 100, rb: a.rb / 100, rc: a.rc / 100, rgo: a.rg / 100 }); }
+  { const a = SCEN[S.scen === "v" ? "o" : "v"]; cmp.alt = readParams({ re: a.re / 100, rb: a.rb / 100, rc: a.rc / 100, rgo: a.rg / 100 }); }
   if (Object.keys(cmp).some(k => k !== "alt" && k !== "noRent")) $("cmpbox").innerHTML = `<p class="busy">Vergleich wird berechnet …</p>`; else renderCmp();
   sideTimer = setTimeout(() => {
     if (sid !== sideId) return;
@@ -2035,7 +2106,7 @@ function undoLever() {
   syncAll(); schedule();
 }
 function renderLev(d, p) {
-  const ul = $("lev"), pts = x => Math.round(x * 1000) / 10, pf = s => nf1.format(pts(s)) + " %", base = d.base;
+  const ul = $("lev"), pts = x => Math.round(x * 100), pf = s => pts(s) + " %", base = d.base;
   const diff = s => { const x = Math.round((pts(s) - pts(base)) * 10) / 10; return `${pf(s)} (${x > 0 ? "+" : x < 0 ? "−" : "±"}${nf1.format(Math.abs(x))} Pkt.)`; };
   let ri = 0;
   const row = (l, b, cls) => `<li><button type="button" class="levbtn" data-li="${ri++}" title="Übernehmen"><span>${esc(l)}</span><b class="${cls}">${esc(b)}</b></button></li>`;
@@ -2076,16 +2147,48 @@ function renderRent() {
   if (p.rv > 0) kz.push(`Netto-Mietrendite auf den Marktwert ${nf1.format(noi / p.rv * 100)} %`);
   if (kz.length) t += ` ${kz.join(", ")}; nach Kosten und Mietausfall, vor Kredit und Steuer.`;
   if (p.rdebt > 0 && L.payoff != null) t += ` Kredit abbezahlt mit ${Math.round(p.age0 + L.payoff)}` + (det.after ? `, danach etwa ${sg(det.after.cf)} im Monat nach Steuer, in heutiger Kaufkraft.` : ".");
-  if (on && last.cmp && last.cmp.noRent) { const n = rentSellNet(p), y0 = p.year0 || 2026; t += ` Heute verkauft, ${n >= 0 ? eur(Math.round(n / 100) * 100) + " Erlös ins Depot" : eur(Math.round(-n / 100) * 100) + " Restschuld aus dem Depot getilgt"}: ${nf1.format(Math.round(last.cmp.noRent.success * 1000) / 10)} % statt ${nf1.format(Math.round(last.r.success * 1000) / 10)} % beim Halten (nach ${Math.round(RSELL * 100)} % Verkaufskosten${y0 - p.rbuyY < 10 ? ", ohne Steuer auf den Gewinn, weil noch keine 10 Jahre" : ""}${p.rdebt > 0 && p.rlzb > 0 ? ", ohne Vorfälligkeitsentschädigung" : ""}).`; }
+  if (on && last.cmp && last.cmp.noRent) { const n = rentSellNet(p), y0 = p.year0 || 2026; t += ` Heute verkauft, ${n >= 0 ? eur(Math.round(n / 100) * 100) + " Erlös ins Depot" : eur(Math.round(-n / 100) * 100) + " Restschuld aus dem Depot getilgt"}: ${pInt(last.cmp.noRent.success)} statt ${pInt(last.r.success)} beim Halten (nach ${Math.round(RSELL * 100)} % Verkaufskosten${y0 - p.rbuyY < 10 ? ", ohne Steuer auf den Gewinn, weil noch keine 10 Jahre" : ""}${p.rdebt > 0 && p.rlzb > 0 ? ", ohne Vorfälligkeitsentschädigung" : ""}).`; }
   h.textContent = t;
+}
+// Spanne über beide Märkte: ehrlicher als eine einzelne Zahl
+function renderSpan() {
+  const el = $("span-h"); if (!el || !last) return;
+  const { r, cmp } = last, alt = cmp && cmp.alt;
+  if (VIEWNOW === "quick" || !alt) { el.textContent = ""; el.hidden = true; return; }
+  el.hidden = false;
+  const bare = s => succTxt(s).replace("etwa ", "");
+  if (S.scen === "o" || S.scen === "v") {
+    const normal = S.scen === "o" ? r.success : alt.success, weak = S.scen === "v" ? r.success : alt.success;
+    el.textContent = bare(weak) === bare(normal) ? `Bei eher schwacher wie bei normaler Börse ${succTxt(weak)}.` : `Je nach Börse zwischen ${bare(weak)} (eher schwach) und ${bare(normal)} (wie früher). Diese Spanne sagt mehr als jede einzelne Zahl.`;
+  } else el.textContent = `Mit deinen Annahmen ${succTxt(r.success)}, bei eher schwacher Börse ${succTxt(alt.success)}. Diese Spanne sagt mehr als jede einzelne Zahl.`;
+}
+// Wie lange muss es reichen? Quote nach Alter und Wahrscheinlichkeit, so alt zu werden
+let LIFETXT = "";
+function renderLife() {
+  const el = $("life"); if (!el || !last) return;
+  const { p, r } = last, n = r.N || NMAX, fa = r.failAges, y0 = p.year0 || 2026;
+  let ages = [80, 85, 90, 95, 100].filter(A => A > p.retAge && A < p.age1); ages.push(p.age1); ages = ages.slice(-4);
+  if (p.age1 <= p.retAge) { el.innerHTML = ""; LIFETXT = ""; return; }
+  const ok = A => 1 - fa.filter(a => a < A).length / n, sv = (L, A) => survive(L, p.age0, A, y0);
+  const risk = L => fa.reduce((s, a) => s + sv(L, a), 0) / n;
+  let h = `<h3>Wie lange muss es reichen?</h3><div class="lt" style="grid-template-columns:minmax(0,1fr) repeat(${ages.length},auto)"><span class="h"></span>` + ages.map(A => `<span class="c">bis ${A}</span>`).join("");
+  const c5 = s => p5(s).replace("über ", "> ").replace("unter ", "< ");
+  h += `<span class="h">Geld reicht</span>` + ages.map(A => `<span><b>${c5(ok(A))}</b></span>`).join("");
+  h += `<span class="h">Erleben Männer</span>` + ages.map(A => `<span>${c5(sv(LXM, A))}</span>`).join("");
+  h += `<span class="h">Erleben Frauen</span>` + ages.map(A => `<span>${c5(sv(LXF, A))}</span>`).join("") + `</div>`;
+  const rm = risk(LXM), rf = risk(LXF), om = sv(LXM, p.age1), of = sv(LXF, p.age1);
+  LIFETXT = `Gewichtet mit der Lebenserwartung geht das Geld bis ${p.age1} zu Lebzeiten aus: bei einem Mann in ${succTxt(rm)} der Fälle, bei einer Frau in ${succTxt(rf)}. Älter als ${p.age1} werden ${succTxt(om)} der Männer und ${succTxt(of)} der Frauen deines Jahrgangs; darüber rechnet der Rechner nicht.`;
+  h += `<p class="hint">${LIFETXT} Grundlage: Sterbetafel 2020/2022 des Statistischen Bundesamts, Sterblichkeit sinkt um 1 % pro Jahr.</p>`;
+  el.innerHTML = h;
 }
 function renderCmp() {
   renderRent();
-  const { p, r, cmp } = last, box = $("cmpbox"), pts = x => Math.round(x * 1000) / 10;
+  renderSpan(); renderLife();
+  const { p, r, cmp } = last, box = $("cmpbox"), pts = x => Math.round(x * 100);
   if (!p.tent && !p.trick && !(p.wG > 0)) { box.innerHTML = `<p class="hint">Schalte das Anleihezelt oder den Zweitdepot-Trick ein oder nimm Gold dazu, dann siehst du hier, was das in genau denselben 2.000 Zukünften ändert.</p>`; return; }
   if (!cmp) return;
   const pf = x => nf1.format(x) + " %";
-  const diff = d => { d = Math.round(d * 10) / 10; return (d > 0 ? "+" : d < 0 ? "−" : "±") + nf1.format(Math.abs(d)) + " Pkt."; };
+  const diff = d => { d = Math.round(d); return (d > 0 ? "+" : d < 0 ? "−" : "±") + Math.abs(d) + " Pkt."; };
   let h = `<h3>Was bringen deine Schalter?</h3>`;
   if (cmp.tent) {
     const a = pts(r.success), b = pts(cmp.tent.success);
@@ -2119,14 +2222,29 @@ function render() {
   const sc = Math.round(r.success * 100), [cls, txt] = verdictClass(sc);
   $("pill").className = "pill " + cls; $("pill").textContent = txt;
   $("meter").style.width = sc + "%"; $("meter").style.background = `var(--${cls})`;
-  $("headline").textContent = `In ${sc} % der Zukünfte reicht das Geld bis ${p.age1}.`;
+  $("headline").textContent = `In ${succTxt(r.success)} der Zukünfte reicht das Geld bis ${p.age1}.`;
   let sub = RY > 0 ? `Mit ${p.retAge} hast du typischerweise ${eurR(Wv.p50[RY])} ${unit}, wenn es schlecht läuft ${eurR(Wv.p10[RY])}. ` : "";
   sub += p.wmode === "dyn" ? `Die Rate startet bei ${eur10(p.net)} und passt sich dann an.` : p.indexed ? `Die Rate von ${eur10(p.net)} behält ihre Kaufkraft.` : `Die Rate bleibt auf dem Konto bei ${eur10(p.net)}.`;
-  if (sc < 100) { const fa = r.failAges.slice().sort((a, b) => a - b); sub += ` In den übrigen ${100 - sc} % ist das Geld vorher weg, im Mittel mit etwa ${fa[Math.floor(fa.length / 2)]}.`; }
+  if (r.failAges.length) {
+    const fa = r.failAges.slice().sort((a, b) => a - b), fg = (r.failGaps || []).slice().sort((a, b) => a - b), mid = a => a[Math.floor(a.length / 2)];
+    const g = fg.length ? mid(fg) : null, inc = p.pOn && p.rOn ? "Rente und Mieteinnahmen" : p.pOn ? "die Rente" : p.rOn ? "die Mieteinnahmen" : "";
+    sub += ` In den übrigen Zukünften (${succTxt(1 - r.success)}) ist das Depot vorher leer, typischerweise mit ${mid(fa)}.`;
+    if (g != null) sub += g < 50 ? (inc ? ` Dann ${inc === "Rente und Mieteinnahmen" ? "decken Rente und Mieteinnahmen" : "deckt " + inc} fast alles.` : "")
+      : inc ? ` Dann bleibt nur ${inc}, und zum Wunsch fehlen etwa ${eur10(g)} im Monat, in heutiger Kaufkraft.` : ` Dann fehlt das ganze Einkommen von etwa ${eur10(g)} im Monat, in heutiger Kaufkraft.`;
+  }
+  // Flexible Rate: wie oft und wie stark muss das Einkommen sinken?
+  if (p.wmode === "dyn" && p.indexed && r.rateR && Y > RY) {
+    const n = r.rateR.length / Y, lows = [];
+    // nur Zukünfte, in denen das Depot reicht; die anderen beschreibt der Satz davor
+    for (let i = 0; i < n; i++) { if (!(r.totR && r.totR[Y * n + i] > 0)) continue; let m = Infinity; for (let y = RY; y < Y; y++) { const v = r.rateR[y * n + i]; if (v > 0 && v < m) m = v; } if (isFinite(m)) lows.push(m); }
+    lows.sort((a, b) => a - b); const cut = lows.filter(v => v < p.net * 0.9).length / n;
+    if (cut >= 0.01 && lows.length) sub += ` Auch wo es reicht, sinkt dein Einkommen mit der flexiblen Rate in ${succTxt(cut)} der Zukünfte zeitweise um mehr als 10 %, im schlechtesten Zehntel davon bis auf etwa ${eur10(lows[Math.floor(lows.length * 0.1)])} im Monat.`;
+  }
   if (p.pOn && r.pension && r.pension.first) { const nr = r.pension.first.net / Math.pow(1 + p.inf, r.pension.PY); sub += nr >= p.net ? ` Die gesetzliche Rente (etwa ${eur10(nr)}) liegt ab ${p.age0 + r.pension.PY} über deinem Wunsch. Dann ist die ganze Rente dein Einkommen, und das Depot muss nichts dazu beitragen; es zahlt nur seine eigene Steuer.` : ` Die gesetzliche Rente deckt ab ${p.age0 + r.pension.PY} davon etwa ${eur10(nr)}, den Rest liefert das Depot.`; }
   if (p.extra > 0) sub += ` Bis ${p.xAge} kommen ${eur(p.extra)} im Monat für die aktiven Jahre dazu.`;
-  if (sc < 80) sub += " Eine niedrigere Rate, mehr Sparen oder eine flexible Rate macht den Plan sicherer.";
+  if (sc < 80) sub += p.wmode === "dyn" ? " Eine niedrigere Rate oder mehr Sparen macht den Plan sicherer." : " Eine niedrigere Rate, mehr Sparen oder eine flexible Rate macht den Plan sicherer.";
   $("subline").textContent = sub;
+  renderSpan(); renderLife();
 
   // Kennzahlen
   $("k1-l").textContent = `Vermögen mit ${p.retAge}`;
@@ -2338,7 +2456,9 @@ function pdfBuild() {
   P.rect(M, y - 13, P.tw(tx("pill"), 9, true) + 16, 18, { fill: cls === "good" ? [227, 242, 233] : cls === "warn" ? [251, 240, 220] : [251, 229, 225] }); P.text(M + 8, y, tx("pill"), { size: 9, bold: true, color: vc }); y += 24;
   y = P.para(M, y, tx("headline"), CW, { size: 15, bold: true, lh: 19 }) + 2;
   P.rect(M, y - 6, CW, 5, { fill: PC.tint }); P.rect(M, y - 6, CW * sc / 100, 5, { fill: vc }); y += 12;
-  y = P.para(M, y, SR.sub, CW, { size: 9.5, color: PC.muted }) + 14;
+  y = P.para(M, y, SR.sub, CW, { size: 9.5, color: PC.muted }) + 6;
+  if (tx("span-h")) y = P.para(M, y, tx("span-h"), CW, { size: 9.5, bold: true }) + 6;
+  if (LIFETXT) y = P.para(M, y, LIFETXT, CW, { size: 9.5, color: PC.muted }) + 14; else y += 8;
   // Kennzahlen als Tabelle: heutige Kaufkraft und Kontoauszug nebeneinander
   P.text(M, y, "Die wichtigsten Zahlen", { size: 12, bold: true }); y += 10;
   const c1 = M + CW * 0.52, c2 = M + CW;
@@ -2653,7 +2773,7 @@ if ($("wiz")) {
   function qkResult() {
     if (!last) return; const { p, r } = last, alt = last.cmp && last.cmp.alt;
     const cur = r.success, oth = alt ? alt.success : null, normal = S.scen === "v" ? oth : cur, vors = S.scen === "v" ? cur : oth;
-    const tile = (lab, sub, x) => { if (x == null) return `<div class="qk-t"><span class="l">${lab}</span><b>…</b><span class="s">${sub}</span></div>`; const sc = Math.round(x * 100), [cls] = verdictClass(sc); return `<div class="qk-t ${cls}"><span class="l">${lab}</span><b>${sc}&nbsp;%</b><span class="s">${sub}</span></div>`; };
+    const tile = (lab, sub, x) => { if (x == null) return `<div class="qk-t"><span class="l">${lab}</span><b>…</b><span class="s">${sub}</span></div>`; const sc = Math.round(x * 100), [cls] = verdictClass(sc); return `<div class="qk-t ${cls}"><span class="l">${lab}</span><b>${succTxt(x).replace("etwa ", "≈\u00a0").replace(" %", "\u00a0%")}</b><span class="s">${sub}</span></div>`; };
     const own = S.scen === "o" || S.scen === "v";
     let h = `<h2>Beide Märkte im Vergleich</h2><div class="qk-two">` + (own ? tile("Normal", "Börse wie früher", normal) + tile("Vorsichtig", "Börse eher schwach", vors) : tile("Deine Annahmen", "aus der ausführlichen Ansicht", cur) + tile("Vorsichtig", "Börse eher schwach", oth)) + `</div>`;
     h += `<p>So oft reicht das Geld bis ${p.age1}. Ergebnis, Stellschrauben und Diagramme rechnen mit „${own ? (S.scen === "v" ? "Vorsichtig" : "Normal") : "deinen Annahmen"}“.</p>`;
